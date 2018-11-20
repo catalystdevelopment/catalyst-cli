@@ -134,7 +134,7 @@ add_dependencies(P2P version)
 add_dependencies(cryptotest version)
 
 # Finally build the binaries
-set_property(TARGET TurtleCoind PROPERTY OUTPUT_NAME "TurtleCoind")
+set_property(TARGET Catalystd PROPERTY OUTPUT_NAME "Catalystd")
 set_property(TARGET zedwallet PROPERTY OUTPUT_NAME "zedwallet")
 set_property(TARGET zedwallet++ PROPERTY OUTPUT_NAME "zedwallet-beta")
 set_property(TARGET service PROPERTY OUTPUT_NAME "turtle-service")
