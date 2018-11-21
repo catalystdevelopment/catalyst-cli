@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 // Copyright (c) 2014-2018, The Monero Project
 // Copyright (c) 2018, The TurtleCoin Developers
-// Copyright (c) 2018, The Catalyst Developers
+// Copyright (c) 2018, The Catalysta Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -260,7 +260,7 @@ const static   boost::uuids::uuid CRYPTONOTE_NETWORK         =
 };
 
 const char* const SEED_NODES[] = {
-    "149.28.121.202:17290" 
-    "149.28.60.17:17290"
+    "45.63.71.202:17290" 
+    "8.12.16.176:17290"
 };
 } // CryptoNote
