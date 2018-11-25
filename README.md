@@ -37,11 +37,12 @@ If you are using Clang, you will need Clang 6.0 or higher. You will also need li
 - `sudo apt-get install aptitude -y`
 - `sudo aptitude install -y build-essential g++-8 gcc-8 git libboost-all-dev python-pip`
 - `sudo pip install cmake`
-- Skip the below two lines for now
 - `export CC=gcc-8`
 - `export CXX=g++-8`
-- `git clone https://github.com/dirtybits/cryptocatalyst` pick one
+- `git clone https://github.com/dirtybits/cryptocatalyst` 
+<!--
 - `git clone -b master --single-branch https://github.com/dirtybits/cryptocatalyst`
+-->
 - `cd cryptocatalyst`
 - `mkdir build`
 - `cd build`
