@@ -80,7 +80,7 @@ You need to modify the below command for your version of ubuntu - see https://ap
 The binaries will be in the `src` folder when you are complete.
 
 - `cd src`
-- `./TurtleCoind --version`
+- `./Catalystd --version`
 
 ##### Generic Linux
 
