@@ -35,7 +35,7 @@ If you are using Clang, you will need Clang 6.0 or higher. You will also need li
 - `sudo pip install cmake`
 - `export CC=gcc-8`
 - `export CXX=g++-8`
-- `git clone https://github.com/dirtybits/cryptocatalyst`
+- `git clone -b master --single-branch https://github.com/dirtybits/cryptocatalyst`
 - `cd cryptocatalyst`
 - `mkdir build`
 - `cd build`
