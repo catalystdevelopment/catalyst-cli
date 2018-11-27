@@ -137,7 +137,7 @@ add_dependencies(cryptotest version)
 set_property(TARGET Catalystd PROPERTY OUTPUT_NAME "Catalystd")
 set_property(TARGET zedwallet PROPERTY OUTPUT_NAME "zedwallet")
 set_property(TARGET zedwallet++ PROPERTY OUTPUT_NAME "zedwallet-beta")
-set_property(TARGET service PROPERTY OUTPUT_NAME "turtle-service")
+set_property(TARGET service PROPERTY OUTPUT_NAME "catalyst-service")
 set_property(TARGET miner PROPERTY OUTPUT_NAME "miner")
 set_property(TARGET cryptotest PROPERTY OUTPUT_NAME "cryptotest")
 
