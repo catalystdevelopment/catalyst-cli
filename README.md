@@ -12,9 +12,9 @@ Catalyst: born November 25, 2018
 [![Build Status](https://travis-ci.org/turtlecoin/turtlecoin.svg?branch=development)](https://travis-ci.org/turtlecoin/turtlecoin) [![Build status](https://ci.appveyor.com/api/projects/status/github/turtlecoin/turtlecoin?branch=development&svg=true)](https://ci.appveyor.com/project/RocksteadyTC/turtlecoin)
 
 ### Installing
-
+<!--
 We offer binary images of the latest releases here: https://latest.turtlecoin.lol
-
+-->
 If you would like to compile yourself, read on.
 
 ### How To Compile
