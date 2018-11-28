@@ -5,11 +5,13 @@
 # Catalyst
 Catalyst: born November 25, 2018
 
+<!--
 #### Master Build Status
 [![Build Status](https://travis-ci.org/turtlecoin/turtlecoin.svg?branch=master)](https://travis-ci.org/turtlecoin/turtlecoin) [![Build status](https://ci.appveyor.com/api/projects/status/github/turtlecoin/turtlecoin?branch=master&svg=true)](https://ci.appveyor.com/project/RocksteadyTC/turtlecoin)
 
 #### Development Build Status
 [![Build Status](https://travis-ci.org/turtlecoin/turtlecoin.svg?branch=development)](https://travis-ci.org/turtlecoin/turtlecoin) [![Build status](https://ci.appveyor.com/api/projects/status/github/turtlecoin/turtlecoin?branch=development&svg=true)](https://ci.appveyor.com/project/RocksteadyTC/turtlecoin)
+-->
 
 ### Installing
 <!--
