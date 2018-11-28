@@ -6,7 +6,7 @@
 #pragma once
 
 const std::string windowsAsciiArt =
-      "\n
+      "\n                                                      \n"
       "_________         __         .__                  __    \n"
       "\_   ___ \_____ _/  |______  |  | ___.__. _______/  |_  \n"
       "/    \  \/\__  \\   __\__  \ |  |<   |  |/  ___/\   __/ \n"
@@ -16,7 +16,7 @@ const std::string windowsAsciiArt =
 
 
 const std::string nonWindowsAsciiArt =
-      "\n
+      "\n                                                      \n"
       "_________         __         .__                  __    \n"
       "\_   ___ \_____ _/  |______  |  | ___.__. _______/  |_  \n"
       "/    \  \/\__  \\   __\__  \ |  |<   |  |/  ___/\   __/ \n"
