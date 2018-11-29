@@ -17,6 +17,7 @@
 namespace CryptoNote {
 namespace parameters {
 
+// look at perhaps increasing this
 const uint64_t DIFFICULTY_TARGET                             = 60; // seconds
 
 const uint32_t CRYPTONOTE_MAX_BLOCK_NUMBER                   = 500000000;
