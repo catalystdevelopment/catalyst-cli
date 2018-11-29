@@ -1,5 +1,6 @@
 <!--
 ![image](https://user-images.githubusercontent.com/34389545/35821974-62e0e25c-0a70-11e8-87dd-2cfffeb6ed47.png)
+![image](https://raw.githubusercontent.com/dirtybits/catalyst/branch/path/to/img.png)
 -->
 
 # Catalyst
