@@ -3,7 +3,6 @@
 -->
 ![image](catalyst.png)
 
-# Catalyst
 Catalyst: born November 25, 2018
 
 <!--
