@@ -3,7 +3,7 @@
 -->
 ![image](catalyst.png)
 
-Catalyst: born November 25, 2018
+v0.0.1.0 November 25, 2018
 
 <!--
 #### Master Build Status
