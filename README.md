@@ -3,8 +3,8 @@
 -->
 ![image](catalyst.png)
 
-v0.0.1.0 November 25, 2018
-v0.0.1.1 November 27, 2018
+#### v0.0.1.0 November 25, 2018
+#### v0.0.1.1 November 27, 2018
 
 <!--
 #### Master Build Status
