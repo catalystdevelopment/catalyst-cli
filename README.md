@@ -101,8 +101,8 @@ Ensure you have the dependencies listed above.
 If you want to use clang, ensure you set the environment variables `CC` and `CXX`.
 See the ubuntu instructions for an example.
 
-- `git clone -b master --single-branch https://github.com/turtlecoin/turtlecoin`
-- `cd turtlecoin`
+- `git clone https://github.com/dirtybits/catalyst`
+- `cd catalyst`
 - `mkdir build`
 - `cd build`
 - `cmake ..`
@@ -111,7 +111,7 @@ See the ubuntu instructions for an example.
 The binaries will be in the `src` folder when you are complete.
 
 - `cd src`
-- `./TurtleCoind --version`
+- `./Catalystd --version`
 
 #### OSX/Apple, using GCC
 
@@ -125,8 +125,8 @@ The binaries will be in the `src` folder when you are complete.
 - `brew install --force cmake boost llvm gcc@8`
 - `export CC=gcc-8`
 - `export CXX=g++-8`
-- `git clone -b master --single-branch https://github.com/turtlecoin/turtlecoin`
-- `cd turtlecoin`
+- `git clone -b master --single-branch https://github.com/dirtybits/catalyst`
+- `cd catalyst`
 - `mkdir build`
 - `cd build`
 - `cmake ..`
@@ -135,7 +135,7 @@ The binaries will be in the `src` folder when you are complete.
 The binaries will be in the `src` folder when you are complete.
 
 - `cd src`
-- `./TurtleCoind --version`
+- `./Catalystd --version`
 
 #### OSX/Apple, using Clang
 
@@ -149,8 +149,8 @@ The binaries will be in the `src` folder when you are complete.
 - `brew install --force cmake boost llvm`
 - `export CC=/usr/local/opt/llvm/bin/clang`
 - `export CXX=/usr/local/opt/llvm/bin/clang++`
-- `git clone -b master --single-branch https://github.com/turtlecoin/turtlecoin`
-- `cd turtlecoin`
+- `git clone https://github.com/dirtybits/catalyst`
+- `cd catalyst`
 - `mkdir build`
 - `cd build`
 - `cmake ..`
@@ -159,7 +159,7 @@ The binaries will be in the `src` folder when you are complete.
 The binaries will be in the `src` folder when you are complete.
 
 - `cd src`
-- `./TurtleCoind --version`
+- `./Catalystd --version`
 
 
 #### Windows
@@ -173,7 +173,7 @@ The binaries will be in the `src` folder when you are complete.
 ##### Building
 
 - From the start menu, open 'x64 Native Tools Command Prompt for vs2017'.
-- `cd <your_turtlecoin_directory>`
+- `cd <your_catalyst_directory>`
 - `mkdir build`
 - `cd build`
 - `set PATH="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin";%PATH%`
@@ -181,13 +181,13 @@ The binaries will be in the `src` folder when you are complete.
 
 If you have errors on this step about not being able to find the following static libraries, you may need to update your cmake. Open 'Visual Studio Installer' and click 'Update'.
 
-- `MSBuild TurtleCoin.sln /p:Configuration=Release /m`
+- `MSBuild Catalyst.sln /p:Configuration=Release /m`
 
 The binaries will be in the `src/Release` folder when you are complete.
 
 - `cd src`
 - `cd Release`
-- `TurtleCoind.exe --version`
+- `Catalystd.exe --version`
 
 #### Raspberry Pi 3 B+
 The following images are known to work. Your operation system image **MUST** be 64 bit.
@@ -202,8 +202,8 @@ Once you have a 64 bit image installed, setup proceeds the same as any Linux dis
 
 ##### Building
 
-- `git clone -b master --single-branch https://github.com/turtlecoin/turtlecoin`
-- `cd turtlecoin`
+- `git clone https://github.com/dirtybits/catalyst`
+- `cd catalyst`
 - `mkdir build`
 - `cd build`
 - `cmake ..`
@@ -212,14 +212,15 @@ Once you have a 64 bit image installed, setup proceeds the same as any Linux dis
 The binaries will be in the `src` folder when you are complete.
 
 - `cd src`
-- `./TurtleCoind --version`
+- `./Catalystd --version`
 
 #### Thanks
 Cryptonote Developers, Bytecoin Developers, Monero Developers, Forknote Project, TurtleCoin Community
 
 ### Copypasta for license when editing files
-
-Hi TurtleCoin contributor, thanks for forking and sending back Pull Requests. Extensive docs about contributing are in the works or elsewhere. For now this is the bit we need to get into all the files we touch. Please add it to the top of the files, see [src/CryptoNoteConfig.h](https://github.com/turtlecoin/turtlecoin/commit/28cfef2575f2d767f6e512f2a4017adbf44e610e) for an example.
+<!--
+Hi Catalyst contributor, thanks for forking and sending back Pull Requests. Extensive docs about contributing are in the works or elsewhere. For now this is the bit we need to get into all the files we touch. Please add it to the top of the files, see [src/CryptoNoteConfig.h](https://github.com/turtlecoin/turtlecoin/commit/28cfef2575f2d767f6e512f2a4017adbf44e610e) for an example.
+-->
 
 ```
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
