@@ -82,8 +82,8 @@ You need to modify the below command for your version of ubuntu - see https://ap
 - `sudo pip install cmake`
 - `export CC=clang-6.0`
 - `export CXX=clang++-6.0`
-- `git clone -b master --single-branch https://github.com/turtlecoin/turtlecoin`
-- `cd turtlecoin`
+- `git clone -b master --single-branch https://github.com/dirtybits/catalyst`
+- `cd catalyst`
 - `mkdir build`
 - `cd build`
 - `cmake ..`
