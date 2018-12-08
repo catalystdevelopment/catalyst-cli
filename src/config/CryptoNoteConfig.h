@@ -44,11 +44,11 @@ const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX_V3              = 3;
 const uint64_t LWMA_3_DIFFICULTY_BLOCK_INDEX                 = 1200000;
 
 const unsigned EMISSION_SPEED_FACTOR                         = 18;
-const unsigned EMISSION_SPEED_FACTOR_V2                      = 22;
+const unsigned EMISSION_SPEED_FACTOR_V2                      = 21;
 
 static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
 static_assert(EMISSION_SPEED_FACTOR_V2 <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
-const uint64_t EMISSION_SPEED_V2_HEIGHT                      = 15000;
+const uint64_t EMISSION_SPEED_V2_HEIGHT                      = 20000;
 
 const uint64_t GENESIS_BLOCK_REWARD                          = UINT64_C(0); 
 
