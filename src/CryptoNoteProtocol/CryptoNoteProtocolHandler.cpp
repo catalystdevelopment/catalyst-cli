@@ -605,7 +605,7 @@ bool CryptoNoteProtocolHandler::request_missing_objects(CryptoNoteConnectionCont
     requestMissingPoolTransactions(context);
 
     context.m_state = CryptoNoteConnectionContext::state_normal;
-    logger(Logging::INFO, Logging::BRIGHT_GREEN) << context << "Successfully synchronized with the TurtleCoin Network.";
+    logger(Logging::INFO, Logging::BRIGHT_BLUE) << context << "Successfully synchronized with the Catalyst Network.";
     on_connection_synchronized();
   }
   return true;
@@ -623,7 +623,7 @@ bool CryptoNoteProtocolHandler::on_connection_synchronized() {
       logger(INFO, WHITE) << " If you need more assistance, you can contact us for support at " + WalletConfig::contactLink << ENDL;
       logger(INFO, BRIGHT_MAGENTA) << "===================================================" << ENDL << ENDL ;
 
-      logger(INFO, BRIGHT_GREEN) << asciiArt << ENDL;
+      logger(INFO, BRIGHT_BLUE << asciiArt << ENDL;
 
     m_observerManager.notify(&ICryptoNoteProtocolObserver::blockchainSynchronized, m_core.getTopBlockIndex());
   }
