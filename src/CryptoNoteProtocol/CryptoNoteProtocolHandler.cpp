@@ -261,7 +261,7 @@ bool CryptoNoteProtocolHandler::process_payload_sync_data(const CORE_SYNC_DATA& 
         ss << "You are " << std::abs(diff) << " blocks (" << days << " days) ahead ";
     }
 
-    ss << "the current peer you're connected to. Slow and steady wins the race! ";
+    ss << "the current peer you're connected to. To infinity and beyond! ";
 
     auto logLevel = Logging::TRACE;
     /* Log at different levels depending upon if we're ahead, behind, and if it's 
