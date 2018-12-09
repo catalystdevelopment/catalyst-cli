@@ -30,5 +30,6 @@ struct CheckpointData {
 // {<block height>, "<block hash>"},
 const std::initializer_list<CheckpointData> CHECKPOINTS = {  
   //{ 10000, "84b6345731e2702cdaadc6ce5e5238c4ca5ecf48e3447136b2ed829b8a95f3ad" },
+    { 17000, "1ddd26c922f5a322f383777fc1683a338d4e5c6803d9e8be11eec86c0f5c5ea3" }
 };
 } // CryptoNote
