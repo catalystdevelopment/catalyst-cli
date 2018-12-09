@@ -48,7 +48,8 @@ const unsigned EMISSION_SPEED_FACTOR_V2                      = 21;
 
 static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
 static_assert(EMISSION_SPEED_FACTOR_V2 <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
-const uint64_t EMISSION_SPEED_V2_HEIGHT                      = 20000;
+   
+const uint64_t EMISSION_SPEED_V2_HEIGHT                      = 21000;
 
 const uint64_t GENESIS_BLOCK_REWARD                          = UINT64_C(0); 
 
