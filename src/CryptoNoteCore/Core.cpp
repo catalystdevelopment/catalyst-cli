@@ -1070,7 +1070,8 @@ std::error_code Core::addBlock(const CachedBlock& cachedBlock, RawBlock&& rawBlo
           switchMainChainStorage(chainsLeaves[0]->getStartBlockIndex(), *chainsLeaves[0]);
 
           ret = error::AddBlockErrorCode::ADDED_TO_ALTERNATIVE_AND_SWITCHED;
-
+          
+          // An alternate chain is now longer than the current one, so the daemon is swapping to it - zpalmtree
           logger(Logging::INFO) << "Resolved: " << blockStr
                                 << ", Previous: " << chainsLeaves[endpointIndex]->getTopBlockIndex() << " ("
                                 << chainsLeaves[endpointIndex]->getTopBlockHash() << ")";
