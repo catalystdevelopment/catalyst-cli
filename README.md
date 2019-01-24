@@ -21,6 +21,8 @@ https://discord.gg/rd3ss4G
 -->
 
 ### Installing
+
+Pre-compiled Windows executables are available here: https://github.com/dirtybits/catalyst-executables/blob/master/Release_fixed.zip
 <!--
 We offer binary images of the latest releases here: https://latest.turtlecoin.lol
 -->
