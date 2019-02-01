@@ -1,5 +1,5 @@
-// Copyright (c) 2018, The TurtleCoin Developers
-// 
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+//
 // Please see the included LICENSE file for more information.
 
 #pragma once
@@ -33,6 +33,17 @@ class Nigel
         Nigel(
             const std::string daemonHost,
             const uint16_t daemonPort,
+            const bool daemonSSL);
+
+        Nigel(
+            const std::string daemonHost,
+            const uint16_t daemonPort,
+            const std::chrono::seconds timeout);
+
+        Nigel(
+            const std::string daemonHost,
+            const uint16_t daemonPort,
+            const bool daemonSSL,
             const std::chrono::seconds timeout);
 
         ~Nigel();
@@ -44,6 +55,8 @@ class Nigel
         void init();
 
         void swapNode(const std::string daemonHost, const uint16_t daemonPort);
+
+        void swapNode(const std::string daemonHost, const uint16_t daemonPort, const bool daemonSSL);
 
         /* Returns whether we've received info from the daemon at some point */
         bool isOnline() const;
@@ -103,6 +116,12 @@ class Nigel
         /* Private member variables */
         //////////////////////////////
 
+#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
+        /* Stores our https client (Don't really care about it launching threads
+           and making our functions non const) */
+        std::shared_ptr<httplib::SSLClient> m_httpsClient = nullptr;
+
+#endif
         /* Stores our http client (Don't really care about it launching threads
            and making our functions non const) */
         std::shared_ptr<httplib::Client> m_httpClient = nullptr;
@@ -115,7 +134,7 @@ class Nigel
 
         /* The amount of blocks the daemon we're connected to has */
         std::atomic<uint64_t> m_localDaemonBlockCount = 0;
-        
+
         /* The amount of blocks the network has */
         std::atomic<uint64_t> m_networkBlockCount = 0;
 
@@ -139,4 +158,7 @@ class Nigel
 
         /* The daemon port */
         uint16_t m_daemonPort;
+
+        /* If the daemon is SSL */
+        bool m_daemonSSL;
 };

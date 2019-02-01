@@ -37,6 +37,9 @@ find_package(Threads)
 
 set(VERSION "0.1")
 
+## This section describes build options for additional support in the project
+set(ENABLE_SSL OFF CACHE STRING "Enable SSL support")
+
 ## This section describes our general CMake setup options
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_CONFIGURATION_TYPES Debug RelWithDebInfo Release CACHE TYPE INTERNAL)
@@ -252,6 +255,20 @@ if(APPLE)
 elseif(NOT MSVC)
   set(Boost_LIBRARIES "${Boost_LIBRARIES};rt")
 endif()
+
+## Go get us some OpenSSL libraries if we need to
+if(ENABLE_SSL)
+  set(OPENSSL_USE_STATIC_LIBS OFF)
+  find_package(OpenSSL)
+  if(OPENSSL_FOUND)
+    include_directories(SYSTEM ${OPENSSL_INCLUDE_DIR})
+    add_definitions(-DCPPHTTPLIB_OPENSSL_SUPPORT)
+    message(STATUS "OpenSSL Found: ${OPENSSL_INCLUDE_DIR}")
+    message(STATUS "OpenSSL Libraries: ${OPENSSL_LIBRARIES}")
+  else()
+    message(STATUS "OpenSSL Found: No... Skipping...")
+  endif()
+endif(ENABLE_SSL)
 
 add_subdirectory(external)
 add_subdirectory(src)
