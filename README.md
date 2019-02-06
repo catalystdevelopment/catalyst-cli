@@ -60,6 +60,8 @@ If you are using Clang, you will need Clang 6.0 or higher. You will also need li
 - `cd build`
 - `cmake ..`
 - `make`
+You can also run `make` with multiple threads to speed up the build process like so:
+- `make -j<number of threads>`
 
 The binaries will be in the `src` folder when you are complete.
 
