@@ -1,5 +1,6 @@
 // Copyright (c) 2018, The TurtleCoin Developers
-// 
+// Copyright (c) 2018-2019, The Catalyst Developers 
+//
 // Please see the included LICENSE file for more information.
 
 ///////////////////////////////////////////////
@@ -13,6 +14,7 @@
 #include <fstream>
 
 #include <WalletBackend/ValidateParameters.h>
+#include <WalletBackend/WalletBackend.h>
 
 #include <zedwallet++/ColouredMsg.h>
 #include <zedwallet++/Commands.h>
@@ -416,6 +418,21 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
     }
 
     std::cout << SuccessMsg(stream.str()) << std::endl;
+
+    /* https://github.com/turtlecoin/turtlecoin/issues/675
+       display unlock time */
+    if (tx.unlockTime != 0 && tx.unlockTime < 50000000)
+    {
+        int64_t difference = tx.unlockTime - tx.blockHeight;
+        if (difference > 0)
+        {
+            std::cout << "(Unlocks in " << difference << " blocks)" << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "(Unlocked at " << ZedUtilities::unixTimeToDate(tx.timestamp) << ")" << std::endl;
+    }
 }
 
 void listTransfers(
