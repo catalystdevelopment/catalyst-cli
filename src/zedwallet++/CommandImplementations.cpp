@@ -408,7 +408,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
     stream << "Incoming transfer:\nHash: " << tx.hash << "\n"
            << "Block height: " << tx.blockHeight << "\n"
            << "Timestamp: " << ZedUtilities::unixTimeToDate(tx.timestamp) << "\n"
-           << "Amount: " << ZedUtilities::formatAmount(amount) << "\n";
+           << "Amount: " << Utilities::formatAmount(amount) << "\n";
 
     if (tx.paymentID != "")
     {
@@ -416,6 +416,21 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
     }
 
     std::cout << SuccessMsg(stream.str()) << std::endl;
+
+    /* https://github.com/turtlecoin/turtlecoin/issues/675
+       display unlock time */
+    if (tx.unlockTime != 0 && tx.unlockTime < 50000000)
+    {
+        int64_t difference = tx.unlockTime - tx.blockHeight;
+        if (difference > 0)
+        {
+            std::cout << "(Unlocks in " << difference << " blocks)" << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "(Unlocked at " << ZedUtilities::unixTimeToDate(tx.timestamp) << ")" << std::endl;
+    }
 }
 
 void listTransfers(
