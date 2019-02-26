@@ -25,7 +25,7 @@ struct CheckpointData {
   uint32_t index;
   const char* blockId;
 };
-  
+
 // Add other checkpoints here using the following format:
 // {<block height>, "<block hash>"},
 const std::initializer_list<CheckpointData> CHECKPOINTS = {  

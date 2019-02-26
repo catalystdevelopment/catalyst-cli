@@ -28,7 +28,7 @@ public:
   void run();
   void stop();
 
-  Logging::ILogger& getLogger() { return logger; }
+  std::shared_ptr<Logging::ILogger> getLogger() { return logger; }
 
 private:
 
@@ -41,9 +41,11 @@ private:
   System::Event* stopEvent;
   PaymentService::ConfigurationManager config;
   PaymentService::WalletService* service;
-  CryptoNote::CurrencyBuilder currencyBuilder;
 
-  Logging::LoggerGroup logger;
+  std::shared_ptr<Logging::LoggerGroup> logger = std::make_shared<Logging::LoggerGroup>();
+
+  std::shared_ptr<CryptoNote::CurrencyBuilder> currencyBuilder;
+
   std::ofstream fileStream;
   Logging::StreamLogger fileLogger;
   Logging::ConsoleLogger consoleLogger;

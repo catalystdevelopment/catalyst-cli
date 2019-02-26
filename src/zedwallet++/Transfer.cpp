@@ -8,7 +8,11 @@
 
 #include <config/WalletConfig.h>
 
-#include <zedwallet++/ColouredMsg.h>
+#include <iostream>
+
+#include <Utilities/FormatTools.h>
+
+#include <Utilities/ColouredMsg.h>
 #include <zedwallet++/Fusion.h>
 #include <zedwallet++/GetInput.h>
 #include <zedwallet++/Utilities.h>
@@ -37,9 +41,9 @@ void transfer(
         std::stringstream stream;
 
         stream << "The minimum send allowed is "
-               << ZedUtilities::formatAmount(WalletConfig::minimumSend)
+               << Utilities::formatAmount(WalletConfig::minimumSend)
                << ", but you have "
-               << ZedUtilities::formatAmount(unlockedBalance) << "!\n";
+               << Utilities::formatAmount(unlockedBalance) << "!\n";
 
         std::cout << WarningMsg(stream.str());
         
@@ -127,13 +131,13 @@ void sendTransaction(
         std::cout << WarningMsg("\nYou don't have enough funds to cover "
                                 "this transaction!\n\n")
                   << "Funds needed: "
-                  << InformationMsg(ZedUtilities::formatAmount(amount + fee + nodeFee))
+                  << InformationMsg(Utilities::formatAmount(amount + fee + nodeFee))
                   << " (Includes a network fee of "
-                  << InformationMsg(ZedUtilities::formatAmount(fee))
+                  << InformationMsg(Utilities::formatAmount(fee))
                   << " and a node fee of "
-                  << InformationMsg(ZedUtilities::formatAmount(nodeFee))
+                  << InformationMsg(Utilities::formatAmount(nodeFee))
                   << ")\nFunds available: "
-                  << SuccessMsg(ZedUtilities::formatAmount(unlockedBalance)) << "\n\n";
+                  << SuccessMsg(Utilities::formatAmount(unlockedBalance)) << "\n\n";
 
         return cancel();
     }
@@ -143,7 +147,7 @@ void sendTransaction(
         return cancel();
     }
 
-    WalletError error;
+    Error error;
 
     Crypto::Hash hash;
 
@@ -290,7 +294,7 @@ void splitTX(
         std::stringstream stream;
 
         stream << "Transaction number " << txNumber << " has been sent!\nHash: "
-               << hash << "\nAmount: " << ZedUtilities::formatAmount(splitAmount)
+               << hash << "\nAmount: " << Utilities::formatAmount(splitAmount)
                << "\n\n";
 
         std::cout << SuccessMsg(stream.str()) << std::endl;
@@ -326,11 +330,11 @@ bool confirmTransaction(
     std::cout << InformationMsg("\nConfirm Transaction?\n");
 
     std::cout << "You are sending "
-              << SuccessMsg(ZedUtilities::formatAmount(amount))
+              << SuccessMsg(Utilities::formatAmount(amount))
               << ", with a network fee of " 
-              << SuccessMsg(ZedUtilities::formatAmount(WalletConfig::defaultFee))
+              << SuccessMsg(Utilities::formatAmount(WalletConfig::defaultFee))
               << ",\nand a node fee of "
-              << SuccessMsg(ZedUtilities::formatAmount(nodeFee));
+              << SuccessMsg(Utilities::formatAmount(nodeFee));
 
     if (paymentID != "")
     {

@@ -6,8 +6,10 @@
 #include <zedwallet++/CommandDispatcher.h>
 //////////////////////////////////////////
 
+#include <iostream>
+
 #include <zedwallet++/AddressBook.h>
-#include <zedwallet++/ColouredMsg.h>
+#include <Utilities/ColouredMsg.h>
 #include <zedwallet++/CommandImplementations.h>
 #include <zedwallet++/Open.h>
 #include <zedwallet++/Transfer.h>
@@ -75,6 +77,10 @@ bool handleCommand(
     {
         changePassword(walletBackend);
     }
+    else if (command == "get_tx_private_key")
+    {
+        getTxPrivateKey(walletBackend);
+    }
     else if (command == "make_integrated_address")
     {
         createIntegratedAddress();
@@ -136,6 +142,10 @@ bool handleCommand(
     else if (command == "status")
     {
         status(walletBackend);
+    }
+    else if (command == "swap_node")
+    {
+        swapNode(walletBackend);
     }
     /* This should never happen */
     else

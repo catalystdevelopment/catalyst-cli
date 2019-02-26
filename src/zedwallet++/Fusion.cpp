@@ -6,9 +6,13 @@
 #include <zedwallet++/Fusion.h>
 ///////////////////////////////
 
+#include <iostream>
+
+#include <Utilities/FormatTools.h>
+
 #include <WalletBackend/WalletBackend.h>
 
-#include <zedwallet++/ColouredMsg.h>
+#include <Utilities/ColouredMsg.h>
 #include <zedwallet++/Utilities.h>
 
 void optimize(const std::shared_ptr<WalletBackend> walletBackend)
@@ -59,7 +63,7 @@ bool optimizeRound(const std::shared_ptr<WalletBackend> walletBackend)
 
             std::stringstream stream;
 
-            stream << "Failed to send fusion transction: " << error << "\n";
+            stream << "Failed to send fusion transaction: " << error << "\n";
 
             std::cout << WarningMsg(stream.str());
         }
@@ -82,13 +86,13 @@ bool optimizeRound(const std::shared_ptr<WalletBackend> walletBackend)
     {
         std::cout << InformationMsg("Waiting for balance to return and unlock:\n"
                                     "\nTotal balance: ")
-                  << InformationMsg(ZedUtilities::formatAmount(initialBalance))
+                  << InformationMsg(Utilities::formatAmount(initialBalance))
 
                   << WarningMsg("\nLocked balance: ")
-                  << WarningMsg(ZedUtilities::formatAmount(initialBalance - currentBalance))
+                  << WarningMsg(Utilities::formatAmount(initialBalance - currentBalance))
 
                   << SuccessMsg("\nUnlocked balance: ")
-                  << SuccessMsg(ZedUtilities::formatAmount(currentBalance))
+                  << SuccessMsg(Utilities::formatAmount(currentBalance))
 
                   << InformationMsg("\nWill check again in 15 seconds...\n\n");
 

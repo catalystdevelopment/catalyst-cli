@@ -219,6 +219,34 @@ struct RandomOuts {
   }
 };
 
+inline void to_json(nlohmann::json &j, const RandomOuts &r)
+{
+    j = {
+        {"amount", r.amount},
+        {"outs", r.outs}
+    };
+}
+
+inline void from_json(const nlohmann::json &j, RandomOuts &r)
+{
+    r.amount = j.at("amount").get<uint64_t>();
+    r.outs = j.at("outs").get<std::vector<OutputEntry>>();
+}
+
+inline void to_json(nlohmann::json &j, const OutputEntry &o)
+{
+    j = {
+        {"global_amount_index", o.global_amount_index},
+        {"out_key", o.out_key}
+    };
+}
+
+inline void from_json(const nlohmann::json &j, OutputEntry &o)
+{
+    o.global_amount_index = j.at("global_amount_index").get<uint32_t>();
+    o.out_key = j.at("out_key").get<Crypto::PublicKey>();
+}
+
 struct COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMOUNTS
 {
     struct request {
@@ -755,10 +783,12 @@ struct COMMAND_RPC_QUERY_BLOCKS_DETAILED {
   struct request {
     std::vector<Crypto::Hash> blockIds;
     uint64_t timestamp;
+    uint32_t blockCount;
 
     void serialize(ISerializer &s) {
       KV_MEMBER(blockIds);
       KV_MEMBER(timestamp)
+      KV_MEMBER(blockCount)
     }
   };
 
@@ -785,11 +815,13 @@ struct COMMAND_RPC_GET_WALLET_SYNC_DATA {
 
     uint64_t startHeight;
     uint64_t startTimestamp;
+    uint64_t blockCount;
 
     void serialize(ISerializer &s) {
-      KV_MEMBER(blockIds);
+      s(blockIds, "blockHashCheckpoints");
       KV_MEMBER(startHeight);
       KV_MEMBER(startTimestamp);
+      KV_MEMBER(blockCount);
     }
   };
 
@@ -799,7 +831,7 @@ struct COMMAND_RPC_GET_WALLET_SYNC_DATA {
 
     void serialize(ISerializer &s) {
       KV_MEMBER(status)
-      KV_MEMBER(items)
+      KV_MEMBER(items);
     }
   };
 };
@@ -825,7 +857,7 @@ struct COMMAND_RPC_GET_TRANSACTIONS_STATUS
 
         /* These transactions are in a block */
         std::unordered_set<Crypto::Hash> transactionsInBlock;
-        
+
         /* We don't know anything about these hashes */
         std::unordered_set<Crypto::Hash> transactionsUnknown;
 

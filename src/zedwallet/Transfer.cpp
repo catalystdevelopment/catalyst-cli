@@ -19,7 +19,7 @@
 
 #include <NodeRpcProxy/NodeErrors.h>
 
-#include <zedwallet/ColouredMsg.h>
+#include <Utilities/ColouredMsg.h>
 #include <zedwallet/Fusion.h>
 #include <zedwallet/Tools.h>
 #include <config/WalletConfig.h>
@@ -288,10 +288,7 @@ void transfer(std::shared_ptr<WalletInfo> walletInfo, uint32_t height,
 
     const uint64_t balance = walletInfo->wallet.getActualBalance();
 
-    const uint64_t balanceNoDust = walletInfo->wallet.getBalanceMinusDust
-    (
-        {walletInfo->walletAddress}
-    );
+    const uint64_t balanceNoDust = walletInfo->wallet.getBalanceMinusDust({});
     
     const auto maybeAddress = getAddress("What address do you want to transfer"
                                          " to?: ");
@@ -1025,7 +1022,7 @@ AddressType parseAddress(std::string address)
         WalletConfig::addressPrefix)
     {
         std::cout << WarningMsg("Invalid address! It should start with ")
-                  << WarningMsg(WalletConfig::addressPrefix)
+                  << WarningMsg(std::string(WalletConfig::addressPrefix))
                   << WarningMsg("!")
                   << std::endl << std::endl;
 
@@ -1077,7 +1074,7 @@ bool parseStandardAddress(std::string address, bool printErrors)
         if (printErrors)
         {
             std::cout << WarningMsg("Invalid address! It should start with ")
-                      << WarningMsg(WalletConfig::addressPrefix)
+                      << WarningMsg(std::string(WalletConfig::addressPrefix))
                       << WarningMsg("!")
                       << std::endl << std::endl;
         }

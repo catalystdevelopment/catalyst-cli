@@ -10,11 +10,13 @@
 
 #include <config/WalletConfig.h>
 
+#include <iostream>
+
 #include <Mnemonics/Mnemonics.h>
 
-#include <WalletBackend/ValidateParameters.h>
+#include <Errors/ValidateParameters.h>
 
-#include <zedwallet++/ColouredMsg.h>
+#include <Utilities/ColouredMsg.h>
 #include <zedwallet++/CommandImplementations.h>
 #include <zedwallet++/PasswordContainer.h>
 #include <zedwallet++/Utilities.h>
@@ -46,11 +48,11 @@ std::shared_ptr<WalletBackend> importViewWallet(const Config &config)
 
         std::getline(std::cin, address);
 
-        ZedUtilities::trim(address);
+        Common::trim(address);
 
         const bool integratedAddressesAllowed = false;
 
-        if (WalletError error = validateAddresses({address}, integratedAddressesAllowed); error != SUCCESS)
+        if (Error error = validateAddresses({address}, integratedAddressesAllowed); error != SUCCESS)
         {
             std::cout << WarningMsg("Invalid address: ")
                       << WarningMsg(error) << std::endl;
@@ -146,7 +148,7 @@ std::shared_ptr<WalletBackend> importWalletFromSeed(const Config &config)
 
         std::getline(std::cin, mnemonicSeed);
 
-        ZedUtilities::trim(mnemonicSeed);
+        Common::trim(mnemonicSeed);
         
         /* Just to check if it's valid */
         auto [error, privateSpendKey] = Mnemonics::MnemonicToPrivateKey(mnemonicSeed);
@@ -299,7 +301,7 @@ Crypto::SecretKey getPrivateKey(const std::string outputMsg)
 
         std::getline(std::cin, privateKeyString);
 
-        ZedUtilities::trim(privateKeyString);
+        Common::trim(privateKeyString);
 
         if (privateKeyString.length() != privateKeyLen)
         {
@@ -386,7 +388,7 @@ std::string getExistingWalletFileName(const Config &config)
                           << InformationMsg(walletName)
                           << WarningMsg(" or ")
                           << InformationMsg(walletFileName)
-                          << WarningMsg(" doesn't exist!z\n")
+                          << WarningMsg(" doesn't exist!\n")
                           << "Ensure you entered your wallet name correctly.\n\n";
             }
         }

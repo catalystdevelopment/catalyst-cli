@@ -1,11 +1,38 @@
 # We need 3.8 for set(CMAKE_CXX_STANDARD 17)
 cmake_minimum_required(VERSION 3.8)
 
-project(Catalyst)
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+  message(STATUS "Found ccache package... Activating...")
+  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+endif()
+
+project(TurtleCoin)
 
 # Required for finding Threads on ARM
 enable_language(C)
 enable_language(CXX)
+
+# Assert our compiler is good
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    # GCC 7.0 or higher
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7)
+        message(FATAL_ERROR "GCC/G++ 7.0 or greater is required to compile. Please check the README.md for detailed compilation instructions.")
+    endif()
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    # Clang 6.0 or higher
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6)
+        message(FATAL_ERROR "Clang 6.0 or greater is required to compile. Please check the README.md for detailed compilation instructions.")
+    endif()
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    # Visual Studio 15 2017 or higher
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 19.10)
+        message(FATAL_ERROR "MSVC 19.10 or greater is required to compile (Latest Visual Studio 15 2017 should suffice). Please check the README.md for detailed compilation instructions.")
+    endif()
+else()
+    message(WARNING "You are using an unsupported compiler. The compilation is very likely to fail. God speed.")
+endif()
+
 find_package(Threads)
 
 set(VERSION "0.1")
@@ -34,6 +61,32 @@ set(ENABLE_PTHREAD_MUTEX_ADAPTIVE_NP OFF CACHE STRING "Enable RocksDB PTHREAD_MU
 set(ENABLE_MALLOC_USABLE_SIZE OFF CACHE STRING "Enable RocksDB MALLOC_USABLE_SIZE support detection? Defaults to OFF")
 set(ENABLE_SCHED_GETCPU OFF CACHE STRING "Enable RocksDB SCHED_GETCPU support detection? Defaults to OFF")
 
+## This section is for settings found in the slow-hash routine(s) that may benefit some systems (mostly ARM)
+set(FORCE_USE_HEAP ON CACHE BOOL "Force the use of heap memory allocation")
+set(NO_AES OFF CACHE BOOL "Turn off Hardware AES instructions?")
+set(NO_OPTIMIZED_MULTIPLY_ON_ARM OFF CACHE BOOL "Turn off Optimized Multiplication on ARM?")
+
+if(FORCE_USE_HEAP)
+  add_definitions(-DFORCE_USE_HEAP)
+  message(STATUS "FORCE_USE_HEAP: ENABLED")
+else()
+  message(STATUS "FORCE_USE_HEAP: DISABLED")
+endif()
+
+if(NO_AES)
+  add_definitions(-DNO_AES)
+  message(STATUS "HW AES: DISABLED")
+else()
+  message(STATUS "HW AES: ENABLED")
+endif()
+
+if(NO_OPTIMIZED_MULTIPLY_ON_ARM)
+  add_definitions(-DNO_OPTIMIZED_MULTIPLY_ON_ARM)
+  message(STATUS "OPTIMIZED_ARM_MULTIPLICATION: DISABLED")
+else()
+  message(STATUS "OPTIMIZED_ARM_MULTIPLICATION: ENABLED")
+endif()
+
 # We need to set the label and import it into CMake if it exists
 set(LABEL "")
 if(DEFINED ENV{LABEL})
@@ -49,11 +102,12 @@ endif()
 ## We only build static binaries -- this is left here for our dependencies
 set(STATIC ON CACHE BOOL FORCE "Link libraries statically? Forced to ON")
 
-# This section helps us set up RocksDB for maximum portability
-set(ENABLE_AVX OFF CACHE STRING "Enable RocksDB AVX/AVX2 support detection? Defaults to OFF")
-
 ## This section helps us tag our builds with the git commit information
 set(COMMIT_ID_IN_VERSION ON CACHE BOOL "Include commit ID in version")
+
+# So we can use std::string with rapidjson
+add_definitions(-DRAPIDJSON_HAS_STDSTRING)
+
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/version")
 if (NOT COMMIT_ID_IN_VERSION)
   set(VERSION "${VERSION}-unknown")
@@ -118,7 +172,7 @@ if(NOT MSVC)
   ## These options generate all those nice warnings we see while building
   set(WARNINGS "-Wall -Wextra -Wpointer-arith -Wvla -Wwrite-strings  -Wno-error=extra -Wno-error=unused-function -Wno-error=sign-compare -Wno-error=strict-aliasing -Wno-error=type-limits -Wno-unused-parameter -Wno-error=unused-variable -Wno-error=undef -Wno-error=uninitialized -Wno-error=unused-result")
   if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
-    set(WARNINGS "${WARNINGS} -Wno-error=mismatched-tags -Wno-error=null-conversion -Wno-overloaded-shift-op-parentheses -Wno-error=shift-count-overflow -Wno-error=tautological-constant-out-of-range-compare -Wno-error=unused-private-field -Wno-error=unneeded-internal-declaration -Wno-error=unused-function -Wno-error=missing-braces")
+    set(WARNINGS "${WARNINGS} -Wno-error=mismatched-tags -Wno-error=null-conversion -Wno-overloaded-shift-op-parentheses -Wno-error=shift-count-overflow -Wno-error=tautological-constant-out-of-range-compare -Wno-error=unused-private-field -Wno-error=unneeded-internal-declaration -Wno-error=unused-function -Wno-error=missing-braces -Wno-error=unused-command-line-argument")
   else()
     set(WARNINGS "${WARNINGS} -Wlogical-op -Wno-error=maybe-uninitialized -Wno-error=clobbered -Wno-error=unused-but-set-variable")
   endif()

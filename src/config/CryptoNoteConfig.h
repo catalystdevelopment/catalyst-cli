@@ -48,10 +48,10 @@ const unsigned EMISSION_SPEED_FACTOR_V2                      = 22;
 
 static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
 static_assert(EMISSION_SPEED_FACTOR_V2 <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
-   
+
 const uint64_t EMISSION_SPEED_V2_HEIGHT                      = 21000;
 
-const uint64_t GENESIS_BLOCK_REWARD                          = UINT64_C(0); 
+const uint64_t GENESIS_BLOCK_REWARD                          = UINT64_C(0);
 
 const char     GENESIS_COINBASE_TX_HEX[]                     = "010a01ff000188f3b501029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd088071210142694232c5b04151d9e4c27d31ec7a68ea568b19488cfcb422659a07a0e44dd5";
 static_assert(sizeof(GENESIS_COINBASE_TX_HEX)/sizeof(*GENESIS_COINBASE_TX_HEX) != 1, "GENESIS_COINBASE_TX_HEX must not be empty.");
@@ -59,7 +59,7 @@ static_assert(sizeof(GENESIS_COINBASE_TX_HEX)/sizeof(*GENESIS_COINBASE_TX_HEX) !
 /* This is the unix timestamp of the first "mined" block (technically block 2, not the genesis block)
    You can get this value by doing "print_block 2" in TurtleCoind. It is used to know what timestamp
    to import from when the block height cannot be found in the node or the node is offline. */
-  
+
 // Change to match Catalyst
 const uint64_t GENESIS_BLOCK_TIMESTAMP                       = 1512800692;
 
@@ -133,8 +133,6 @@ const size_t   FUSION_TX_MAX_SIZE                            = CRYPTONOTE_BLOCK_
 const size_t   FUSION_TX_MIN_INPUT_COUNT                     = 12;
 const size_t   FUSION_TX_MIN_IN_OUT_COUNT_RATIO              = 4;
 
-const uint32_t KEY_IMAGE_CHECKING_BLOCK_INDEX                = 0;
-
 const uint32_t UPGRADE_HEIGHT_V2                             = 1;
 const uint32_t UPGRADE_HEIGHT_V3                             = 2;
 const uint32_t UPGRADE_HEIGHT_V4                             = 3; // Upgrade height for CN-Lite Variant 1 switch.
@@ -174,7 +172,7 @@ const uint64_t FORK_HEIGHTS_SIZE = sizeof(FORK_HEIGHTS) / sizeof(*FORK_HEIGHTS);
 
    This will default to zero if the FORK_HEIGHTS array is empty, so you don't
    need to change it manually. */
-const uint8_t CURRENT_FORK_INDEX = FORK_HEIGHTS_SIZE == 0 ? 0 : 0;
+const uint8_t CURRENT_FORK_INDEX = FORK_HEIGHTS_SIZE == 0 ? 0 : SOFTWARE_SUPPORTED_FORK_INDEX;
 
 static_assert(CURRENT_FORK_INDEX >= 0, "CURRENT FORK INDEX must be >= 0");
 /* Make sure CURRENT_FORK_INDEX is a valid index, unless FORK_HEIGHTS is empty */
@@ -202,7 +200,7 @@ const uint8_t  BLOCK_MINOR_VERSION_0                         =  0;
 const uint8_t  BLOCK_MINOR_VERSION_1                         =  1;
 
 const size_t   BLOCKS_IDS_SYNCHRONIZING_DEFAULT_COUNT        =  10000;  //by default, blocks ids count in synchronizing
-const size_t   BLOCKS_SYNCHRONIZING_DEFAULT_COUNT            =  100;    //by default, blocks count in blocks downloading
+const uint64_t BLOCKS_SYNCHRONIZING_DEFAULT_COUNT            =  100;    //by default, blocks count in blocks downloading
 const size_t   COMMAND_RPC_GET_BLOCKS_FAST_MAX_COUNT         =  1000;
 
 const int      P2P_DEFAULT_PORT                              =  17290;
@@ -214,8 +212,12 @@ const size_t   P2P_LOCAL_GRAY_PEERLIST_LIMIT                 =  5000;
 
 // P2P Network Configuration Section - This defines our current P2P network version
 // and the minimum version for communication between nodes
-const uint8_t  P2P_CURRENT_VERSION                           = 3;
-const uint8_t  P2P_MINIMUM_VERSION                           = 2;
+const uint8_t  P2P_CURRENT_VERSION                           = 4;
+const uint8_t  P2P_MINIMUM_VERSION                           = 3;
+
+// This defines the minimum P2P version required for lite blocks propogation
+const uint8_t P2P_LITE_BLOCKS_PROPOGATION_VERSION            = 4;
+
 // This defines the number of versions ahead we must see peers before we start displaying
 // warning messages that we need to upgrade our software.
 const uint8_t  P2P_UPGRADE_WINDOW                            = 2;
@@ -241,12 +243,12 @@ const char     LATEST_VERSION_URL[]                          = "http://catalystc
 const std::string LICENSE_URL                                = "https://github.com/turtlecoin/turtlecoin/blob/master/LICENSE";
 const static   boost::uuids::uuid CRYPTONOTE_NETWORK         =
 {
-    // Another one of Bender's nightmares 
+    // Another one of Bender's nightmares
     {  0x01, 0x11, 0x01, 0x11, 0x00, 0x01, 0x10, 0x11, 0x11, 0x11, 0x00, 0x01, 0x11, 0x00, 0x01, 0x02 }
 };
 
 const char* const SEED_NODES[] = {
-    "45.76.31.135:17290", 
+    "45.76.31.135:17290",
     "66.42.87.139:17290"
 };
 } // CryptoNote

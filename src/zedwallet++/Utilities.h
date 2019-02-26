@@ -34,20 +34,13 @@ bool confirm(const std::string &msg, const bool defaultReturn);
 
 bool startsWith(const std::string &str, const std::string &substring);
 
-std::string formatAmountBasic(const uint64_t amount);
-std::string formatAmount(const uint64_t amount);
-std::string formatDollars(const uint64_t amount);
-std::string formatCents(const uint64_t amount);
-
 std::string unixTimeToDate(const uint64_t timestamp);
-
-uint64_t getDivisor();
 
 uint64_t getScanHeight();
 
 std::vector<std::string> split(const std::string& str, char delim);
 
-bool parseDaemonAddressFromString(std::string& host, int port, const std::string& address);
+bool parseDaemonAddressFromString(std::string &host, uint16_t &port, const std::string address);
 
 template <typename T, typename Function>
 std::vector<T> filter(const std::vector<T> &input, Function predicate)

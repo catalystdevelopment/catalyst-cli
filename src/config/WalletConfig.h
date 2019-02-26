@@ -10,7 +10,7 @@
 namespace WalletConfig
 {
     /* The prefix your coins address starts with */
-    const std::string addressPrefix = "cat1";
+    const std::string_view addressPrefix = "cat1";
 
     /* Your coins 'Ticker', e.g. Monero = XMR, Bitcoin = BTC */
     const std::string ticker = "CX";
@@ -40,20 +40,20 @@ namespace WalletConfig
 
 
     /* The number of decimals your coin has */
-    const int numDecimalPlaces = CryptoNote::parameters
-                                           ::CRYPTONOTE_DISPLAY_DECIMAL_POINT;
+    const uint8_t numDecimalPlaces = CryptoNote::parameters
+                                               ::CRYPTONOTE_DISPLAY_DECIMAL_POINT;
 
 
     /* The length of a standard address for your coin */
-    const long unsigned int standardAddressLength = 98;
+    const uint16_t standardAddressLength = 98;
 
     /* The length of an integrated address for your coin - It's the same as
        a normal address, but there is a paymentID included in there - since
        payment ID's are 64 chars, and base58 encoding is done by encoding
        chunks of 8 chars at once into blocks of 11 chars, we can calculate
        this automatically */
-    const long unsigned int integratedAddressLength = standardAddressLength
-                                                    + ((64 * 11) / 8);
+    const uint16_t integratedAddressLength = standardAddressLength
+                                           + ((64 * 11) / 8);
 
     /* The default fee value to use with transactions (in ATOMIC units!) */
     const uint64_t defaultFee = CryptoNote::parameters::MINIMUM_FEE; 
@@ -72,4 +72,8 @@ namespace WalletConfig
        zero is allowed */
     const uint64_t mixinZeroDisabledHeight
         = CryptoNote::parameters::MIXIN_LIMITS_V2_HEIGHT;
+
+    /* Should we process coinbase transactions? We can skip them to speed up
+       syncing, as most people don't have solo mined transactions */
+    const bool processCoinbaseTransactions = true;
 }

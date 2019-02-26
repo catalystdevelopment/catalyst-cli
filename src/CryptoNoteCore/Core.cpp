@@ -5,32 +5,39 @@
 // Please see the included LICENSE file for more information.
 
 #include <algorithm>
-#include <numeric>
-#include <set>
-#include <unordered_set>
 
-#include "Core.h"
-#include "Common/ShuffleGenerator.h"
-#include "Common/Math.h"
-#include "Common/MemoryInputStream.h"
-#include "CryptoNoteTools.h"
-#include "CryptoNoteFormatUtils.h"
-#include "BlockchainCache.h"
-#include "BlockchainStorage.h"
-#include "BlockchainUtils.h"
-#include "CryptoNoteCore/ITimeProvider.h"
-#include "CryptoNoteCore/CoreErrors.h"
-#include "CryptoNoteCore/MemoryBlockchainStorage.h"
-#include "CryptoNoteCore/TransactionExtra.h"
-#include "CryptoNoteCore/TransactionPool.h"
-#include "CryptoNoteCore/TransactionPoolCleaner.h"
-#include "CryptoNoteCore/UpgradeManager.h"
-#include "CryptoNoteCore/Mixins.h"
-#include "CryptoNoteProtocol/CryptoNoteProtocolHandlerCommon.h"
+#include <numeric>
+
+#include <Common/ShuffleGenerator.h>
+#include <Common/Math.h>
+#include <Common/MemoryInputStream.h>
+
+#include <CryptoNoteCore/BlockchainCache.h>
+#include <CryptoNoteCore/BlockchainStorage.h>
+#include <CryptoNoteCore/BlockchainUtils.h>
+#include <CryptoNoteCore/Core.h>
+#include <CryptoNoteCore/CoreErrors.h>
+#include <CryptoNoteCore/CryptoNoteFormatUtils.h>
+#include <CryptoNoteCore/CryptoNoteTools.h>
+#include <CryptoNoteCore/ITimeProvider.h>
+#include <CryptoNoteCore/MemoryBlockchainStorage.h>
+#include <CryptoNoteCore/Mixins.h>
+#include <CryptoNoteCore/TransactionApi.h>
+#include <CryptoNoteCore/TransactionExtra.h>
+#include <CryptoNoteCore/TransactionPool.h>
+#include <CryptoNoteCore/TransactionPoolCleaner.h>
+#include <CryptoNoteCore/UpgradeManager.h>
+
+#include <CryptoNoteProtocol/CryptoNoteProtocolHandlerCommon.h>
+
+#include <set>
 
 #include <System/Timer.h>
 
-#include "TransactionApi.h"
+#include <Utilities/FormatTools.h>
+#include <Utilities/LicenseCanary.h>
+
+#include <unordered_set>
 
 #include <WalletTypes.h>
 
@@ -183,7 +190,7 @@ const std::chrono::seconds OUTDATED_TRANSACTION_POLLING_INTERVAL = std::chrono::
 
 }
 
-Core::Core(const Currency& currency, Logging::ILogger& logger, Checkpoints&& checkpoints, System::Dispatcher& dispatcher,
+Core::Core(const Currency& currency, std::shared_ptr<Logging::ILogger> logger, Checkpoints&& checkpoints, System::Dispatcher& dispatcher,
            std::unique_ptr<IBlockchainCacheFactory>&& blockchainCacheFactory, std::unique_ptr<IMainChainStorage>&& mainchainStorage)
     : currency(currency), dispatcher(dispatcher), contextGroup(dispatcher), logger(logger, "Core"), checkpoints(std::move(checkpoints)),
       upgradeManager(new UpgradeManager()), blockchainCacheFactory(std::move(blockchainCacheFactory)),
@@ -192,6 +199,7 @@ Core::Core(const Currency& currency, Logging::ILogger& logger, Checkpoints&& che
   upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_2, currency.upgradeHeight(BLOCK_MAJOR_VERSION_2));
   upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_3, currency.upgradeHeight(BLOCK_MAJOR_VERSION_3));
   upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_4, currency.upgradeHeight(BLOCK_MAJOR_VERSION_4));
+  upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_5, currency.upgradeHeight(BLOCK_MAJOR_VERSION_5));
 
   transactionPool = std::unique_ptr<ITransactionPoolCleanWrapper>(new TransactionPoolCleanWrapper(
     std::unique_ptr<ITransactionPool>(new TransactionPool(logger)),
@@ -450,8 +458,8 @@ bool Core::queryBlocksLite(const std::vector<Crypto::Hash>& knownBlockHashes, ui
   }
 }
 
-bool Core::queryBlocksDetailed(const std::vector<Crypto::Hash>& knownBlockHashes, uint64_t timestamp, uint32_t& startIndex,
-                           uint32_t& currentIndex, uint32_t& fullOffset, std::vector<BlockDetails>& entries) const {
+bool Core::queryBlocksDetailed(const std::vector<Crypto::Hash>& knownBlockHashes, uint64_t timestamp, uint64_t& startIndex,
+                           uint64_t& currentIndex, uint64_t& fullOffset, std::vector<BlockDetails>& entries, uint32_t blockCount) const {
   assert(entries.empty());
   assert(!chainsLeaves.empty());
   assert(!chainsStorage.empty());
@@ -459,6 +467,24 @@ bool Core::queryBlocksDetailed(const std::vector<Crypto::Hash>& knownBlockHashes
   throwIfNotInitialized();
 
   try {
+    if (blockCount == 0)
+    {
+      blockCount = BLOCKS_IDS_SYNCHRONIZING_DEFAULT_COUNT;
+    }
+    else if (blockCount == 1)
+    {
+      /* If we only ever request one block at a time then any attempt to sync
+       via this method will not proceed */
+      blockCount = 2;
+    }
+    else if (blockCount > BLOCKS_IDS_SYNCHRONIZING_DEFAULT_COUNT)
+    {
+      /* If we request more than the maximum defined here, chances are we are
+         going to timeout or otherwise fail whether we meant it to or not as
+         this is a VERY resource heavy RPC call */
+      blockCount = BLOCKS_IDS_SYNCHRONIZING_DEFAULT_COUNT;
+    }
+
     IBlockchainCache* mainChain = chainsLeaves[0];
     currentIndex = mainChain->getTopBlockIndex();
 
@@ -482,13 +508,13 @@ bool Core::queryBlocksDetailed(const std::vector<Crypto::Hash>& knownBlockHashes
       fullOffset = startIndex;
     }
 
-    size_t hashesPushed = pushBlockHashes(startIndex, fullOffset, BLOCKS_IDS_SYNCHRONIZING_DEFAULT_COUNT, entries);
+    size_t hashesPushed = pushBlockHashes(startIndex, fullOffset, blockCount, entries);
 
     if (startIndex + static_cast<uint32_t>(hashesPushed) != fullOffset) {
       return true;
     }
 
-    fillQueryBlockDetails(fullOffset, currentIndex, BLOCKS_SYNCHRONIZING_DEFAULT_COUNT, entries);
+    fillQueryBlockDetails(fullOffset, currentIndex, blockCount, entries);
 
     return true;
   } catch (std::exception& e) {
@@ -516,39 +542,24 @@ bool Core::getTransactionsStatus(
         /* Pop into a set for quicker .find() */
         std::unordered_set<Crypto::Hash> poolTransactions(txs.begin(), txs.end());
 
-        /* Loop through the inputted hashes */
-        for (auto it = transactionHashes.begin(); it != transactionHashes.end();)
+        for (const auto hash : transactionHashes)
         {
-            /* Transaction exists in the pool */
-            if (poolTransactions.find(*it) != poolTransactions.end())
+            if (poolTransactions.find(hash) != poolTransactions.end())
             {
-                transactionsInPool.insert(*it);
-
-                /* We have processed this transaction, remove it from the
-                   container, and update the iterators */
-                it = transactionHashes.erase(it);
+                /* It's in the pool */
+                transactionsInPool.insert(hash);
+            }
+            else if (findSegmentContainingTransaction(hash) != nullptr)
+            {
+                /* It's in a block */
+                transactionsInBlock.insert(hash);
             }
             else
             {
-                ++it;
+                /* We don't know anything about it */
+                transactionsUnknown.insert(hash);
             }
         }
-
-        for (auto it = transactionHashes.begin(); it != transactionHashes.end();)
-        {
-            /* The transaction is present in a block */
-            if (findSegmentContainingTransaction(*it) != nullptr)
-            {
-                transactionsInBlock.insert(*it);
-
-                /* We have processed this transaction, remove it from the container
-                   and update the iterators */
-                it = transactionHashes.erase(it);
-            }
-        }
-
-        /* Anything remaining, the daemon does not know about. */
-        transactionsUnknown = transactionHashes;
 
         return true;
     }
@@ -566,6 +577,7 @@ bool Core::getWalletSyncData(
     const std::vector<Crypto::Hash> &knownBlockHashes,
     const uint64_t startHeight,
     const uint64_t startTimestamp,
+    const uint64_t blockCount,
     std::vector<WalletTypes::WalletBlockInfo> &walletBlocks) const
 {
     throwIfNotInitialized();
@@ -577,7 +589,21 @@ bool Core::getWalletSyncData(
         /* Current height */
         uint64_t currentIndex = mainChain->getTopBlockIndex();
 
-        const auto [success, timestampBlockHeight] = mainChain->getBlockHeightForTimestamp(startTimestamp);
+        uint64_t actualBlockCount = std::min(BLOCKS_SYNCHRONIZING_DEFAULT_COUNT, blockCount);
+
+        if (actualBlockCount == 0) {
+            actualBlockCount = BLOCKS_SYNCHRONIZING_DEFAULT_COUNT;
+        }
+
+        auto [success, timestampBlockHeight] = mainChain->getBlockHeightForTimestamp(startTimestamp);
+
+        /* If no timestamp given, occasionaly the daemon returns a non zero
+           block height... for some reason. Set it back to zero if we didn't
+           give a timestamp to fix this. */
+        if (startTimestamp == 0)
+        {
+            timestampBlockHeight = 0;
+        }
 
         /* If we couldn't get the first block timestamp, then the node is
            synced less than the current height, so return no blocks till we're
@@ -591,13 +617,42 @@ bool Core::getWalletSyncData(
            to a block */
         uint64_t firstBlockHeight = startHeight == 0 ? timestampBlockHeight : startHeight;
 
+        /* The height of the last block we know about */
+        uint64_t lastKnownBlockHashHeight = static_cast<uint64_t>(findBlockchainSupplement(knownBlockHashes));
+
         /* Start returning either from the start height, or the height of the
            last block we know about, whichever is higher */
         uint64_t startIndex = std::max(
-            /* Plus one so we return the next block */
-            static_cast<uint64_t>(findBlockchainSupplement(knownBlockHashes)) + 1,
+            /* Plus one so we return the next block - default to zero if it's zero,
+               otherwise genesis block will be skipped. */
+            lastKnownBlockHashHeight == 0 ? 0 : lastKnownBlockHashHeight + 1,
             firstBlockHeight
         );
+
+        /* Difference between the start and end */
+        uint64_t blockDifference = currentIndex - startIndex;
+
+        /* Sync actualBlockCount or the amount of blocks between
+           start and end, whichever is smaller */
+        uint64_t endIndex = std::min(actualBlockCount, blockDifference + 1) + startIndex;
+
+        logger(Logging::DEBUGGING)
+            << "\n\n"
+            << "\n============================================="
+            << "\n========= GetWalletSyncData summary ========="
+            << "\n* Known block hashes size: " << knownBlockHashes.size()
+            << "\n* Blocks requested: " << actualBlockCount
+            << "\n* Start height: " << startHeight
+            << "\n* Start timestamp: " << startTimestamp
+            << "\n* Current index: " << currentIndex
+            << "\n* Timestamp block height: " << timestampBlockHeight
+            << "\n* First block height: " << firstBlockHeight
+            << "\n* Last known block hash height: " << lastKnownBlockHashHeight
+            << "\n* Start index: " << startIndex
+            << "\n* Block difference: " << blockDifference
+            << "\n* End index: " << endIndex
+            << "\n============================================="
+            << "\n\n\n";
 
         /* If we're fully synced, then the start index will be greater than our
            current block. */
@@ -605,16 +660,6 @@ bool Core::getWalletSyncData(
         {
             return true;
         }
-
-        /* Difference between the start and end */
-        uint64_t blockDifference = currentIndex - startIndex;
-
-        /* Sync BLOCKS_SYNCHRONIZING_DEFAULT_COUNT or the amount of blocks between
-           start and end, whichever is smaller */
-        uint64_t endIndex = std::min(
-            static_cast<uint64_t>(BLOCKS_SYNCHRONIZING_DEFAULT_COUNT),
-            blockDifference + 1
-        ) + startIndex;
 
         std::vector<RawBlock> rawBlocks = mainChain->getBlocksByHeight(startIndex, endIndex);
 
@@ -699,7 +744,7 @@ WalletTypes::RawTransaction Core::getRawTransaction(
     transaction.paymentID = getPaymentIDFromExtra(t.extra);
 
     transaction.unlockTime = t.unlockTime;
-    
+
     /* Simplify the outputs */
     for (const auto &output : t.outputs)
     {
@@ -793,7 +838,7 @@ std::string Core::getPaymentIDFromExtra(const std::vector<uint8_t> &extra)
             {
                 return std::string();
             }
-            
+
             /* Payment ID in extra nonce */
             if (extra[i+2] == TX_EXTRA_PAYMENT_ID_IDENTIFIER)
             {
@@ -1281,6 +1326,12 @@ bool Core::getRandomOutputs(uint64_t amount, uint16_t count, std::vector<uint32_
 
   globalIndexes = chainsLeaves[0]->getRandomOutsByAmount(amount, count, getTopBlockIndex());
   if (globalIndexes.empty()) {
+    logger(Logging::ERROR) << "Failed to get any matching outputs for amount "
+                           << amount << " (" << Utilities::formatAmount(amount)
+                           << "). Further explanation here: "
+                           << "https://gist.github.com/zpalmtree/80b3e80463225bcfb8f8432043cb594c\n"
+                           << "Note: If you are a public node operator, you can safely ignore this message. "
+                           << "It is only relevant to the user sending the transaction.";
     return false;
   }
 
@@ -1418,6 +1469,15 @@ std::vector<Crypto::Hash> Core::getPoolTransactionHashes() const {
   throwIfNotInitialized();
 
   return transactionPool->getTransactionHashes();
+}
+
+std::tuple<bool, CryptoNote::BinaryArray> Core::getPoolTransaction(const Crypto::Hash& transactionHash) const {
+  if (transactionPool->checkIfTransactionPresent(transactionHash)) {
+    return {true, transactionPool->getTransaction(transactionHash).getTransactionBinaryArray()};
+  }
+  else {
+    return {false, BinaryArray()};
+  }
 }
 
 bool Core::getPoolChanges(const Crypto::Hash& lastBlockHash, const std::vector<Crypto::Hash>& knownHashes,
@@ -1655,29 +1715,6 @@ size_t Core::getAlternativeBlockCount() const {
   });
 }
 
-uint64_t Core::getTotalGeneratedAmount() const {
-  assert(!chainsLeaves.empty());
-  throwIfNotInitialized();
-
-  return chainsLeaves[0]->getAlreadyGeneratedCoins();
-}
-
-std::vector<BlockTemplate> Core::getAlternativeBlocks() const {
-  throwIfNotInitialized();
-
-  std::vector<BlockTemplate> alternativeBlocks;
-  for (auto& cache : chainsStorage) {
-    if (mainChainSet.count(cache.get()))
-      continue;
-    for (auto index = cache->getStartBlockIndex(); index <= cache->getTopBlockIndex(); ++index) {
-      // TODO: optimize
-      alternativeBlocks.push_back(fromBinaryArray<BlockTemplate>(cache->getBlockByIndex(index).block));
-    }
-  }
-
-  return alternativeBlocks;
-}
-
 std::vector<Transaction> Core::getPoolTransactions() const {
   throwIfNotInitialized();
 
@@ -1748,12 +1785,7 @@ auto error = validateSemantic(transaction, fee, blockIndex);
           return error::TransactionValidationError::INPUT_SPEND_LOCKED_OUT;
         }
 
-        std::vector<const Crypto::PublicKey*> outputKeyPointers;
-        outputKeyPointers.reserve(outputKeys.size());
-        std::for_each(outputKeys.begin(), outputKeys.end(), [&outputKeyPointers] (const Crypto::PublicKey& key) { outputKeyPointers.push_back(&key); });
-        if (!Crypto::check_ring_signature(cachedTransaction.getTransactionPrefixHash(), in.keyImage, outputKeyPointers.data(),
-                                          outputKeyPointers.size(), transaction.signatures[inputIndex].data(),
-                                          blockIndex > parameters::KEY_IMAGE_CHECKING_BLOCK_INDEX)) {
+        if (!Crypto::crypto_ops::checkRingSignature(cachedTransaction.getTransactionPrefixHash(), in.keyImage, outputKeys, transaction.signatures[inputIndex])) {
           return error::TransactionValidationError::INPUT_INVALID_SIGNATURES;
         }
       }
@@ -1819,10 +1851,10 @@ std::error_code Core::validateSemantic(const Transaction& transaction, uint64_t&
 
       // outputIndexes are packed here, first is absolute, others are offsets to previous,
       // so first can be zero, others can't
-  // Fix discovered by Monero Lab and suggested by "fluffypony" (bitcointalk.org)
-  if (!(scalarmultKey(in.keyImage, L) == I) && blockIndex > parameters::KEY_IMAGE_CHECKING_BLOCK_INDEX) {
-    return error::TransactionValidationError::INPUT_INVALID_DOMAIN_KEYIMAGES;
-  }
+      // Fix discovered by Monero Lab and suggested by "fluffypony" (bitcointalk.org)
+      if (!(scalarmultKey(in.keyImage, L) == I)) {
+        return error::TransactionValidationError::INPUT_INVALID_DOMAIN_KEYIMAGES;
+      }
 
       if (std::find(++std::begin(in.outputIndexes), std::end(in.outputIndexes), 0) != std::end(in.outputIndexes)) {
         return error::TransactionValidationError::INPUT_IDENTICAL_OUTPUT_INDEXES;
@@ -2693,29 +2725,6 @@ TransactionDetails Core::getTransactionDetails(const Crypto::Hash& transactionHa
   }
 
   return transactionDetails;
-}
-
-std::vector<Crypto::Hash> Core::getAlternativeBlockHashesByIndex(uint32_t blockIndex) const {
-  throwIfNotInitialized();
-
-  std::vector<Crypto::Hash> alternativeBlockHashes;
-  for (size_t chain = 1; chain < chainsLeaves.size(); ++chain) {
-    IBlockchainCache* segment = chainsLeaves[chain];
-    if (segment->getTopBlockIndex() < blockIndex) {
-      continue;
-    }
-
-    do {
-      if (segment->getTopBlockIndex() - segment->getBlockCount() + 1 <= blockIndex) {
-        alternativeBlockHashes.push_back(segment->getBlockHash(blockIndex));
-        break;
-      } else if (segment->getTopBlockIndex() - segment->getBlockCount() - 1 > blockIndex) {
-        segment = segment->getParent();
-        assert(segment != nullptr);
-      }
-    } while (mainChainSet.count(segment) == 0);
-  }
-  return alternativeBlockHashes;
 }
 
 std::vector<Crypto::Hash> Core::getBlockHashesByTimestamps(uint64_t timestampBegin, size_t secondsCount) const {
