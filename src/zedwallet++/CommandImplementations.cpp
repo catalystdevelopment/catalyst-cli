@@ -14,8 +14,6 @@
 #include <fstream>
 
 #include <Utilities/FormatTools.h>
-#include <WalletBackend/ValidateParameters.h>
-#include <WalletBackend/WalletBackend.h>
 
 #include <Utilities/ColouredMsg.h>
 #include <zedwallet++/Commands.h>
