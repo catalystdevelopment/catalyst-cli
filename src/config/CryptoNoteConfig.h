@@ -124,6 +124,9 @@ const uint64_t MAX_EXTRA_SIZE                                = 140000;
 const uint64_t MAX_EXTRA_SIZE_V2                             = 1024;
 const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT                      = 1300000;
 
+/* This needs to be changed, we'll set to 170000 for now*/
+const uint64_t TRANSACTION_SIGNATURE_COUNT_VALIDATION_HEIGHT = 170000;
+
 const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS     = 1;
 const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_SECONDS    = DIFFICULTY_TARGET * CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS;
 
