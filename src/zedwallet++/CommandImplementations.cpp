@@ -419,8 +419,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
 
     std::cout << SuccessMsg(stream.str()) << std::endl;
 
-    /* https://github.com/turtlecoin/turtlecoin/issues/675
-       display unlock time */
+    /* Display unlock time */
     if (tx.unlockTime != 0 && tx.unlockTime < 50000000)
     {
         int64_t difference = tx.unlockTime - tx.blockHeight;
