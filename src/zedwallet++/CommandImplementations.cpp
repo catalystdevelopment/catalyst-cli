@@ -417,7 +417,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
         stream << "Payment ID: " << tx.paymentID << "\n";
     }
 
-        std::cout << SuccessMsg(stream.str());
+    std::cout << SuccessMsg(stream.str());
 
     /* Display unlock time */
     if (tx.unlockTime != 0 && tx.unlockTime < 50000000)
