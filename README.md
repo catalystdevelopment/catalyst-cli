@@ -1,7 +1,4 @@
-<!--
-![image](https://user-images.githubusercontent.com/34389545/35821974-62e0e25c-0a70-11e8-87dd-2cfffeb6ed47.png)
--->
-![image](catalyst.png)
+![Imgur Image](https://imgur.com/a/J9cY70v.jpg)
 
 #### v0.0.1.0 November 25, 2018
 #### v0.0.1.1 November 27, 2018
