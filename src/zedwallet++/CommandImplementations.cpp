@@ -1,4 +1,5 @@
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Catalyst Developers
 // 
 // Please see the included LICENSE file for more information.
 
@@ -416,7 +417,21 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
         stream << "Payment ID: " << tx.paymentID << "\n";
     }
 
-    std::cout << SuccessMsg(stream.str()) << std::endl;
+        std::cout << SuccessMsg(stream.str());
+
+    /* Display unlock time */
+    if (tx.unlockTime != 0 && tx.unlockTime < 50000000)
+    {
+        int64_t difference = tx.unlockTime - tx.blockHeight;
+        if (difference > 0)
+        {
+            std::cout << "(Unlocks in " << difference << " blocks)" << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "(Unlocked at " << ZedUtilities::unixTimeToDate(tx.timestamp) << ")" << std::endl;
+    }
 }
 
 void listTransfers(
