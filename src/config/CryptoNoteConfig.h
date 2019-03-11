@@ -41,7 +41,7 @@ const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX                 = 1;
 const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX_V2              = 2;
 const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX_V3              = 3;
 
-const uint64_t LWMA_3_DIFFICULTY_BLOCK_INDEX                 = 1200000;
+const uint64_t LWMA_3_DIFFICULTY_BLOCK_INDEX                 = 170000;
 
 const unsigned EMISSION_SPEED_FACTOR                         = 18;
 const unsigned EMISSION_SPEED_FACTOR_V2                      = 22;
@@ -153,22 +153,23 @@ static_assert(UPGRADE_VOTING_WINDOW > 1, "Bad UPGRADE_VOTING_WINDOW");
 /* Block heights we are going to have hard forks at */
 const uint64_t FORK_HEIGHTS[] =
 {
-    170000,  // 0
-    270000,  // 1
-    470000,  // 2
-    670000,  // 3
-    770000,  // 4
-    900000,  // 5
-    1100000, // 6
-    1300000, // 7
-    1500000, // 8
-    1700000, // 9
-    1900000, // 10
-    2100000, // 11
+    22000,   // 0
+    170000,  // 1
+    270000,  // 2
+    470000,  // 3
+    670000,  // 4
+    770000,  // 5
+    900000,  // 6
+    1100000, // 7
+    1300000, // 8
+    1500000, // 9
+    1700000, // 10
+    1900000, // 11
+    2100000, // 12
 };
 
 /* MAKE SURE TO UPDATE THIS VALUE WITH EVERY MAJOR RELEASE BEFORE A FORK */
-const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX                 = 0;
+const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX                 = 1;
 
 const uint64_t FORK_HEIGHTS_SIZE = sizeof(FORK_HEIGHTS) / sizeof(*FORK_HEIGHTS);
 
