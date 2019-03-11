@@ -440,6 +440,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
                           << InformationMsg(" blocks)")
                           << std::endl
                           << std::endl;
+
             }
         }
     }
