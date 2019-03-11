@@ -151,6 +151,11 @@ namespace Crypto {
     }
 
     uint32_t scratchpad = CN_SOFT_SHELL_MEMORY + (static_cast<uint32_t>(offset) * CN_SOFT_SHELL_PAD_MULTIPLIER);
+	scratchpad = (static_cast<uint64_t>(scratchpad / 64)) * 64;
+	if ((scratchpad / 64) % 2 != 0)
+	{
+		scratchpad -= 64;
+	}
     uint32_t iterations = CN_SOFT_SHELL_ITER + (static_cast<uint32_t>(offset) * CN_SOFT_SHELL_ITER_MULTIPLIER);
     uint32_t pagesize = scratchpad;
 
@@ -165,6 +170,11 @@ namespace Crypto {
     }
 
     uint32_t scratchpad = CN_SOFT_SHELL_MEMORY + (static_cast<uint32_t>(offset) * CN_SOFT_SHELL_PAD_MULTIPLIER);
+	scratchpad = (static_cast<uint64_t>(scratchpad / 64)) * 64;
+	if ((scratchpad / 64) % 2 != 0)
+	{
+		scratchpad -= 64;
+	}
     uint32_t iterations = CN_SOFT_SHELL_ITER + (static_cast<uint32_t>(offset) * CN_SOFT_SHELL_ITER_MULTIPLIER);
     uint32_t pagesize = scratchpad;
 
@@ -179,6 +189,11 @@ namespace Crypto {
     }
 
     uint32_t scratchpad = CN_SOFT_SHELL_MEMORY + (static_cast<uint32_t>(offset) * CN_SOFT_SHELL_PAD_MULTIPLIER);
+	scratchpad = (static_cast<uint64_t>(scratchpad / 64)) * 64;
+	if ((scratchpad / 64) % 2 != 0) 
+	{
+		scratchpad -= 64;
+	}
     uint32_t iterations = CN_SOFT_SHELL_ITER + (static_cast<uint32_t>(offset) * CN_SOFT_SHELL_ITER_MULTIPLIER);
     uint32_t pagesize = scratchpad;
 
