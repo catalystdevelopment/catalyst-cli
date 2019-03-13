@@ -41,8 +41,10 @@ const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX                 = 1;
 const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX_V2              = 2;
 const uint64_t LWMA_2_DIFFICULTY_BLOCK_INDEX_V3              = 3;
 
-/* LWMA_2 is performing better according to our friends at TurtleCoin */
-const uint64_t LWMA_3_DIFFICULTY_BLOCK_INDEX                 = 170000;
+/* LWMA_2 is performing better than LWMA_3 according to our friends at TurtleCoin.
+ * Keeping it in for now as it wouldn't go into effect for quite a while,
+ * but should probably be removed if it is going to go unused */
+const uint64_t LWMA_3_DIFFICULTY_BLOCK_INDEX                 = 800000;
 
 const unsigned EMISSION_SPEED_FACTOR                         = 18;
 const unsigned EMISSION_SPEED_FACTOR_V2                      = 22;

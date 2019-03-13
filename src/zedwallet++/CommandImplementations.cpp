@@ -433,7 +433,8 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
 
             if (difference > 0)
             {
-                int64_t unlockInUnixTime = tx.timestamp + tx.blockHeight*2 + tx.unlockTime;
+                unsigned short blocksPerMinute = 60 / CryptoNote::parameters::DIFFICULTY_TARGET;
+                int64_t unlockInUnixTime = tx.timestamp + (difference*blocksPerMinute);
 
                 std::cout << InformationMsg("Unlocks in ")
                           << InformationMsg(difference)
