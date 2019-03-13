@@ -417,40 +417,32 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
     {
         stream << "Payment ID: " << tx.paymentID << "\n";
     }
-
+    
+    /* Display unlock time (if applicable) */
     if (tx.unlockTime == 0)
     {
         std::cout << SuccessMsg(stream.str()) << std::endl;
     }
-
-    /* Display unlock time */
-    if (tx.unlockTime != 0)
+    else
     {
         std::cout << SuccessMsg(stream.str());
-        
-        /* Unlock time should be treated as a block, and is in the future */
+        /* Let's treat Unlock as a block and as a time, and treat it that way in the future */
         if (tx.unlockTime < CryptoNote::parameters::CRYPTONOTE_MAX_BLOCK_NUMBER)
         {
             int64_t difference = tx.unlockTime - tx.blockHeight;
 
             if (difference > 0)
             {
-                std::cout << InformationMsg("(Unlocks in ")
+                int64_t unlockInUnixTime = tx.timestamp + tx.blockHeight*2 + tx.unlockTime;
+
+                std::cout << InformationMsg("Unlocks in ")
                           << InformationMsg(difference)
-                          << InformationMsg(" blocks)")
+                          << InformationMsg(" blocks, at approximately: ")
+                          << InformationMsg(ZedUtilities::unixTimeToDate(unlockInUnixTime))
                           << std::endl
                           << std::endl;
             }
         }
-    }
-    /* Unlock time should be treated as a time, and is in the future */
-    else if (tx.unlockTime > std::time(nullptr))
-    {
-        std::cout << InformationMsg("(Unlocks at ")
-                  << InformationMsg(ZedUtilities::unixTimeToDate(tx.timestamp))
-                  << InformationMsg(")")
-                  << std::endl
-                  << std::endl;
     }
 }
 
