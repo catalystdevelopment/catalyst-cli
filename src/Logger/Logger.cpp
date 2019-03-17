@@ -94,7 +94,7 @@ namespace Logger
 
         output << ": " << message;
 
-        if (level >= m_logLevel)
+        if (level <= m_logLevel)
         {
             /* If the user provides a callback, log to that instead */
             if (m_callback)

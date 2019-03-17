@@ -14,11 +14,11 @@ namespace Logger
 {
     enum LogLevel
     {
-        DEBUG = 0,
-        INFO = 1,
+        DEBUG = 4,
+        INFO = 3,
         WARNING = 2,
-        ERROR = 3,
-        DISABLED = 4,
+        ERROR = 1,
+        DISABLED = 0,
     };
 
     enum LogCategory
