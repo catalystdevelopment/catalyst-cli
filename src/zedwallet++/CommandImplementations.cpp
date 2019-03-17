@@ -433,12 +433,11 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
 
             if (difference > 0)
             {
-                const unsigned short blocksPerMinute = 60 / CryptoNote::parameters::DIFFICULTY_TARGET;
-                int64_t unlockInUnixTime = tx.timestamp + (difference*blocksPerMinute);
+                int64_t unlockInUnixTime = tx.timestamp + (difference*CryptoNote::parameters::DIFFICULTY_TARGET);
 
                 std::cout << InformationMsg("Unlocks in ")
                           << InformationMsg(difference)
-                          << InformationMsg(" blocks, at approximately: ")
+                          << InformationMsg(" blocks, at approximately ")
                           << InformationMsg(ZedUtilities::unixTimeToDate(unlockInUnixTime))
                           << std::endl
                           << std::endl;
