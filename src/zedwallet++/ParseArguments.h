@@ -28,6 +28,7 @@ struct Config
     /* The wallet password */
     std::string walletPass;
 
+    /* Controls what level of messages to log */
     Logger::LogLevel logLevel = Logger::DISABLED;
 };
 
