@@ -437,7 +437,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
 
                 std::cout << InformationMsg("Unlocks in ")
                           << InformationMsg(difference)
-                          << InformationMsg(" blocks, at approximately: ")
+                          << InformationMsg(" blocks, at approximately ")
                           << InformationMsg(ZedUtilities::unixTimeToDate(unlockInUnixTime))
                           << std::endl
                           << std::endl;
