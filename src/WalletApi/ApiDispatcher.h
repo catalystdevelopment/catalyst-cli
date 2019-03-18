@@ -10,6 +10,13 @@
 
 #include <cryptopp/modes.h>
 
+enum WalletState
+{
+    WalletMustBeOpen,
+    WalletMustBeClosed,
+    DoesntMatter,
+};
+
 /* Functions the same as body.at(key).get<T>(), but gives better error messages */
 template<typename T>
 T tryGetJsonValue(const nlohmann::json &body, const std::string key)
@@ -70,7 +77,7 @@ class ApiDispatcher
         void middleware(
             const httplib::Request &req,
             httplib::Response &res,
-            const bool walletMustBeOpen,
+            const WalletState walletState,
             const bool viewWalletsPermitted,
             std::function<std::tuple<Error, uint16_t>
                 (const httplib::Request &req,
