@@ -12,6 +12,8 @@
 
 #include <iostream>
 
+#include <sstream>
+
 namespace Logger
 {
     Logger logger;
