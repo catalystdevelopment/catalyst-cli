@@ -28,6 +28,8 @@
 
 #include <WalletBackend/JsonSerialization.h>
 
+#include <Utilities/Addresses.h>
+
 using namespace httplib;
 
 ApiDispatcher::ApiDispatcher(
@@ -91,6 +93,9 @@ ApiDispatcher::ApiDispatcher(
 
             /* Import a view only address with a public spend key */
             .Post("/addresses/import/view", router(&ApiDispatcher::importViewAddress, WalletMustBeOpen, viewWalletsAllowed))
+
+            /* Validate an address */
+            .Post("/addresses/validate", router(&ApiDispatcher::validateAddress, DoesntMatter, viewWalletsAllowed))
 
             /* Send a transaction */
             .Post("/transactions/send/basic", router(&ApiDispatcher::sendBasicTransaction, WalletMustBeOpen, viewWalletsBanned))
@@ -566,6 +571,45 @@ std::tuple<Error, uint16_t> ApiDispatcher::importViewAddress(
 
     return {SUCCESS, 201};
 }
+
+std::tuple<Error, uint16_t> ApiDispatcher::validateAddress(
+    const Request &req,
+    Response &res,
+    const nlohmann::json &body)
+{
+    const std::string address = tryGetJsonValue<std::string>(body, "address");
+
+    const Error error = validateAddresses({address}, true);
+
+    if (error != SUCCESS) {
+        return {error, 400};
+    }
+
+    std::string actualAddress = address;
+    std::string paymentID = "";
+
+    const bool isIntegrated = address.length() == WalletConfig::integratedAddressLength;
+
+    if (isIntegrated)
+    {
+        std::tie(actualAddress, paymentID) = Utilities::extractIntegratedAddressData(address);
+    }
+
+    const auto [publicSpendKey, publicViewKey] = Utilities::addressToKeys(actualAddress);
+
+    nlohmann::json j {
+        {"isIntegrated", address.length() == WalletConfig::integratedAddressLength},
+        {"paymentID", paymentID},
+        {"actualAddress", actualAddress},
+        {"publicSpendKey", publicSpendKey},
+        {"publicViewKey", publicViewKey},
+    };
+
+    res.set_content(j.dump(4) + "\n", "application/json");
+
+    return {SUCCESS, 200};
+}
+
 
 std::tuple<Error, uint16_t> ApiDispatcher::sendBasicTransaction(
     const Request &req,

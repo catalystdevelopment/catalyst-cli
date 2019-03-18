@@ -142,6 +142,11 @@ class ApiDispatcher
             httplib::Response &res,
             const nlohmann::json &body);
 
+        std::tuple<Error, uint16_t> validateAddress(
+            const httplib::Request &req,
+            httplib::Response &res,
+            const nlohmann::json &body);
+
         std::tuple<Error, uint16_t> sendBasicTransaction(
             const httplib::Request &req,
             httplib::Response &res,
