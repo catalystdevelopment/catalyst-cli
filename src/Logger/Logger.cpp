@@ -38,9 +38,9 @@ namespace Logger
             {
                 return "Warning";
             }
-            case ERROR:
+            case FATAL:
             {
-                return "Error";
+                return "Fatal";
             }
         }
     }

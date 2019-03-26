@@ -17,7 +17,7 @@ namespace Logger
         DEBUG = 4,
         INFO = 3,
         WARNING = 2,
-        ERROR = 1,
+        FATAL = 1,
         DISABLED = 0,
     };
 

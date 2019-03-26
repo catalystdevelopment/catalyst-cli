@@ -505,7 +505,7 @@ std::tuple<Error, std::shared_ptr<WalletBackend>> WalletBackend::openWallet(
     {
         Logger::logger.log(
             std::string("Failed to open wallet file: ") + e.what(),
-            Logger::ERROR,
+            Logger::FATAL,
             {Logger::FILESYSTEM, Logger::SAVE}
         );
 
@@ -616,7 +616,7 @@ Error WalletBackend::unsafeSave() const
     {
         Logger::logger.log(
             std::string("Wallet filename: ") + m_filename + " is invalid",
-            Logger::ERROR,
+            Logger::FATAL,
             {Logger::FILESYSTEM, Logger::SAVE}
         );
 
