@@ -34,6 +34,8 @@
 
 #include "JsonHelper.h"
 
+#include <Logger/Logger.h>
+
 #include <Mnemonics/Mnemonics.h>
 
 #include "rapidjson/writer.h"
@@ -501,6 +503,12 @@ std::tuple<Error, std::shared_ptr<WalletBackend>> WalletBackend::openWallet(
     }
     catch (const std::invalid_argument &e)
     {
+        Logger::logger.log(
+            std::string("Failed to open wallet file: ") + e.what(),
+            Logger::FATAL,
+            {Logger::FILESYSTEM, Logger::SAVE}
+        );
+
         return {WALLET_FILE_CORRUPTED, nullptr};
     }
 }
@@ -606,6 +614,12 @@ Error WalletBackend::unsafeSave() const
 
     if (!file)
     {
+        Logger::logger.log(
+            std::string("Wallet filename: ") + m_filename + " is invalid",
+            Logger::FATAL,
+            {Logger::FILESYSTEM, Logger::SAVE}
+        );
+
         return INVALID_WALLET_FILENAME;
     }
 
