@@ -494,9 +494,12 @@ std::tuple<Error, uint16_t> ApiDispatcher::createAddress(
 {
     const auto [error, address, privateSpendKey] = m_walletBackend->addSubWallet();
 
+    const auto [publicSpendKey, publicViewKey] = Utilities::addressToKeys(address);
+
     nlohmann::json j {
         {"address", address},
-        {"privateSpendKey", privateSpendKey}
+        {"privateSpendKey", privateSpendKey},
+        {"publicSpendKey", publicSpendKey}
     };
 
     res.set_content(j.dump(4) + "\n", "application/json");
