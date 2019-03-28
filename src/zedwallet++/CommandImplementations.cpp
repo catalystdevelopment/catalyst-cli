@@ -419,8 +419,8 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
     }
 
     /* Don't display unlock time */
-    if (tx.unlockTime == 0 ^ (tx.unlockTime < std::time(nullptr)
-        && tx.unlockTime > CryptoNote::parameters::DIFFICULTY_TARGET))
+    if (tx.unlockTime == 0 ^ (tx.unlockTime < std::time(nullptr) &&
+        tx.unlockTime > CryptoNote::parameters::DIFFICULTY_TARGET))
     {
         std::cout << SuccessMsg(stream.str()) << std::endl;
     }
