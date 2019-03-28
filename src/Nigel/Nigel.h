@@ -71,7 +71,7 @@ class Nigel
 
         std::tuple<uint64_t, std::string> nodeFee() const;
 
-        std::tuple<std::string, uint16_t> nodeAddress() const;
+        std::tuple<std::string, uint16_t, bool> nodeAddress() const;
 
         std::tuple<bool, std::vector<WalletTypes::WalletBlockInfo>> getWalletSyncData(
             const std::vector<Crypto::Hash> blockHashCheckpoints,
@@ -160,5 +160,5 @@ class Nigel
         uint16_t m_daemonPort;
 
         /* If the daemon is SSL */
-        bool m_daemonSSL;
+        bool m_daemonSSL = false;
 };

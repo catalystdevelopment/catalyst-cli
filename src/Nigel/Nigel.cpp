@@ -99,12 +99,14 @@ void Nigel::swapNode(const std::string daemonHost, const uint16_t daemonPort, co
 #ifdef CPPHTTPLIB_OPENSSL_SUPPORT
     if (m_daemonSSL)
     {
+        m_httpClient = nullptr;
         m_httpsClient = std::make_shared<httplib::SSLClient>(
             daemonHost.c_str(), daemonPort, m_timeout.count()
         );
     }
     else
     {
+        m_httpsClient = nullptr;
 #endif
         m_httpClient = std::make_shared<httplib::Client>(
             daemonHost.c_str(), daemonPort, m_timeout.count()
@@ -371,9 +373,9 @@ std::tuple<uint64_t, std::string> Nigel::nodeFee() const
     return {m_nodeFeeAmount, m_nodeFeeAddress};
 }
 
-std::tuple<std::string, uint16_t> Nigel::nodeAddress() const
+std::tuple<std::string, uint16_t, bool> Nigel::nodeAddress() const
 {
-    return {m_daemonHost, m_daemonPort};
+    return {m_daemonHost, m_daemonPort, m_daemonSSL};
 }
 
 bool Nigel::getTransactionsStatus(

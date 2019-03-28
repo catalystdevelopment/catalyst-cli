@@ -1,4 +1,4 @@
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
 // 
 // Please see the included LICENSE file for more information.
 
@@ -327,7 +327,7 @@ class ApiDispatcher
         //////////////////////////
 
         /* Extracts {host, port, filename, password}, from body */
-        std::tuple<std::string, uint16_t, std::string, std::string>
+        std::tuple<std::string, uint16_t, bool, std::string, std::string>
             getDefaultWalletParams(const nlohmann::json body) const;
 
         /* Assert the wallet is not a view only wallet */

@@ -152,6 +152,7 @@ if(OPENSSL_FOUND)
   target_link_libraries(miner ${OPENSSL_LIBRARIES})
   target_link_libraries(Nigel ${OPENSSL_LIBRARIES})
   target_link_libraries(WalletApi ${OPENSSL_LIBRARIES})
+  target_link_libraries(zedwallet++ ${OPENSSL_LIBRARIES})
 endif()
 
 # Add dependencies means we have to build the latter before we build the former
