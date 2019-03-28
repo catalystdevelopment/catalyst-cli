@@ -418,11 +418,13 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
         stream << "Payment ID: " << tx.paymentID << "\n";
     }
     
-    /* Display unlock time (if applicable) */
-    if (tx.unlockTime == 0)
+    /* Don't display unlock time */
+    if (tx.unlockTime == 0 ^ (tx.unlockTime < std::time(nullptr) && 
+                              tx.unlockTime > CryptoNote::parameters::DIFFICULTY_TARGET))
     {
         std::cout << SuccessMsg(stream.str()) << std::endl;
     }
+    /* Display Unlock time */
     else
     {
         std::cout << SuccessMsg(stream.str());
@@ -445,7 +447,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
             }
         }
         /* Here we treat Unlock as Unix time, and treat it that way in the future */
-        else
+        else if (tx.unlockTime > std::time(nullptr) && tx.unlockTime > Cryptonote::parameters::DIFFICULTY_TARGET)
         {
             std::cout << InformationMsg("Unlocks at ")
                       << InformationMsg(ZedUtilities::unixTimeToDate(tx.unlockTime))
