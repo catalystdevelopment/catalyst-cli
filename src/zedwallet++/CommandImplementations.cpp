@@ -430,7 +430,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
                   << InformationMsg("Unlock height: ")
                   << InformationMsg(tx.unlockTime)
                   << std::endl
-                  << InformationMsg("Unlocks at approximately ")
+                  << InformationMsg("Unlocks at approximately: ")
                   << InformationMsg(ZedUtilities::unixTimeToDate(unlockInUnixTime))
                   << std::endl
                   << std::endl;
