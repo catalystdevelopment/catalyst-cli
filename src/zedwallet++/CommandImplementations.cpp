@@ -439,7 +439,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
     else if (tx.unlockTime > std::time(nullptr))
     {
         std::cout << SuccessMsg(stream.str())
-                  << InformationMsg("Unlocks at approximately: ")
+                  << InformationMsg("Unlocks at: ")
                   << InformationMsg(ZedUtilities::unixTimeToDate(tx.unlockTime))
                   << std::endl
                   << std::endl;
