@@ -419,8 +419,8 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
     }
     
     /* Don't display unlock time */
-    if (tx.unlockTime == 0 ^ (tx.unlockTime < std::time(nullptr) && 
-                              tx.unlockTime > CryptoNote::parameters::CRYPTONOTE_MAX_BLOCK_NUMBER))
+    if (tx.unlockTime == 0 || (tx.unlockTime < std::time(nullptr) &&
+                               tx.unlockTime > CryptoNote::parameters::CRYPTONOTE_MAX_BLOCK_NUMBER))
     {
         std::cout << SuccessMsg(stream.str()) << std::endl;
     }
@@ -436,11 +436,12 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
 
             if (difference > 0)
             {
-                int64_t unlockInUnixTime = tx.timestamp + (difference*CryptoNote::parameters::DIFFICULTY_TARGET);
+                int64_t unlockInUnixTime = tx.timestamp + (difference * CryptoNote::parameters::DIFFICULTY_TARGET);
 
-                std::cout << InformationMsg("Unlocks in ")
-                          << InformationMsg(difference)
-                          << InformationMsg(" blocks, at approximately ")
+                std::cout << InformationMsg("Unlock height: ")
+                          << InformationMsg(tx.unlockTime)
+                          << std::endl
+                          << InformationMsg("Unlocks at approximately ")
                           << InformationMsg(ZedUtilities::unixTimeToDate(unlockInUnixTime))
                           << std::endl
                           << std::endl;
@@ -449,7 +450,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
         /* Here we treat Unlock as Unix time, and treat it that way in the future */
         else if (tx.unlockTime > std::time(nullptr))
         {
-            std::cout << InformationMsg("Unlocks at ")
+            std::cout << InformationMsg("Unlocks at approximately: ")
                       << InformationMsg(ZedUtilities::unixTimeToDate(tx.unlockTime))
                       << std::endl
                       << std::endl;
