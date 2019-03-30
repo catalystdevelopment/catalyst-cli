@@ -1,4 +1,4 @@
-![Imgur Image](https://i.imgur.com/r2jiwNT.png)
+![Imgur Image](https://i.imgur.com/SF4M5F5.png)
 
 #### v0.0.1.0 November 25, 2018
 #### v0.0.1.1 November 27, 2018
