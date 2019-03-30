@@ -27,7 +27,7 @@ inline std::shared_ptr<httplib::Client> getClient(const std::string daemonHost, 
 #ifdef CPPHTTPLIB_OPENSSL_SUPPORT
     if (daemonSSL)
     {
-        return (std::shared_ptr<httplib::Client>) std::make_shared<httplib::SSLClient>(daemonHost.c_str(), daemonPort, timeout.count());
+        return std::make_shared<httplib::SSLClient>(daemonHost.c_str(), daemonPort, timeout.count());
     }
     else
     {
