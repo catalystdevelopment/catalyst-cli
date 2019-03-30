@@ -21,11 +21,6 @@ void confirmPassword(
     const std::shared_ptr<WalletBackend> walletBackend,
     const std::string msg);
 
-bool confirm(const std::string &msg);
-bool confirm(const std::string &msg, const bool defaultReturn);
-
-std::string unixTimeToDate(const uint64_t timestamp);
-
 uint64_t getScanHeight();
 
 template <typename T, typename Function>

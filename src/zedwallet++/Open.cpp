@@ -18,6 +18,7 @@
 
 #include <Utilities/ColouredMsg.h>
 #include <Utilities/String.h>
+#include <Utilities/Input.h>
 
 #include <zedwallet++/CommandImplementations.h>
 #include <zedwallet++/PasswordContainer.h>
@@ -29,7 +30,7 @@ std::shared_ptr<WalletBackend> importViewWallet(const Config &config)
               << WarningMsg("transactions, and cannot make transfers.")
               << std::endl;
 
-    bool create = ZedUtilities::confirm("Is this OK?");
+    bool create = Utilities::confirm("Is this OK?");
 
     std::cout << "\n";
 
