@@ -1,5 +1,4 @@
 // Copyright (c) 2018-2019, The TurtleCoin Developers
-// Copyright (c) 2018-2019, The Catalyst Developers
 // 
 // Please see the included LICENSE file for more information.
 
@@ -8,6 +7,7 @@
 ///////////////////////////////////////////////
 
 #include <config/WalletConfig.h>
+
 #include <config/CryptoNoteConfig.h>
 
 #include <Errors/ValidateParameters.h>
@@ -419,7 +419,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
     {
         stream << "Payment ID: " << tx.paymentID << "\n";
     }
-    
+
     /* Display Unlock time, if applicable; otherwise, don't */
     int64_t difference = tx.unlockTime - tx.blockHeight;
 
@@ -633,11 +633,11 @@ void advanced(const std::shared_ptr<WalletBackend> walletBackend)
 
 void swapNode(const std::shared_ptr<WalletBackend> walletBackend)
 {
-    const auto [host, port] = getDaemonAddress();
+    const auto [host, port, ssl] = getDaemonAddress();
 
     std::cout << InformationMsg("\nSwapping node, this may take some time...\n");
 
-    walletBackend->swapNode(host, port);
+    walletBackend->swapNode(host, port, ssl);
 
     std::cout << SuccessMsg("Node swap complete.\n\n");
 }

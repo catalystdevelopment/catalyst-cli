@@ -1,6 +1,8 @@
-// Copyright (c) 2018, The TurtleCoin Developers
-// 
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+//
 // Please see the included LICENSE file for more information.
+
+#include <algorithm>
 
 /////////////////////////////////
 #include <zedwallet++/GetInput.h>
@@ -83,13 +85,13 @@ std::string getInput(
     std::string command;
 
     bool quit = linenoise::Readline(promptMsg.c_str(), command);
-    
+
     /* User entered ctrl+c or similar */
     if (quit)
     {
         return "exit";
     }
-	
+
     /* Remove any whitespace */
     Utilities::trim(command);
 
@@ -260,7 +262,7 @@ std::tuple<bool, uint64_t> getAmountToAtomic(
         const uint64_t decimalPos = amountString.find_last_of('.');
 
         /* Get the length of the decimal part */
-        const uint64_t decimalLength = decimalPos == std::string::npos ? 0 : 
+        const uint64_t decimalLength = decimalPos == std::string::npos ? 0 :
             amountString.substr(decimalPos + 1, amountString.length()).length();
 
         /* Can't send amounts with more decimal places than supported */
@@ -280,7 +282,7 @@ std::tuple<bool, uint64_t> getAmountToAtomic(
         /* Remove the decimal place, so we can parse it as an atomic amount */
         Utilities::removeCharFromString(amountString, '.');
 
-        /* Pad the string with 0's at the end, so 123 becomes 12300, so we 
+        /* Pad the string with 0's at the end, so 123 becomes 12300, so we
            can parse it as an atomic amount. 123.45 parses as 12345. */
         amountString.append(WalletConfig::numDecimalPlaces - decimalLength, '0');
 
@@ -311,7 +313,7 @@ std::tuple<bool, uint64_t> getAmountToAtomic(
     }
 }
 
-std::tuple<std::string, uint16_t> getDaemonAddress()
+std::tuple<std::string, uint16_t, bool> getDaemonAddress()
 {
     while (true)
     {
@@ -326,10 +328,12 @@ std::tuple<std::string, uint16_t> getDaemonAddress()
 
         uint16_t port = CryptoNote::RPC_DEFAULT_PORT;
 
+        bool ssl = false;
+
         /* Fixes infinite looping when someone does a ctrl + c */
         if (!std::getline(std::cin, address) || address == "")
         {
-            return {host, port};
+            return {host, port, ssl};
         }
 
         Utilities::trim(address);
@@ -340,7 +344,11 @@ std::tuple<std::string, uint16_t> getDaemonAddress()
             continue;
         }
 
-        return {host, port};
+#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
+        ssl = ZedUtilities::confirm("Does this daemon support SSL?", false);
+#endif
+
+        return {host, port, ssl};
     }
 }
 

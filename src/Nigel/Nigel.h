@@ -1,5 +1,5 @@
-// Copyright (c) 2018, The TurtleCoin Developers
-// 
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+//
 // Please see the included LICENSE file for more information.
 
 #pragma once
@@ -28,11 +28,13 @@ class Nigel
 
         Nigel(
             const std::string daemonHost,
-            const uint16_t daemonPort);
+            const uint16_t daemonPort,
+            const bool daemonSSL);
 
         Nigel(
             const std::string daemonHost,
             const uint16_t daemonPort,
+            const bool daemonSSL,
             const std::chrono::seconds timeout);
 
         ~Nigel();
@@ -43,7 +45,7 @@ class Nigel
 
         void init();
 
-        void swapNode(const std::string daemonHost, const uint16_t daemonPort);
+        void swapNode(const std::string daemonHost, const uint16_t daemonPort, const bool daemonSSL);
 
         /* Returns whether we've received info from the daemon at some point */
         bool isOnline() const;
@@ -58,7 +60,7 @@ class Nigel
 
         std::tuple<uint64_t, std::string> nodeFee() const;
 
-        std::tuple<std::string, uint16_t> nodeAddress() const;
+        std::tuple<std::string, uint16_t, bool> nodeAddress() const;
 
         std::tuple<bool, std::vector<WalletTypes::WalletBlockInfo>> getWalletSyncData(
             const std::vector<Crypto::Hash> blockHashCheckpoints,
@@ -105,7 +107,7 @@ class Nigel
 
         /* Stores our http client (Don't really care about it launching threads
            and making our functions non const) */
-        std::shared_ptr<httplib::Client> m_httpClient = nullptr;
+        std::shared_ptr<httplib::Client> m_nodeClient = nullptr;
 
         /* Runs a background refresh on height, hashrate, etc */
         std::thread m_backgroundThread;
@@ -115,7 +117,7 @@ class Nigel
 
         /* The amount of blocks the daemon we're connected to has */
         std::atomic<uint64_t> m_localDaemonBlockCount = 0;
-        
+
         /* The amount of blocks the network has */
         std::atomic<uint64_t> m_networkBlockCount = 0;
 
@@ -139,4 +141,7 @@ class Nigel
 
         /* The daemon port */
         uint16_t m_daemonPort;
+
+        /* If the daemon is SSL */
+        bool m_daemonSSL = false;
 };

@@ -14,6 +14,16 @@ If you would like to compile yourself, read on.
 
 ### How To Compile
 
+#### OpenSSL Support
+
+Both zedwallet++ (zedwallet-beta) and wallet-api now support connecting to a node using SSL. To enable it during compilation, you will need to pass `-DENABLE_SSL=1` in the any of the CMake commands below.
+
+**Note:** If you compile with SSL support, it will link OpenSSL as a shared library.
+
+If you enable SSL support but OpenSSL is not found on your system, you can tell CMake where it is located with the `-DOPENSSL_ROOT_DIR=<path>` option.
+
+Ex. `-DOPENSSL_ROOT_DIR=/usr/lib/openssl` or `-DOPENSSL_ROOT_DIR=C:/OpenSSL-Win64/include`
+
 #### Linux
 
 ##### Prerequisites

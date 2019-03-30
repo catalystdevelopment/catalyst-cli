@@ -1,4 +1,4 @@
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -38,7 +38,12 @@ Config parseArguments(int argc, char **argv)
 
     options.add_options("Daemon")
         ("r,remote-daemon", "The daemon <host:port> combination to use for node operations.",
-          cxxopts::value<std::string>(remoteDaemon)->default_value(defaultRemoteDaemon), "<host:port>");
+          cxxopts::value<std::string>(remoteDaemon)->default_value(defaultRemoteDaemon), "<host:port>")
+#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
+        ("ssl", "Use SSL when connecting to the daemon.",
+          cxxopts::value<bool>(config.ssl)->default_value("false")->implicit_value("true"))
+#endif
+        ;
 
     options.add_options("Wallet")
         ("w,wallet-file", "Open the wallet <file>", cxxopts::value<std::string>(config.walletFile), "<file>")

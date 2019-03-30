@@ -1,5 +1,5 @@
-// Copyright (c) 2018, The TurtleCoin Developers
-// 
+// Copyright (c) 2018-2019, The TurtleCoin Developers
+//
 // Please see the included LICENSE file for more information.
 
 ////////////////////////
@@ -19,25 +19,48 @@
 using json = nlohmann::json;
 
 ////////////////////////////////
+/*   Inline helper methods    */
+////////////////////////////////
+
+inline std::shared_ptr<httplib::Client> getClient(const std::string daemonHost, const uint16_t daemonPort, const bool daemonSSL, const std::chrono::seconds timeout)
+{
+#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
+    if (daemonSSL)
+    {
+        return std::make_shared<httplib::SSLClient>(daemonHost.c_str(), daemonPort, timeout.count());
+    }
+    else
+    {
+#endif
+        return std::make_shared<httplib::Client>(daemonHost.c_str(), daemonPort, timeout.count());
+#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
+    }
+#endif
+}
+
+////////////////////////////////
 /* Constructors / Destructors */
 ////////////////////////////////
 
 Nigel::Nigel(
-    const std::string daemonHost, 
-    const uint16_t daemonPort) : 
-    Nigel(daemonHost, daemonPort, std::chrono::seconds(10))
+    const std::string daemonHost,
+    const uint16_t daemonPort,
+    const bool daemonSSL) :
+    Nigel(daemonHost, daemonPort, daemonSSL, std::chrono::seconds(10))
 {
 }
 
 Nigel::Nigel(
-    const std::string daemonHost, 
+    const std::string daemonHost,
     const uint16_t daemonPort,
+    const bool daemonSSL,
     const std::chrono::seconds timeout) :
     m_timeout(timeout),
     m_daemonHost(daemonHost),
     m_daemonPort(daemonPort),
-    m_httpClient(std::make_shared<httplib::Client>(daemonHost.c_str(), daemonPort, timeout.count()))
+    m_daemonSSL(daemonSSL)
 {
+    m_nodeClient = getClient(m_daemonHost, m_daemonPort, m_daemonSSL, m_timeout);
 }
 
 Nigel::~Nigel()
@@ -49,7 +72,7 @@ Nigel::~Nigel()
 /* Member functions */
 //////////////////////
 
-void Nigel::swapNode(const std::string daemonHost, const uint16_t daemonPort)
+void Nigel::swapNode(const std::string daemonHost, const uint16_t daemonPort, const bool daemonSSL)
 {
     stop();
 
@@ -60,10 +83,9 @@ void Nigel::swapNode(const std::string daemonHost, const uint16_t daemonPort)
 
     m_daemonHost = daemonHost;
     m_daemonPort = daemonPort;
+    m_daemonSSL = daemonSSL;
 
-    m_httpClient = std::make_shared<httplib::Client>(
-        daemonHost.c_str(), daemonPort, m_timeout.count()
-    );
+    m_nodeClient = getClient(m_daemonHost, m_daemonPort, m_daemonSSL, m_timeout);
 
     init();
 }
@@ -85,7 +107,7 @@ std::tuple<bool, std::vector<WalletTypes::WalletBlockInfo>> Nigel::getWalletSync
         {"startTimestamp", startTimestamp}
     };
 
-    const auto res = m_httpClient->Post(
+    auto res = m_nodeClient->Post(
         "/getwalletsyncdata", j.dump(), "application/json"
     );
 
@@ -150,7 +172,7 @@ bool Nigel::getDaemonInfo()
         {Logger::SYNC, Logger::DAEMON}
     );
 
-    const auto res = m_httpClient->Get("/info");
+    auto res = m_nodeClient->Get("/info");
 
     if (res && res->status == 200)
     {
@@ -179,7 +201,7 @@ bool Nigel::getDaemonInfo()
             m_peerCount = j.at("incoming_connections_count").get<uint64_t>()
                         + j.at("outgoing_connections_count").get<uint64_t>();
 
-            m_lastKnownHashrate = j.at("difficulty").get<uint64_t>() 
+            m_lastKnownHashrate = j.at("difficulty").get<uint64_t>()
                                 / CryptoNote::parameters::DIFFICULTY_TARGET;
 
             return true;
@@ -205,7 +227,7 @@ bool Nigel::getFeeInfo()
         {Logger::DAEMON}
     );
 
-    const auto res = m_httpClient->Get("/fee");
+    auto res = m_nodeClient->Get("/fee");
 
     if (res && res->status == 200)
     {
@@ -285,9 +307,9 @@ std::tuple<uint64_t, std::string> Nigel::nodeFee() const
     return {m_nodeFeeAmount, m_nodeFeeAddress};
 }
 
-std::tuple<std::string, uint16_t> Nigel::nodeAddress() const
+std::tuple<std::string, uint16_t, bool> Nigel::nodeAddress() const
 {
-    return {m_daemonHost, m_daemonPort};
+    return {m_daemonHost, m_daemonPort, m_daemonSSL};
 }
 
 bool Nigel::getTransactionsStatus(
@@ -300,7 +322,7 @@ bool Nigel::getTransactionsStatus(
         {"transactionHashes", transactionHashes}
     };
 
-    const auto res = m_httpClient->Post(
+    auto res = m_nodeClient->Post(
         "/get_transactions_status", j.dump(), "application/json"
     );
 
@@ -337,7 +359,7 @@ std::tuple<bool, std::vector<CryptoNote::RandomOuts>> Nigel::getRandomOutsByAmou
         {"outs_count", requestedOuts}
     };
 
-    const auto res = m_httpClient->Post(
+    auto res = m_nodeClient->Post(
         "/getrandom_outs", j.dump(), "application/json"
     );
 
@@ -371,7 +393,7 @@ std::tuple<bool, bool> Nigel::sendTransaction(
         {"tx_as_hex", Common::toHex(CryptoNote::toBinaryArray(tx))}
     };
 
-    const auto res = m_httpClient->Post(
+    auto res = m_nodeClient->Post(
         "/sendrawtransaction", j.dump(), "application/json"
     );
 
@@ -406,10 +428,10 @@ std::tuple<bool, std::unordered_map<Crypto::Hash, std::vector<uint64_t>>>
         {"endHeight", endHeight}
     };
 
-    const auto res = m_httpClient->Post(
+    auto res = m_nodeClient->Post(
         "/get_global_indexes_for_range", j.dump(), "application/json"
     );
-    
+
     if (res && res->status == 200)
     {
         try
