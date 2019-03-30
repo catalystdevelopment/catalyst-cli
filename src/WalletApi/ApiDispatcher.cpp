@@ -1562,7 +1562,7 @@ std::tuple<std::string, uint16_t, bool, std::string, std::string>
 
     if (body.find("daemonSSL") != body.end())
     {
-      daemonSSL = tryGetJsonValue<bool>(body, "daemonSSL");
+        daemonSSL = tryGetJsonValue<bool>(body, "daemonSSL");
     }
 
     return {daemonHost, daemonPort, daemonSSL, filename, password};
