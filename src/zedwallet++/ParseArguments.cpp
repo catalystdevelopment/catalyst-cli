@@ -12,9 +12,11 @@
 #include <config/CryptoNoteConfig.h>
 #include <config/WalletConfig.h>
 
-#include <zedwallet++/Utilities.h>
+#include <Utilities/Utilities.h>
 
 #include "version.h"
+
+#include <zedwallet++/Utilities.h>
 
 Config parseArguments(int argc, char **argv)
 {
@@ -82,7 +84,7 @@ Config parseArguments(int argc, char **argv)
 
     if (!remoteDaemon.empty())
     {
-        if (!ZedUtilities::parseDaemonAddressFromString(config.host, config.port, remoteDaemon))
+        if (!Utilities::parseDaemonAddressFromString(config.host, config.port, remoteDaemon))
         {
             std::cout << "There was an error parsing the --remote-daemon you specified" << std::endl;
             exit(1);

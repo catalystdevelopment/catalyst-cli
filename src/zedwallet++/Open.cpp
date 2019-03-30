@@ -17,6 +17,8 @@
 #include <Errors/ValidateParameters.h>
 
 #include <Utilities/ColouredMsg.h>
+#include <Utilities/String.h>
+
 #include <zedwallet++/CommandImplementations.h>
 #include <zedwallet++/PasswordContainer.h>
 #include <zedwallet++/Utilities.h>
@@ -48,7 +50,7 @@ std::shared_ptr<WalletBackend> importViewWallet(const Config &config)
 
         std::getline(std::cin, address);
 
-        Common::trim(address);
+        Utilities::trim(address);
 
         const bool integratedAddressesAllowed = false;
 
@@ -148,7 +150,7 @@ std::shared_ptr<WalletBackend> importWalletFromSeed(const Config &config)
 
         std::getline(std::cin, mnemonicSeed);
 
-        Common::trim(mnemonicSeed);
+        Utilities::trim(mnemonicSeed);
         
         /* Just to check if it's valid */
         auto [error, privateSpendKey] = Mnemonics::MnemonicToPrivateKey(mnemonicSeed);
@@ -301,7 +303,7 @@ Crypto::SecretKey getPrivateKey(const std::string outputMsg)
 
         std::getline(std::cin, privateKeyString);
 
-        Common::trim(privateKeyString);
+        Utilities::trim(privateKeyString);
 
         if (privateKeyString.length() != privateKeyLen)
         {

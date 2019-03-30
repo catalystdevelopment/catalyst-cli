@@ -21,28 +21,12 @@ void confirmPassword(
     const std::shared_ptr<WalletBackend> walletBackend,
     const std::string msg);
 
-void removeCharFromString(std::string &str, const char c);
-
-void trim(std::string &str);
-
-void leftTrim(std::string &str);
-
-void rightTrim(std::string &str);
-
 bool confirm(const std::string &msg);
 bool confirm(const std::string &msg, const bool defaultReturn);
-
-bool startsWith(const std::string &str, const std::string &substring);
 
 std::string unixTimeToDate(const uint64_t timestamp);
 
 uint64_t getScanHeight();
-
-std::vector<std::string> split(const std::string& str, char delim);
-
-std::string removePrefix(const std::string &str, const std::string &prefix);
-
-bool parseDaemonAddressFromString(std::string &host, uint16_t &port, std::string address);
 
 template <typename T, typename Function>
 std::vector<T> filter(const std::vector<T> &input, Function predicate)

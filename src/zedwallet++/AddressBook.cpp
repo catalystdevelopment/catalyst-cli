@@ -15,6 +15,8 @@
 #include <iostream>
 
 #include <Utilities/ColouredMsg.h>
+#include <Utilities/String.h>
+
 #include <zedwallet++/GetInput.h>
 #include <zedwallet++/Transfer.h>
 #include <zedwallet++/Utilities.h>
@@ -30,7 +32,7 @@ const std::string getAddressBookName(const std::vector<AddressBookEntry> address
 
         std::getline(std::cin, friendlyName);
 
-        Common::trim(friendlyName);
+        Utilities::trim(friendlyName);
 
         const auto it = std::find(addressBook.begin(), addressBook.end(),
                                   AddressBookEntry(friendlyName));
@@ -121,7 +123,7 @@ const std::tuple<bool, AddressBookEntry> getAddressBookEntry(
 
         std::getline(std::cin, friendlyName);
 
-        Common::trim(friendlyName);
+        Utilities::trim(friendlyName);
 
         /* \n == no-op */
         if (friendlyName == "")
@@ -271,7 +273,7 @@ void deleteFromAddressBook()
 
         std::getline(std::cin, friendlyName);
 
-        Common::trim(friendlyName);
+        Utilities::trim(friendlyName);
 
         if (friendlyName == "cancel")
         {

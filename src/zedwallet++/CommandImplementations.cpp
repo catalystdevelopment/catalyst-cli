@@ -14,9 +14,10 @@
 
 #include <fstream>
 
-#include <Utilities/FormatTools.h>
-
 #include <Utilities/ColouredMsg.h>
+#include <Utilities/FormatTools.h>
+#include <Utilities/String.h>
+
 #include <zedwallet++/Commands.h>
 #include <zedwallet++/GetInput.h>
 #include <zedwallet++/Menu.h>
@@ -550,7 +551,7 @@ void createIntegratedAddress()
 
         std::getline(std::cin, address);
 
-        Common::trim(address);
+        Utilities::trim(address);
 
         const bool integratedAddressesAllowed = false;
 
@@ -571,7 +572,7 @@ void createIntegratedAddress()
 
         std::getline(std::cin, paymentID);
 
-        Common::trim(paymentID);
+        Utilities::trim(paymentID);
 
         /* Validate the payment ID */
         if (Error error = validatePaymentID(paymentID); error != SUCCESS)
