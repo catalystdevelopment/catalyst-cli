@@ -105,15 +105,9 @@ class Nigel
         /* Private member variables */
         //////////////////////////////
 
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-        /* Stores our https client (Don't really care about it launching threads
-           and making our functions non const) */
-        std::shared_ptr<httplib::SSLClient> m_httpsClient = nullptr;
-
-#endif
         /* Stores our http client (Don't really care about it launching threads
            and making our functions non const) */
-        std::shared_ptr<httplib::Client> m_httpClient = nullptr;
+        std::shared_ptr<httplib::Client> m_nodeClient = nullptr;
 
         /* Runs a background refresh on height, hashrate, etc */
         std::thread m_backgroundThread;

@@ -19,6 +19,26 @@
 using json = nlohmann::json;
 
 ////////////////////////////////
+/*   Inline helper methods    */
+////////////////////////////////
+
+inline std::shared_ptr<httplib::Client> getClient(const std::string daemonHost, const uint16_t daemonPort, const bool daemonSSL, const std::chrono::seconds timeout)
+{
+#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
+    if (daemonSSL)
+    {
+        return (std::shared_ptr<httplib::Client>) std::make_shared<httplib::SSLClient>(daemonHost.c_str(), daemonPort, timeout.count());
+    }
+    else
+    {
+#endif
+        return std::make_shared<httplib::Client>(daemonHost.c_str(), daemonPort, timeout.count());
+#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
+    }
+#endif
+}
+
+////////////////////////////////
 /* Constructors / Destructors */
 ////////////////////////////////
 
@@ -40,18 +60,7 @@ Nigel::Nigel(
     m_daemonPort(daemonPort),
     m_daemonSSL(daemonSSL)
 {
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    if (m_daemonSSL)
-    {
-        m_httpsClient = std::make_shared<httplib::SSLClient>(daemonHost.c_str(), daemonPort, timeout.count());
-    }
-    else
-    {
-#endif
-        m_httpClient = std::make_shared<httplib::Client>(daemonHost.c_str(), daemonPort, timeout.count());
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    }
-#endif
+    m_nodeClient = getClient(m_daemonHost, m_daemonPort, m_daemonSSL, m_timeout);
 }
 
 Nigel::~Nigel()
@@ -76,24 +85,7 @@ void Nigel::swapNode(const std::string daemonHost, const uint16_t daemonPort, co
     m_daemonPort = daemonPort;
     m_daemonSSL = daemonSSL;
 
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    if (m_daemonSSL)
-    {
-        m_httpClient = nullptr;
-        m_httpsClient = std::make_shared<httplib::SSLClient>(
-            daemonHost.c_str(), daemonPort, m_timeout.count()
-        );
-    }
-    else
-    {
-        m_httpsClient = nullptr;
-#endif
-        m_httpClient = std::make_shared<httplib::Client>(
-            daemonHost.c_str(), daemonPort, m_timeout.count()
-        );
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    }
-#endif
+    m_nodeClient = getClient(m_daemonHost, m_daemonPort, m_daemonSSL, m_timeout);
 
     init();
 }
@@ -115,23 +107,9 @@ std::tuple<bool, std::vector<WalletTypes::WalletBlockInfo>> Nigel::getWalletSync
         {"startTimestamp", startTimestamp}
     };
 
-    std::shared_ptr<httplib::Response> res;
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    if (m_daemonSSL)
-    {
-        res = m_httpsClient->Post(
-            "/getwalletsyncdata", j.dump(), "application/json"
-        );
-    }
-    else
-    {
-#endif
-        res = m_httpClient->Post(
-            "/getwalletsyncdata", j.dump(), "application/json"
-        );
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    }
-#endif
+    auto res = m_nodeClient->Post(
+        "/getwalletsyncdata", j.dump(), "application/json"
+    );
 
     if (res && res->status == 200)
     {
@@ -194,19 +172,7 @@ bool Nigel::getDaemonInfo()
         {Logger::SYNC, Logger::DAEMON}
     );
 
-    std::shared_ptr<httplib::Response> res;
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    if (m_daemonSSL)
-    {
-        res = m_httpsClient->Get("/info");
-    }
-    else
-    {
-#endif
-        res = m_httpClient->Get("/info");
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    }
-#endif
+    auto res = m_nodeClient->Get("/info");
 
     if (res && res->status == 200)
     {
@@ -261,19 +227,7 @@ bool Nigel::getFeeInfo()
         {Logger::DAEMON}
     );
 
-    std::shared_ptr<httplib::Response> res;
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    if (m_daemonSSL)
-    {
-        res = m_httpsClient->Get("/fee");
-    }
-    else
-    {
-#endif
-        res = m_httpClient->Get("/fee");
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    }
-#endif
+    auto res = m_nodeClient->Get("/fee");
 
     if (res && res->status == 200)
     {
@@ -368,23 +322,9 @@ bool Nigel::getTransactionsStatus(
         {"transactionHashes", transactionHashes}
     };
 
-    std::shared_ptr<httplib::Response> res;
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    if (m_daemonSSL)
-    {
-        res = m_httpsClient->Post(
-            "/get_transactions_status", j.dump(), "application/json"
-        );
-    }
-    else
-    {
-#endif
-        res = m_httpClient->Post(
-            "/get_transactions_status", j.dump(), "application/json"
-        );
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    }
-#endif
+    auto res = m_nodeClient->Post(
+        "/get_transactions_status", j.dump(), "application/json"
+    );
 
     if (res && res->status == 200)
     {
@@ -419,23 +359,9 @@ std::tuple<bool, std::vector<CryptoNote::RandomOuts>> Nigel::getRandomOutsByAmou
         {"outs_count", requestedOuts}
     };
 
-    std::shared_ptr<httplib::Response> res;
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    if (m_daemonSSL)
-    {
-        res = m_httpsClient->Post(
-            "/getrandom_outs", j.dump(), "application/json"
-        );
-    }
-    else
-    {
-#endif
-        res = m_httpClient->Post(
-            "/getrandom_outs", j.dump(), "application/json"
-        );
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    }
-#endif
+    auto res = m_nodeClient->Post(
+        "/getrandom_outs", j.dump(), "application/json"
+    );
 
     if (res && res->status == 200)
     {
@@ -467,23 +393,9 @@ std::tuple<bool, bool> Nigel::sendTransaction(
         {"tx_as_hex", Common::toHex(CryptoNote::toBinaryArray(tx))}
     };
 
-    std::shared_ptr<httplib::Response> res;
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    if (m_daemonSSL)
-    {
-        res = m_httpsClient->Post(
-            "/sendrawtransaction", j.dump(), "application/json"
-        );
-    }
-    else
-    {
-#endif
-        res = m_httpClient->Post(
-            "/sendrawtransaction", j.dump(), "application/json"
-        );
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    }
-#endif
+    auto res = m_nodeClient->Post(
+        "/sendrawtransaction", j.dump(), "application/json"
+    );
 
     bool success = false;
     bool connectionError = true;
@@ -516,23 +428,9 @@ std::tuple<bool, std::unordered_map<Crypto::Hash, std::vector<uint64_t>>>
         {"endHeight", endHeight}
     };
 
-    std::shared_ptr<httplib::Response> res;
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    if (m_daemonSSL)
-    {
-        res = m_httpsClient->Post(
-            "/get_global_indexes_for_range", j.dump(), "application/json"
-        );
-    }
-    else
-    {
-#endif
-        res = m_httpClient->Post(
-            "/get_global_indexes_for_range", j.dump(), "application/json"
-        );
-#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-    }
-#endif
+    auto res = m_nodeClient->Post(
+        "/get_global_indexes_for_range", j.dump(), "application/json"
+    );
 
     if (res && res->status == 200)
     {
