@@ -15,6 +15,9 @@
 #include <iostream>
 
 #include <Utilities/ColouredMsg.h>
+#include <Utilities/Input.h>
+#include <Utilities/String.h>
+
 #include <zedwallet++/GetInput.h>
 #include <zedwallet++/Transfer.h>
 #include <zedwallet++/Utilities.h>
@@ -30,7 +33,7 @@ const std::string getAddressBookName(const std::vector<AddressBookEntry> address
 
         std::getline(std::cin, friendlyName);
 
-        Common::trim(friendlyName);
+        Utilities::trim(friendlyName);
 
         const auto it = std::find(addressBook.begin(), addressBook.end(),
                                   AddressBookEntry(friendlyName));
@@ -121,7 +124,7 @@ const std::tuple<bool, AddressBookEntry> getAddressBookEntry(
 
         std::getline(std::cin, friendlyName);
 
-        Common::trim(friendlyName);
+        Utilities::trim(friendlyName);
 
         /* \n == no-op */
         if (friendlyName == "")
@@ -185,7 +188,7 @@ const std::tuple<bool, AddressBookEntry> getAddressBookEntry(
                       << std::endl << std::endl;
         }
 
-        const bool list = ZedUtilities::confirm(
+        const bool list = Utilities::confirm(
             "Would you like to list everyone in your address book?"
         );
 
@@ -271,7 +274,7 @@ void deleteFromAddressBook()
 
         std::getline(std::cin, friendlyName);
 
-        Common::trim(friendlyName);
+        Utilities::trim(friendlyName);
 
         if (friendlyName == "cancel")
         {
@@ -301,7 +304,7 @@ void deleteFromAddressBook()
                   << InformationMsg(friendlyName)
                   << WarningMsg(" in your address book!\n\n");
 
-        const bool list = ZedUtilities::confirm(
+        const bool list = Utilities::confirm(
             "Would you like to list everyone in your address book?"
         );
 
