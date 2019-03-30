@@ -17,32 +17,32 @@ build_script:
   - md build
   - cd build
   - cmake -G "Visual Studio 15 2017 Win64" ..
-  - MSBuild TurtleCoin.sln /p:CLToolExe=clcache.exe /p:CLToolPath=c:\Python37\Scripts\ /p:Configuration=Release /m
+  - MSBuild Catalyst.sln /p:CLToolExe=clcache.exe /p:CLToolPath=c:\Python37\Scripts\ /p:Configuration=Release /m
   - src\Release\cryptotest.exe
 
 after_build:
   - clcache -s
   - if not defined APPVEYOR_REPO_TAG_NAME (set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_COMMIT%)
   - cd src\Release
-  - mkdir turtlecoin-%APPVEYOR_REPO_TAG_NAME%
+  - mkdir catalyst-%APPVEYOR_REPO_TAG_NAME%
   - copy *.exe turtlecoin-%APPVEYOR_REPO_TAG_NAME%
   - copy ..\..\..\LICENSE turtlecoin-%APPVEYOR_REPO_TAG_NAME%
-  - 7z a turtlecoin-%APPVEYOR_REPO_TAG_NAME%-windows.zip turtlecoin-%APPVEYOR_REPO_TAG_NAME%
-  - copy turtlecoin-%APPVEYOR_REPO_TAG_NAME%-windows.zip ..\..\..\
+  - 7z a catalyst-%APPVEYOR_REPO_TAG_NAME%-windows.zip catalyst-%APPVEYOR_REPO_TAG_NAME%
+  - copy catalyst-%APPVEYOR_REPO_TAG_NAME%-windows.zip ..\..\..\
 
 artifacts:
-  - path: turtlecoin-$(APPVEYOR_REPO_TAG_NAME)-windows.zip
-    name: TurtleCoinRelease
+  - path: catalyst-$(APPVEYOR_REPO_TAG_NAME)-windows.zip
+    name: CatalystRelease
 
 deploy:
   - provider: GitHub
     auth_token:
       secure: KFrN1rc9FJN3BEoX99whHEuK5iPHHLmDcZ1Ac7tgT9oR6AxyjL0B+XMQu4wqo+fK
-    artifact: TurtleCoinRelease
+    artifact: CatalystRelease
     draft: false
     prerelease: false
     on:
-      appveyor_repo_name: turtlecoin/turtlecoin
+      appveyor_repo_name: catalystdevelopment/catalyst
       appveyor_repo_tag: true
 
   - provider: S3
@@ -50,10 +50,10 @@ deploy:
       secure: nVmSNpabdw1WcGdTTzxAEjza8j9icu89oyXbC8fZVuM=
     secret_access_key:
       secure: TpCxPp5npMRclcwHB3dhkd9ZsEgKstS6HOnQ1VR6YObEsaPyl5dr16ZdbsOgjykj
-    bucket: turtlecoin
+    bucket: catalyst
     region: us-east-2
     set_public: true
-    folder: turtlecoin
-    artifact: TurtleCoinRelease
+    folder: catalyst
+    artifact: CatalystRelease
     on:
-      appveyor_repo_name: turtlecoin/turtlecoin
+      appveyor_repo_name: catalystdevelopment/catalyst
