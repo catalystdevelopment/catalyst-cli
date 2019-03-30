@@ -326,7 +326,7 @@ class ApiDispatcher
         /* END OF API FUNCTIONS */
         //////////////////////////
 
-        /* Extracts {host, port, filename, password}, from body */
+        /* Extracts {host, port, ssl, filename, password}, from body */
         std::tuple<std::string, uint16_t, bool, std::string, std::string>
             getDefaultWalletParams(const nlohmann::json body) const;
 
