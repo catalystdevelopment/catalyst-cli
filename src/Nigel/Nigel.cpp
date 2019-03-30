@@ -24,24 +24,9 @@ using json = nlohmann::json;
 
 Nigel::Nigel(
     const std::string daemonHost,
-    const uint16_t daemonPort) :
-    Nigel(daemonHost, daemonPort, false, std::chrono::seconds(10))
-{
-}
-
-Nigel::Nigel(
-    const std::string daemonHost,
     const uint16_t daemonPort,
     const bool daemonSSL) :
     Nigel(daemonHost, daemonPort, daemonSSL, std::chrono::seconds(10))
-{
-}
-
-Nigel::Nigel(
-    const std::string daemonHost,
-    const uint16_t daemonPort,
-    const std::chrono::seconds timeout) :
-    Nigel(daemonHost, daemonPort, false, timeout)
 {
 }
 
@@ -77,11 +62,6 @@ Nigel::~Nigel()
 //////////////////////
 /* Member functions */
 //////////////////////
-
-void Nigel::swapNode(const std::string daemonHost, const uint16_t daemonPort)
-{
-    swapNode(daemonHost, daemonPort, false);
-}
 
 void Nigel::swapNode(const std::string daemonHost, const uint16_t daemonPort, const bool daemonSSL)
 {

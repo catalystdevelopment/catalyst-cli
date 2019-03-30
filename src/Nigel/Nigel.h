@@ -28,17 +28,8 @@ class Nigel
 
         Nigel(
             const std::string daemonHost,
-            const uint16_t daemonPort);
-
-        Nigel(
-            const std::string daemonHost,
             const uint16_t daemonPort,
             const bool daemonSSL);
-
-        Nigel(
-            const std::string daemonHost,
-            const uint16_t daemonPort,
-            const std::chrono::seconds timeout);
 
         Nigel(
             const std::string daemonHost,
@@ -53,8 +44,6 @@ class Nigel
         /////////////////////////////
 
         void init();
-
-        void swapNode(const std::string daemonHost, const uint16_t daemonPort);
 
         void swapNode(const std::string daemonHost, const uint16_t daemonPort, const bool daemonSSL);
 
