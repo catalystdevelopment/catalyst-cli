@@ -178,8 +178,29 @@ std::vector<std::string> split(const std::string& str, char delim = ' ')
     return cont;
 }
 
-bool parseDaemonAddressFromString(std::string &host, uint16_t &port, const std::string address)
+std::string removePrefix(const std::string &str, const std::string &prefix)
 {
+    const size_t removePos = str.rfind(prefix, 0);
+
+    if (removePos == 0)
+    {
+        /* erase is in place */
+        std::string copy = str;
+
+        copy.erase(0, prefix.length());
+
+        return copy;
+    }
+
+    return str;
+}
+
+bool parseDaemonAddressFromString(std::string &host, uint16_t &port, std::string address)
+{
+    /* Lets users enter url's instead of host:port */
+    address = removePrefix(address, "https://");
+    address = removePrefix(address, "http://");
+
     std::vector<std::string> parts = split(address, ':');
 
     if (parts.empty())

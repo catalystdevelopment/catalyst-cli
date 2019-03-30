@@ -40,7 +40,9 @@ uint64_t getScanHeight();
 
 std::vector<std::string> split(const std::string& str, char delim);
 
-bool parseDaemonAddressFromString(std::string &host, uint16_t &port, const std::string address);
+std::string removePrefix(const std::string &str, const std::string &prefix);
+
+bool parseDaemonAddressFromString(std::string &host, uint16_t &port, std::string address);
 
 template <typename T, typename Function>
 std::vector<T> filter(const std::vector<T> &input, Function predicate)
