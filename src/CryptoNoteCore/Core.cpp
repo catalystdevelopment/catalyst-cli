@@ -1,7 +1,7 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 // Copyright (c) 2014-2018, The Monero Project
-// Copyright (c) 2018, The Galaxia Project Developers
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Galaxia Project Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -37,6 +37,7 @@
 
 #include <Utilities/FormatTools.h>
 #include <Utilities/LicenseCanary.h>
+#include <Utilities/Container.h>
 
 #include <unordered_set>
 
@@ -1019,6 +1020,53 @@ std::error_code Core::addBlock(const CachedBlock& cachedBlock, RawBlock&& rawBlo
   if (currentDifficulty == 0) {
     logger(Logging::DEBUGGING) << "Block " << blockStr << " has difficulty overhead";
     return error::BlockValidationError::DIFFICULTY_OVERHEAD;
+  }
+
+  // Copyright (c) 2018-2019, The Galaxia Project Developers
+  // See https://github.com/turtlecoin/turtlecoin/issues/748 for more information
+  if (blockIndex >= CryptoNote::parameters::BLOCK_BLOB_SHUFFLE_CHECK_HEIGHT)
+  {
+    /* Check to verify that the blocktemplate suppied contains no duplicate transaction hashes */
+    if (!Utilities::is_unique(blockTemplate.transactionHashes.begin(), blockTemplate.transactionHashes.end()))
+    {
+      return error::BlockValidationError::TRANSACTION_DUPLICATES;
+    }
+
+    /* Build a vector of the rawBlock transaction Hashes */
+    std::vector<Crypto::Hash> transactionHashes{transactions.size()};
+
+    std::transform(transactions.begin(),
+                   transactions.end(),
+                   transactionHashes.begin(),
+                   [](const auto &transaction)
+                   {
+                     return transaction.getTransactionHash();
+                   }
+    );
+
+    /* Make sure that the rawBlock transaction hashes contain no duplicates */
+    if (!Utilities::is_unique(transactionHashes.begin(), transactionHashes.end()))
+    {
+      return error::BlockValidationError::TRANSACTION_DUPLICATES;
+    }
+
+    /* Loop through the rawBlock transaction hashes and verify that they are
+       all in the blocktemplate transaction hashes */
+    for (const auto &transaction: transactionHashes)
+    {
+      const auto search = std::find(blockTemplate.transactionHashes.begin(), blockTemplate.transactionHashes.end(), transaction);
+
+      if (search == blockTemplate.transactionHashes.end())
+      {
+        return error::BlockValidationError::TRANSACTION_INCONSISTENCY;
+      }
+    }
+
+    /* Ensure that the blocktemplate hashes vector matches the rawBlock transactionHashes vector */
+    if (blockTemplate.transactionHashes != transactionHashes)
+    {
+      return error::BlockValidationError::TRANSACTION_INCONSISTENCY;
+    }
   }
 
   // This allows us to accept blocks with transaction mixins for the mined money unlock window
