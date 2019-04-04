@@ -667,3 +667,9 @@ void getTxPrivateKey(const std::shared_ptr<WalletBackend> walletBackend)
                   << SuccessMsg(key) << std::endl;
     }
 }
+
+// WIP - remove this comment when completed
+void exitCurrentWallet(const std::shared_ptr<WalletBackend> walletBackend)
+{
+
+}

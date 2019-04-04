@@ -1,4 +1,5 @@
 // Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2019, The Catalyst Developers
 // 
 // Please see the included LICENSE file for more information.
 
@@ -57,3 +58,6 @@ void advanced(const std::shared_ptr<WalletBackend> walletBackend);
 void swapNode(const std::shared_ptr<WalletBackend> walletBackend);
 
 void getTxPrivateKey(const std::shared_ptr<WalletBackend> walletBackend);
+
+// WIP - remove this comment when completed
+void exitCurrentWallet(const std::shared_ptr<WalletBackend> walletBackend);
