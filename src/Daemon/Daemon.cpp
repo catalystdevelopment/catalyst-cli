@@ -34,6 +34,8 @@
 #include <config/CryptoNoteCheckpoints.h>
 #include <Logging/LoggerManager.h>
 
+#include <Common/FileSystemShim.h>
+
 #if defined(WIN32)
 #include <crtdbg.h>
 #include <io.h>
@@ -187,6 +189,19 @@ int main(int argc, char* argv[])
     }
   }
 
+  /* If we were given the resync arg, we're deleting everything */
+  if (config.resync)
+  {
+    std::error_code ec;
+    fs::remove_all(fs::path(config.dataDirectory), ec);
+
+    if (ec)
+    {
+      std::cout << "Could not delete data directory: " << config.dataDirectory << std::endl;
+      exit(1);
+    }
+  }
+
   try
   {
     fs::path cwdPath = fs::current_path();
@@ -253,19 +268,9 @@ int main(int argc, char* argv[])
     DataBaseConfig dbConfig;
     dbConfig.init(config.dataDirectory, config.dbThreads, config.dbMaxOpenFiles, config.dbWriteBufferSizeMB, config.dbReadCacheSizeMB);
 
-    if (dbConfig.isConfigFolderDefaulted())
+    if (!Tools::create_directories_if_necessary(dbConfig.getDataDir()))
     {
-      if (!Tools::create_directories_if_necessary(dbConfig.getDataDir()))
-      {
-        throw std::runtime_error("Can't create directory: " + dbConfig.getDataDir());
-      }
-    }
-    else
-    {
-      if (!Tools::directoryExists(dbConfig.getDataDir()))
-      {
-        throw std::runtime_error("Directory does not exist: " + dbConfig.getDataDir());
-      }
+      throw std::runtime_error("Can't create directory: " + dbConfig.getDataDir());
     }
 
     RocksDBWrapper database(logManager);

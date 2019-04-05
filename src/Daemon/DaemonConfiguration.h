@@ -43,6 +43,7 @@ namespace DaemonConfig {
       printGenesisTx = false;
       dumpConfig = false;
       useSqliteForLocalCaches = false;
+      resync = false;
     }
 
     std::string dataDirectory;
@@ -72,6 +73,7 @@ namespace DaemonConfig {
     bool enableBlockExplorer;
     bool localIp;
     bool hideMyPort;
+    bool resync;
 
     std::string configFile;
     std::string outputFile;
