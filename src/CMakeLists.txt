@@ -125,9 +125,9 @@ elseif (UNIX)
 endif()
 
 if(MSVC)
-	target_link_libraries(TurtleCoind System CryptoNoteCore rocksdb ${Boost_LIBRARIES})
+	target_link_libraries(TurtleCoind System CryptoNoteCore rocksdb sqlite3 ${Boost_LIBRARIES})
 else()
-	target_link_libraries(TurtleCoind System CryptoNoteCore rocksdblib ${Boost_LIBRARIES})
+	target_link_libraries(TurtleCoind System CryptoNoteCore rocksdblib sqlite3 ${Boost_LIBRARIES})
 endif()
 
 # Add the dependencies we need

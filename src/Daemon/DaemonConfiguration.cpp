@@ -1,4 +1,4 @@
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -47,6 +47,7 @@ namespace DaemonConfig{
       ("log-file", "Specify the <path> to the log file", cxxopts::value<std::string>()->default_value(config.logFile), "<path>")
       ("log-level", "Specify log level", cxxopts::value<int>()->default_value(std::to_string(config.logLevel)), "#")
       ("no-console", "Disable daemon console commands", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+      ("sqlite", "Use SQLite3 for local cache files", cxxopts::value<bool>(config.useSqliteForLocalCaches)->default_value("false")->implicit_value("true"))
       ("save-config", "Save the configuration to the specified <file>", cxxopts::value<std::string>(), "<file>");
 
     options.add_options("RPC")
@@ -139,6 +140,11 @@ namespace DaemonConfig{
       if (cli.count("log-level") > 0)
       {
         config.logLevel = cli["log-level"].as<int>();
+      }
+      
+      if (cli.count("sqlite") > 0)
+      {
+        config.useSqliteForLocalCaches = cli["sqlite"].as<bool>();
       }
 
       if (cli.count("no-console") > 0)
@@ -329,6 +335,11 @@ namespace DaemonConfig{
           {
             throw std::runtime_error(std::string(e.what()) + " - Invalid value for " + cfgKey );
           }
+        }
+        else if (cfgKey.compare("sqlite") == 0)
+        {
+          config.useSqliteForLocalCaches = cfgValue.at(0) == '1' ? true : false;
+          updated = true;
         }
         else if (cfgKey.compare("no-console") == 0)
         {
@@ -555,6 +566,11 @@ namespace DaemonConfig{
     {
       config.logLevel = j["log-level"].get<int>();
     }
+    
+    if (j.find("sqlite") != j.end())
+    {
+      config.useSqliteForLocalCaches = j["sqlite"].get<bool>();
+    }
 
     if (j.find("no-console") != j.end())
     {
@@ -665,6 +681,7 @@ namespace DaemonConfig{
       {"log-file", config.logFile},
       {"log-level", config.logLevel},
       {"no-console", config.noConsole},
+      {"sqlite", config.useSqliteForLocalCaches},
       {"db-max-open-files", config.dbMaxOpenFiles},
       {"db-read-buffer-size", (config.dbReadCacheSizeMB)},
       {"db-threads", config.dbThreads},
