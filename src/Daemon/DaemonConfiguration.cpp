@@ -33,6 +33,8 @@ namespace DaemonConfig{
       ("help", "Display this help message", cxxopts::value<bool>()->implicit_value("true"))
       ("os-version", "Output Operating System version information", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
       ("resync", "Forces the daemon to delete the blockchain data and start resyncing", cxxopts::value<bool>(config.resync)->default_value("false")->implicit_value("true"))
+      ("rewind", "Rewinds the local blockchain cache to the specified height. 0 = Normal Operation",
+        cxxopts::value<uint32_t>()->default_value(std::to_string(config.rewindToHeight)), "#")
       ("version","Output daemon version information",cxxopts::value<bool>()->default_value("false")->implicit_value("true"));
 
     options.add_options("Genesis Block")
@@ -111,6 +113,11 @@ namespace DaemonConfig{
       if (cli.count("os-version") > 0)
       {
         config.osVersion = cli["os-version"].as<bool>();
+      }
+      
+      if (cli.count("rewind") > 0)
+      {
+        config.rewindToHeight = cli["rewind"].as<uint32_t>();
       }
 
       if (cli.count("print-genesis-tx") > 0)

@@ -237,6 +237,30 @@ int main(int argc, char* argv[])
     }
     CryptoNote::Currency currency = currencyBuilder.currency();
 
+    /* If we were told to rewind the blockchain to a certain height
+       we will remove blocks until we're back at the height specified */
+    if (config.rewindToHeight > 0)
+    {
+      logger(INFO) << "Rewinding blockchain to: " << config.rewindToHeight << std::endl;
+      std::unique_ptr<IMainChainStorage> mainChainStorage;
+
+      if (config.useSqliteForLocalCaches)
+      {
+        mainChainStorage = createSwappedMainChainStorageSqlite(config.dataDirectory, currency);
+      }
+      else
+      {
+        mainChainStorage = createSwappedMainChainStorage(config.dataDirectory, currency);
+      }
+
+      while(mainChainStorage->getBlockCount() >= config.rewindToHeight)
+      {
+        mainChainStorage->popBlock();
+      }
+
+      logger(INFO) << "Blockchain rewound to: " << config.rewindToHeight << std::endl;
+    }
+
     bool use_checkpoints = !config.checkPoints.empty();
     CryptoNote::Checkpoints checkpoints(logManager);
 
