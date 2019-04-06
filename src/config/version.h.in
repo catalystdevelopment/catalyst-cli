@@ -16,6 +16,4 @@
 #define PROJECT_DESCRIPTION PROJECT_NAME " " PROJECT_VERSION_LONG
 
 
-A: are you equal to set X?
-B: no, set B is not equal to set X, how does this relate to set B?
-A: because you contain y which is an element of X
+
