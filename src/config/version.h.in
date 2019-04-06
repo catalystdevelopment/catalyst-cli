@@ -6,11 +6,16 @@
 #define PROJECT_COPYRIGHT "Copyright 2018-2019, The Catalyst Developers"
 #define APP_VER_MAJOR 0
 #define APP_VER_MINOR 3
-#define APP_VER_REV 2
-#define APP_VER_BUILD 2
+#define APP_VER_REV 3
+#define APP_VER_BUILD 0
 
 #define BUILD_COMMIT_ID "@VERSION@"
 #define PROJECT_VERSION STR(APP_VER_MAJOR) "." STR(APP_VER_MINOR) "." STR(APP_VER_REV)
 #define PROJECT_VERSION_BUILD_NO STR(APP_VER_BUILD)
 #define PROJECT_VERSION_LONG PROJECT_VERSION "." PROJECT_VERSION_BUILD_NO " (" BUILD_COMMIT_ID ")"
 #define PROJECT_DESCRIPTION PROJECT_NAME " " PROJECT_VERSION_LONG
+
+
+A: are you equal to set X?
+B: no, set B is not equal to set X, how does this relate to set B?
+A: because you contain y which is an element of X

@@ -434,7 +434,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
                   << InformationMsg(tx.unlockTime)
                   << std::endl
                   << InformationMsg("Unlocks at approximately: ")
-                  << InformationMsg(ZedUtilities::unixTimeToDate(unlockInUnixTime))
+                  << InformationMsg(Utilities::unixTimeToDate(unlockInUnixTime))
                   << std::endl
                   << std::endl;
     }
@@ -443,7 +443,7 @@ void printIncomingTransfer(const WalletTypes::Transaction tx)
     {
         std::cout << SuccessMsg(stream.str())
                   << InformationMsg("Unlocks at: ")
-                  << InformationMsg(ZedUtilities::unixTimeToDate(tx.unlockTime))
+                  << InformationMsg(Utilities::unixTimeToDate(tx.unlockTime))
                   << std::endl
                   << std::endl;
     }
