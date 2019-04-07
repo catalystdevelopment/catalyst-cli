@@ -193,12 +193,24 @@ int main(int argc, char* argv[])
   if (config.resync)
   {
     std::error_code ec;
-    fs::remove_all(fs::path(config.dataDirectory), ec);
 
-    if (ec)
+    std::vector<std::string> removablePaths = {
+      config.dataDirectory + "/" + CryptoNote::parameters::CRYPTONOTE_BLOCKS_FILENAME,
+      config.dataDirectory + "/" + CryptoNote::parameters::CRYPTONOTE_BLOCKINDEXES_FILENAME,
+      config.dataDirectory + "/" + CryptoNote::parameters::P2P_NET_DATA_FILENAME,
+      config.dataDirectory + "/" + CryptoNote::parameters::CRYPTONOTE_BLOCKS_FILENAME + ".sqlite3",
+      config.dataDirectory + "/DB"
+    };
+
+    for (const auto path : removablePaths)
     {
-      std::cout << "Could not delete data directory: " << config.dataDirectory << std::endl;
-      exit(1);
+      fs::remove_all(fs::path(path), ec);
+
+      if (ec)
+      {
+        std::cout << "Could not delete data path: " << path << std::endl;
+        exit(1);
+      }
     }
   }
 
