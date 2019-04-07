@@ -16,11 +16,11 @@
 
 #include <Utilities/ColouredMsg.h>
 #include <Utilities/FormatTools.h>
+#include <Utilities/Input.h>
 #include <Utilities/String.h>
 #include <Utilities/Utilities.h>
 
 #include <zedwallet++/Commands.h>
-#include <zedwallet++/Utilities.h>
 
 /* Note: this is not portable, it only works with terminals that support ANSI
    codes (e.g., not Windows) - however! due to the way linenoise-cpp works,
@@ -345,7 +345,7 @@ std::tuple<std::string, uint16_t, bool> getDaemonAddress()
         }
 
 #ifdef CPPHTTPLIB_OPENSSL_SUPPORT
-        ssl = ZedUtilities::confirm("Does this daemon support SSL?", false);
+        ssl = Utilities::confirm("Does this daemon support SSL?", false);
 #endif
 
         return {host, port, ssl};
