@@ -9,6 +9,7 @@ include_directories(${CMAKE_SOURCE_DIR}/external/nlohmann-json)
 include_directories(${CMAKE_SOURCE_DIR}/external/rapidjson)
 include_directories(${CMAKE_SOURCE_DIR}/external/cxxopts)
 include_directories(${CMAKE_SOURCE_DIR}/external/cryptopp)
+include_directories(${CMAKE_SOURCE_DIR}/external/sqlite3)
 
 # Show cmake where the source files are
 # Note, if you add remove a source file, you will need to re-run cmake so it
@@ -124,14 +125,14 @@ elseif (UNIX)
 endif()
 
 if(MSVC)
-	target_link_libraries(TurtleCoind System CryptoNoteCore rocksdb ${Boost_LIBRARIES})
+	target_link_libraries(TurtleCoind System CryptoNoteCore rocksdb sqlite3 ${Boost_LIBRARIES})
 else()
-	target_link_libraries(TurtleCoind System CryptoNoteCore rocksdblib ${Boost_LIBRARIES})
+	target_link_libraries(TurtleCoind System CryptoNoteCore rocksdblib sqlite3 ${Boost_LIBRARIES})
 endif()
 
 # Add the dependencies we need
 target_link_libraries(Common __filesystem)
-target_link_libraries(CryptoNoteCore Common Logging Crypto P2P Rpc Http Serialization System ${Boost_LIBRARIES})
+target_link_libraries(CryptoNoteCore Common Logging Crypto P2P Rpc Http Serialization System sqlite3 ${Boost_LIBRARIES})
 target_link_libraries(cryptotest Crypto Common)
 target_link_libraries(Errors Crypto SubWallets)
 target_link_libraries(Logging Common)
