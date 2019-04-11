@@ -988,7 +988,7 @@ void SubWallets::fromJSON(const JSONObject &j)
     {
         WalletTypes::Transaction tx;
         tx.fromJSON(x);
-        m_transactions.push_back(tx);
+        m_lockedTransactions.push_back(tx);
     }
 
     m_privateViewKey.fromString(getStringFromJSON(j, "privateViewKey"));
