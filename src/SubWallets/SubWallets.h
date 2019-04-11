@@ -187,6 +187,8 @@ class SubWallets
         std::vector<std::tuple<std::string, uint64_t, uint64_t>> getBalances(
             const uint64_t currentHeight) const;
 
+        void pruneSpentInputs(const uint64_t pruneHeight);
+
         /////////////////////////////
         /* Public member variables */
         /////////////////////////////

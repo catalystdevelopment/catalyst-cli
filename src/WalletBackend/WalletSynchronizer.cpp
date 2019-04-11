@@ -270,6 +270,13 @@ void WalletSynchronizer::processBlock(const WalletTypes::WalletBlockInfo &block)
         removeForkedTransactions(block.blockHeight);
     }
 
+    /* Prune old inputs that are out of our 'confirmation' window */
+    if (block.blockHeight % Constants::PRUNE_SPENT_INPUTS_INTERVAL == 0 
+     && block.blockHeight > Constants::PRUNE_SPENT_INPUTS_INTERVAL)
+    {
+        m_subWallets->pruneSpentInputs(block.blockHeight - Constants::PRUNE_SPENT_INPUTS_INTERVAL);
+    }
+
     auto ourInputs = processBlockOutputs(block);
 
     std::unordered_map<Crypto::Hash, std::vector<uint64_t>> globalIndexes;

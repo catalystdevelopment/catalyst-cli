@@ -656,7 +656,7 @@ std::vector<std::string> SubWallets::getAddresses() const
 {
     std::vector<std::string> addresses;
 
-    for (const auto [pubKey, subWallet] : m_subWallets)
+    for (const auto &[pubKey, subWallet] : m_subWallets)
     {
         addresses.push_back(subWallet.address());
     }
@@ -688,7 +688,7 @@ std::tuple<uint64_t, uint64_t> SubWallets::getBalance(
 
     uint64_t lockedBalance = 0;
 
-    for (const auto pubKey : subWalletsToTakeFrom)
+    for (const auto &pubKey : subWalletsToTakeFrom)
     {
         const auto [unlocked, locked] = m_subWallets.at(pubKey).getBalance(currentHeight);
 
@@ -848,7 +848,7 @@ std::vector<Crypto::SecretKey> SubWallets::getPrivateSpendKeys() const
 {
     std::vector<Crypto::SecretKey> spendKeys;
 
-    for (const auto [pubKey, subWallet] : m_subWallets)
+    for (const auto &[pubKey, subWallet] : m_subWallets)
     {
         spendKeys.push_back(subWallet.privateSpendKey());
     }
@@ -940,7 +940,7 @@ void SubWallets::convertSyncTimestampToHeight(
 {
     std::scoped_lock lock(m_mutex);
 
-    for (auto [pubKey, subWallet] : m_subWallets)
+    for (auto &[pubKey, subWallet] : m_subWallets)
     {
         subWallet.convertSyncTimestampToHeight(timestamp, height);
     }
@@ -951,14 +951,22 @@ std::vector<std::tuple<std::string, uint64_t, uint64_t>> SubWallets::getBalances
 {
     std::vector<std::tuple<std::string, uint64_t, uint64_t>> balances;
 
-    for (auto [pubKey, subWallet] : m_subWallets)
+    for (const auto &[pubKey, subWallet] : m_subWallets)
     {
-        const auto [unlocked, locked] = m_subWallets.at(pubKey).getBalance(currentHeight);
+        const auto [unlocked, locked] = subWallet.getBalance(currentHeight);
 
         balances.emplace_back(subWallet.address(), unlocked, locked);
     }
 
     return balances;
+}
+
+void SubWallets::pruneSpentInputs(const uint64_t pruneHeight)
+{
+    for (auto &[pubKey, subWallet] : m_subWallets)
+    {
+        subWallet.pruneSpentInputs(pruneHeight);
+    }
 }
 
 void SubWallets::fromJSON(const JSONObject &j)

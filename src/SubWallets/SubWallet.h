@@ -105,6 +105,8 @@ class SubWallet
             const uint64_t timestamp,
             const uint64_t height);
 
+        void pruneSpentInputs(const uint64_t pruneHeight);
+
         /////////////////////////////
         /* Public member variables */
         /////////////////////////////
