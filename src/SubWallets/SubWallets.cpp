@@ -961,6 +961,14 @@ std::vector<std::tuple<std::string, uint64_t, uint64_t>> SubWallets::getBalances
     return balances;
 }
 
+void SubWallets::pruneSpentInputs(const uint64_t pruneHeight)
+{
+    for (auto [pubKey, subWallet] : m_subWallets)
+    {
+        subWallet.pruneSpentInputs(pruneHeight);
+    }
+}
+
 void SubWallets::fromJSON(const JSONObject &j)
 {
     for (const auto &x : getArrayFromJSON(j, "publicSpendKeys"))

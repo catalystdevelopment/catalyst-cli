@@ -9,6 +9,8 @@
 #include <CryptoNoteCore/Account.h>
 #include <CryptoNoteCore/CryptoNoteBasicImpl.h>
 
+#include <Logger/Logger.h>
+
 #include <Utilities/Utilities.h>
 
 #include <WalletBackend/Constants.h>
@@ -406,6 +408,35 @@ void SubWallet::convertSyncTimestampToHeight(
     {
         m_syncStartTimestamp = timestamp;
         m_syncStartHeight = height;
+    }
+}
+
+void SubWallet::pruneSpentInputs(const uint64_t pruneHeight)
+{
+    const uint64_t lenBeforePrune = m_spentInputs.size();
+
+    const auto it = std::remove_if(m_spentInputs.begin(), m_spentInputs.end(),
+    [&pruneHeight](const auto input)
+    {
+        return input.blockHeight >= pruneHeight;
+    });
+
+    if (it != m_spentInputs.end())
+    {
+        m_spentInputs.erase(it, m_spentInputs.end());
+    }
+
+    const uint64_t lenAfterPrune = m_spentInputs.size();
+
+    const uint64_t difference = lenBeforePrune - lenAfterPrune;
+
+    if (difference != 0)
+    {
+        Logger::logger.log(
+            "Pruned " + std::to_string(difference) + " spent inputs from " + m_address,
+            Logger::DEBUG,
+            {Logger::SYNC}
+        );
     }
 }
 
