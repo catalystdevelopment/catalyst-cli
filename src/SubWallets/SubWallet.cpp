@@ -418,7 +418,7 @@ void SubWallet::pruneSpentInputs(const uint64_t pruneHeight)
     const auto it = std::remove_if(m_spentInputs.begin(), m_spentInputs.end(),
     [&pruneHeight](const auto input)
     {
-        return input.blockHeight <= pruneHeight;
+        return input.spendHeight <= pruneHeight;
     });
 
     if (it != m_spentInputs.end())
