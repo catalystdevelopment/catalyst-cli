@@ -45,6 +45,10 @@ namespace Constants
        blocks */
     const uint32_t BLOCK_HASH_CHECKPOINTS_INTERVAL = 5000;
 
+    /* The amount of blocks since an input has been spent that we remove it
+       from the container */
+    const uint64_t PRUNE_SPENT_INPUTS_INTERVAL = 5000;
+
     /* When we get the global indexes, we pass in a range of blocks, to obscure
        which transactions we are interested in - the ones that belong to us.
        To do this, we get the global indexes for all transactions in a range.

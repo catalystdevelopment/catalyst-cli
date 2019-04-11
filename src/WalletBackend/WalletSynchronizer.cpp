@@ -271,9 +271,10 @@ void WalletSynchronizer::processBlock(const WalletTypes::WalletBlockInfo &block)
     }
 
     /* Prune old inputs that are out of our 'confirmation' window */
-    if (block.blockHeight % 5000 == 0 && block.blockHeight != 0)
+    if (block.blockHeight % Constants::PRUNE_SPENT_INPUTS_INTERVAL == 0 
+     && block.blockHeight > Constants::PRUNE_SPENT_INPUTS_INTERVAL)
     {
-        m_subWallets->pruneSpentInputs(block.blockHeight - 5000);
+        m_subWallets->pruneSpentInputs(block.blockHeight - Constants::PRUNE_SPENT_INPUTS_INTERVAL);
     }
 
     auto ourInputs = processBlockOutputs(block);
