@@ -24,8 +24,7 @@ public:
 
   virtual const TransactionValidatorState& getPoolTransactionValidationState() const = 0;
   virtual std::vector<CachedTransaction> getPoolTransactions() const = 0;
-  virtual std::vector<CachedTransaction> getNormalTransactions() const = 0;
-  virtual std::vector<CachedTransaction> getFusionTransactions() const = 0;
+  virtual std::tuple<std::vector<CachedTransaction>, std::vector<CachedTransaction>> getPoolTransactionsForBlockTemplate() const = 0;
 
   virtual uint64_t getTransactionReceiveTime(const Crypto::Hash& hash) const = 0;
   virtual std::vector<Crypto::Hash> getTransactionHashesByPaymentId(const Crypto::Hash& paymentId) const = 0;

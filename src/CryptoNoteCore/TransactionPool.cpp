@@ -129,34 +129,27 @@ std::vector<CachedTransaction> TransactionPool::getPoolTransactions() const {
   return result;
 }
 
-std::vector<CachedTransaction> TransactionPool::getNormalTransactions() const
+std::tuple<std::vector<CachedTransaction>, std::vector<CachedTransaction>> TransactionPool::getPoolTransactionsForBlockTemplate() const
 {
-  std::vector<CachedTransaction> result;
+  std::vector<CachedTransaction> regularTransactions;
+
+  std::vector<CachedTransaction> fusionTransactions;
 
   for (const auto &transaction : transactionCostIndex)
   {
-    if(transaction.cachedTransaction.getTransactionFee() != 0)
+    uint64_t transactionFee = transaction.cachedTransaction.getTransactionFee();
+
+    if(transactionFee != 0)
     {
-      result.emplace_back(transaction.cachedTransaction);
+      regularTransactions.emplace_back(transaction.cachedTransaction);
+    }
+    else
+    {
+      fusionTransactions.emplace_back(transaction.cachedTransaction);
     }
   }
 
-  return result;
-}
-
-std::vector<CachedTransaction> TransactionPool::getFusionTransactions() const
-{
-  std::vector<CachedTransaction> result;
-
-  for (const auto &transaction : transactionCostIndex)
-  {
-    if(transaction.cachedTransaction.getTransactionFee() == 0)
-    {
-      result.emplace_back(transaction.cachedTransaction);
-    }
-  }
-
-  return result;
+  return {regularTransactions, fusionTransactions};
 }
 
 uint64_t TransactionPool::getTransactionReceiveTime(const Crypto::Hash& hash) const {

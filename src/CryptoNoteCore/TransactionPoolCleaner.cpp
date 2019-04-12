@@ -63,12 +63,9 @@ std::vector<CachedTransaction> TransactionPoolCleanWrapper::getPoolTransactions(
   return transactionPool->getPoolTransactions();
 }
 
-std::vector<CachedTransaction> TransactionPoolCleanWrapper::getNormalTransactions() const {
-  return transactionPool->getNormalTransactions();
-}
-
-std::vector<CachedTransaction> TransactionPoolCleanWrapper::getFusionTransactions() const {
-  return transactionPool->getFusionTransactions();
+std::tuple<std::vector<CachedTransaction>, std::vector<CachedTransaction>> TransactionPoolCleanWrapper::getPoolTransactionsForBlockTemplate() const
+{
+  return transactionPool->getPoolTransactionsForBlockTemplate();
 }
 
 uint64_t TransactionPoolCleanWrapper::getTransactionReceiveTime(const Crypto::Hash& hash) const {

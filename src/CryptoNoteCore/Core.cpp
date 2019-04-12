@@ -57,6 +57,25 @@ std::vector<T> preallocateVector(size_t elements) {
 }
 UseGenesis addGenesisBlock = UseGenesis(true);
 
+class TransactionSpentInputsChecker {
+public:
+  bool haveSpentInputs(const Transaction& transaction) {
+    for (const auto& input : transaction.inputs) {
+      if (input.type() == typeid(KeyInput)) {
+        auto inserted = alreadySpentKeyImages.insert(boost::get<KeyInput>(input).keyImage);
+        if (!inserted.second) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+private:
+  std::unordered_set<Crypto::KeyImage> alreadySpentKeyImages;
+};
+
 inline IBlockchainCache* findIndexInChain(IBlockchainCache* blockSegment, const Crypto::Hash& blockHash) {
   assert(blockSegment != nullptr);
   while (blockSegment != nullptr) {
@@ -2462,43 +2481,6 @@ bool Core::validateBlockTemplateTransaction(
     return true;
 }
 
-bool Core::addTransactionToBlockTemplate(
-    TransactionSpentInputsChecker &spentInputsChecker,
-    const CachedTransaction transaction,
-    const size_t maxTotalSize,
-    const uint64_t height,
-    BlockTemplate &block,
-    size_t &transactionsSize,
-    uint64_t &fee) const
-{
-    if (maxTotalSize < transactionsSize + transaction.getTransactionBinaryArray().size())
-    {
-        return false;
-    }
-
-    if (!validateBlockTemplateTransaction(transaction, height))
-    {
-        transactionPool->removeTransaction(transaction.getTransactionHash());
-
-        return false;
-    }
-
-    if (!spentInputsChecker.haveSpentInputs(transaction.getTransaction()))
-    {
-        transactionsSize += transaction.getTransactionBinaryArray().size();
-
-        fee += transaction.getTransactionFee();
-
-        block.transactionHashes.emplace_back(transaction.getTransactionHash());
-
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 void Core::fillBlockTemplate(
     BlockTemplate& block,
     const size_t medianSize,
@@ -2516,27 +2498,66 @@ void Core::fillBlockTemplate(
 
     TransactionSpentInputsChecker spentInputsChecker;
 
-    std::vector<CachedTransaction> normalTransactions = transactionPool->getNormalTransactions();
+    /* Go get our regular and fusion transactions from the transaction pool */
+    auto [regularTransactions, fusionTransactions] = transactionPool->getPoolTransactionsForBlockTemplate();
 
-    for (auto &transaction : normalTransactions)
+    /* Define our lambda function for checking and adding transactions to a block template */
+    const auto addTransactionToBlockTemplate = [this, &spentInputsChecker, maxTotalSize, height, &transactionsSize, &fee, &block](const CachedTransaction &transaction)
     {
-        if (addTransactionToBlockTemplate(spentInputsChecker, transaction, maxTotalSize, height, block, transactionsSize, fee))
+      /* If the current set of transactions included in the blocktemplate plus the transaction
+         we just passed in exceed the maximum size of a block, it won't fit so we'll move on */
+      if (transactionsSize + transaction.getTransactionBinaryArray().size() > maxTotalSize)
+      {
+          return false;
+      }
+
+      /* Check to validate that the transaction is valid for a block at this height */
+      if (!validateBlockTemplateTransaction(transaction, height))
+      {
+          transactionPool->removeTransaction(transaction.getTransactionHash());
+
+          return false;
+      }
+
+      /* Make sure that we have not already spent funds in this same block via
+         another transaction that we've already included in this block template */
+      if (!spentInputsChecker.haveSpentInputs(transaction.getTransaction()))
+      {
+          transactionsSize += transaction.getTransactionBinaryArray().size();
+
+          fee += transaction.getTransactionFee();
+
+          block.transactionHashes.emplace_back(transaction.getTransactionHash());
+
+          return true;
+      }
+      else
+      {
+          return false;
+      }
+    };
+
+    /* First we're going to loop through transactions that have a fee:
+       ie. the transactions that are paying to use the network */
+    for (const auto &transaction : regularTransactions)
+    {
+        if (addTransactionToBlockTemplate(transaction))
         {
-            logger(Logging::TRACE) << "Transaction " << transaction.getTransactionHash() << " included to block template";
+            logger(Logging::TRACE) << "Transaction " << transaction.getTransactionHash() << " included in block template";
         }
         else
         {
-            logger(Logging::TRACE) << "Transaction " << transaction.getTransactionHash() << " is failed to include to block template";
+            logger(Logging::TRACE) << "Transaction " << transaction.getTransactionHash() << " not included in block template";
         }
     }
 
-    std::vector<CachedTransaction> fusionTransactions = transactionPool->getFusionTransactions();
-
-    for (auto &transaction : fusionTransactions)
+    /* Then we'll loop through the fusion transactions as they don't
+       pay anything to use the network */
+    for (const auto &transaction : fusionTransactions)
     {
-        if (addTransactionToBlockTemplate(spentInputsChecker, transaction, maxTotalSize, height, block, transactionsSize, fee))
+        if (addTransactionToBlockTemplate(transaction))
         {
-            logger(Logging::TRACE) << "Fusion transaction " << transaction.getTransactionHash() << " included to block template";
+            logger(Logging::TRACE) << "Fusion transaction " << transaction.getTransactionHash() << " included in block template";
         }
     }
 }

@@ -47,8 +47,7 @@ public:
 
   virtual const TransactionValidatorState& getPoolTransactionValidationState() const override;
   virtual std::vector<CachedTransaction> getPoolTransactions() const override;
-  virtual std::vector<CachedTransaction> getNormalTransactions() const override;
-  virtual std::vector<CachedTransaction> getFusionTransactions() const override;
+  virtual std::tuple<std::vector<CachedTransaction>, std::vector<CachedTransaction>> getPoolTransactionsForBlockTemplate() const override;
 
   virtual uint64_t getTransactionReceiveTime(const Crypto::Hash& hash) const override;
   virtual std::vector<Crypto::Hash> getTransactionHashesByPaymentId(const Crypto::Hash& paymentId) const override;
