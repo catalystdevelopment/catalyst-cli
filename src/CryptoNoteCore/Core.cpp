@@ -57,25 +57,6 @@ std::vector<T> preallocateVector(size_t elements) {
 }
 UseGenesis addGenesisBlock = UseGenesis(true);
 
-class TransactionSpentInputsChecker {
-public:
-  bool haveSpentInputs(const Transaction& transaction) {
-    for (const auto& input : transaction.inputs) {
-      if (input.type() == typeid(KeyInput)) {
-        auto inserted = alreadSpentKeyImages.insert(boost::get<KeyInput>(input).keyImage);
-        if (!inserted.second) {
-          return true;
-        }
-      }
-    }
-
-    return false;
-  }
-
-private:
-  std::unordered_set<Crypto::KeyImage> alreadSpentKeyImages;
-};
-
 inline IBlockchainCache* findIndexInChain(IBlockchainCache* blockSegment, const Crypto::Hash& blockHash) {
   assert(blockSegment != nullptr);
   while (blockSegment != nullptr) {
@@ -2481,6 +2462,43 @@ bool Core::validateBlockTemplateTransaction(
     return true;
 }
 
+bool Core::addTransactionToBlockTemplate(
+    TransactionSpentInputsChecker &spentInputsChecker,
+    const CachedTransaction transaction,
+    const size_t maxTotalSize,
+    const uint64_t height,
+    BlockTemplate &block,
+    size_t &transactionsSize,
+    uint64_t &fee) const
+{
+    if (maxTotalSize < transactionsSize + transaction.getTransactionBinaryArray().size())
+    {
+        return false;
+    }
+
+    if (!validateBlockTemplateTransaction(transaction, height))
+    {
+        transactionPool->removeTransaction(transaction.getTransactionHash());
+
+        return false;
+    }
+
+    if (!spentInputsChecker.haveSpentInputs(transaction.getTransaction()))
+    {
+        transactionsSize += transaction.getTransactionBinaryArray().size();
+
+        fee += transaction.getTransactionFee();
+
+        block.transactionHashes.emplace_back(transaction.getTransactionHash());
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void Core::fillBlockTemplate(
     BlockTemplate& block,
     const size_t medianSize,
@@ -2489,58 +2507,38 @@ void Core::fillBlockTemplate(
     size_t& transactionsSize,
     uint64_t& fee) const {
 
-  transactionsSize = 0;
-  fee = 0;
+    transactionsSize = 0;
+    fee = 0;
 
-  size_t maxTotalSize = (125 * medianSize) / 100;
-  maxTotalSize = std::min(maxTotalSize, maxCumulativeSize) - currency.minerTxBlobReservedSize();
+    size_t maxTotalSize = (125 * medianSize) / 100;
 
-  TransactionSpentInputsChecker spentInputsChecker;
+    maxTotalSize = std::min(maxTotalSize, maxCumulativeSize) - currency.minerTxBlobReservedSize();
 
-  std::vector<CachedTransaction> poolTransactions = transactionPool->getPoolTransactions();
-  for (auto it = poolTransactions.rbegin(); it != poolTransactions.rend() && it->getTransactionFee() == 0; ++it) {
-    const CachedTransaction& transaction = *it;
+    TransactionSpentInputsChecker spentInputsChecker;
 
-    auto transactionBlobSize = transaction.getTransactionBinaryArray().size();
-    if (currency.fusionTxMaxSize() < transactionsSize + transactionBlobSize) {
-      continue;
-    }
+    std::vector<CachedTransaction> normalTransactions = transactionPool->getNormalTransactions();
 
-    if (!validateBlockTemplateTransaction(transaction, height))
+    for (auto &transaction : normalTransactions)
     {
-        transactionPool->removeTransaction(transaction.getTransactionHash());
-        continue;
+        if (addTransactionToBlockTemplate(spentInputsChecker, transaction, maxTotalSize, height, block, transactionsSize, fee))
+        {
+            logger(Logging::TRACE) << "Transaction " << transaction.getTransactionHash() << " included to block template";
+        }
+        else
+        {
+            logger(Logging::TRACE) << "Transaction " << transaction.getTransactionHash() << " is failed to include to block template";
+        }
     }
 
-    if (!spentInputsChecker.haveSpentInputs(transaction.getTransaction())) {
-      block.transactionHashes.emplace_back(transaction.getTransactionHash());
-      transactionsSize += transactionBlobSize;
-      logger(Logging::TRACE) << "Fusion transaction " << transaction.getTransactionHash() << " included to block template";
-    }
-  }
+    std::vector<CachedTransaction> fusionTransactions = transactionPool->getFusionTransactions();
 
-  for (const auto& cachedTransaction : poolTransactions) {
-    size_t blockSizeLimit = (cachedTransaction.getTransactionFee() == 0) ? medianSize : maxTotalSize;
-
-    if (blockSizeLimit < transactionsSize + cachedTransaction.getTransactionBinaryArray().size()) {
-      continue;
-    }
-
-    if (!validateBlockTemplateTransaction(cachedTransaction, height))
+    for (auto &transaction : fusionTransactions)
     {
-        transactionPool->removeTransaction(cachedTransaction.getTransactionHash());
-        continue;
+        if (addTransactionToBlockTemplate(spentInputsChecker, transaction, maxTotalSize, height, block, transactionsSize, fee))
+        {
+            logger(Logging::TRACE) << "Fusion transaction " << transaction.getTransactionHash() << " included to block template";
+        }
     }
-
-    if (!spentInputsChecker.haveSpentInputs(cachedTransaction.getTransaction())) {
-      transactionsSize += cachedTransaction.getTransactionBinaryArray().size();
-      fee += cachedTransaction.getTransactionFee();
-      block.transactionHashes.emplace_back(cachedTransaction.getTransactionHash());
-      logger(Logging::TRACE) << "Transaction " << cachedTransaction.getTransactionHash() << " included to block template";
-    } else {
-      logger(Logging::TRACE) << "Transaction " << cachedTransaction.getTransactionHash() << " is failed to include to block template";
-    }
-  }
 }
 
 void Core::deleteAlternativeChains() {

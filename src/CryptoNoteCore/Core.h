@@ -1,5 +1,5 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -30,6 +30,25 @@
 #include <WalletTypes.h>
 
 namespace CryptoNote {
+
+class TransactionSpentInputsChecker {
+public:
+  bool haveSpentInputs(const Transaction& transaction) {
+    for (const auto& input : transaction.inputs) {
+      if (input.type() == typeid(KeyInput)) {
+        auto inserted = alreadSpentKeyImages.insert(boost::get<KeyInput>(input).keyImage);
+        if (!inserted.second) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+private:
+  std::unordered_set<Crypto::KeyImage> alreadSpentKeyImages;
+};
 
 class Core : public ICore, public ICoreInformation {
 public:
@@ -196,6 +215,15 @@ private:
   bool validateBlockTemplateTransaction(
     const CachedTransaction &cachedTransaction,
     const uint64_t blockHeight) const;
+
+  bool addTransactionToBlockTemplate(
+    TransactionSpentInputsChecker &spentInputsChecker,
+    const CachedTransaction transaction,
+    const size_t maxTotalSize,
+    const uint64_t height,
+    BlockTemplate &block,
+    size_t &transactionsSize,
+    uint64_t &fee) const;
 
   void fillBlockTemplate(
     BlockTemplate& block,
