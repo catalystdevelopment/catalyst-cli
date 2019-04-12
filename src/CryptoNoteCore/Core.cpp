@@ -62,7 +62,7 @@ public:
   bool haveSpentInputs(const Transaction& transaction) {
     for (const auto& input : transaction.inputs) {
       if (input.type() == typeid(KeyInput)) {
-        auto inserted = alreadSpentKeyImages.insert(boost::get<KeyInput>(input).keyImage);
+        auto inserted = alreadySpentKeyImages.insert(boost::get<KeyInput>(input).keyImage);
         if (!inserted.second) {
           return true;
         }
@@ -73,7 +73,7 @@ public:
   }
 
 private:
-  std::unordered_set<Crypto::KeyImage> alreadSpentKeyImages;
+  std::unordered_set<Crypto::KeyImage> alreadySpentKeyImages;
 };
 
 inline IBlockchainCache* findIndexInChain(IBlockchainCache* blockSegment, const Crypto::Hash& blockHash) {
@@ -2489,58 +2489,77 @@ void Core::fillBlockTemplate(
     size_t& transactionsSize,
     uint64_t& fee) const {
 
-  transactionsSize = 0;
-  fee = 0;
+    transactionsSize = 0;
+    fee = 0;
 
-  size_t maxTotalSize = (125 * medianSize) / 100;
-  maxTotalSize = std::min(maxTotalSize, maxCumulativeSize) - currency.minerTxBlobReservedSize();
+    size_t maxTotalSize = (125 * medianSize) / 100;
 
-  TransactionSpentInputsChecker spentInputsChecker;
+    maxTotalSize = std::min(maxTotalSize, maxCumulativeSize) - currency.minerTxBlobReservedSize();
 
-  std::vector<CachedTransaction> poolTransactions = transactionPool->getPoolTransactions();
-  for (auto it = poolTransactions.rbegin(); it != poolTransactions.rend() && it->getTransactionFee() == 0; ++it) {
-    const CachedTransaction& transaction = *it;
+    TransactionSpentInputsChecker spentInputsChecker;
 
-    auto transactionBlobSize = transaction.getTransactionBinaryArray().size();
-    if (currency.fusionTxMaxSize() < transactionsSize + transactionBlobSize) {
-      continue;
-    }
+    /* Go get our regular and fusion transactions from the transaction pool */
+    auto [regularTransactions, fusionTransactions] = transactionPool->getPoolTransactionsForBlockTemplate();
 
-    if (!validateBlockTemplateTransaction(transaction, height))
+    /* Define our lambda function for checking and adding transactions to a block template */
+    const auto addTransactionToBlockTemplate = [this, &spentInputsChecker, maxTotalSize, height, &transactionsSize, &fee, &block](const CachedTransaction &transaction)
     {
-        transactionPool->removeTransaction(transaction.getTransactionHash());
-        continue;
-    }
+      /* If the current set of transactions included in the blocktemplate plus the transaction
+         we just passed in exceed the maximum size of a block, it won't fit so we'll move on */
+      if (transactionsSize + transaction.getTransactionBinaryArray().size() > maxTotalSize)
+      {
+          return false;
+      }
 
-    if (!spentInputsChecker.haveSpentInputs(transaction.getTransaction())) {
-      block.transactionHashes.emplace_back(transaction.getTransactionHash());
-      transactionsSize += transactionBlobSize;
-      logger(Logging::TRACE) << "Fusion transaction " << transaction.getTransactionHash() << " included to block template";
-    }
-  }
+      /* Check to validate that the transaction is valid for a block at this height */
+      if (!validateBlockTemplateTransaction(transaction, height))
+      {
+          transactionPool->removeTransaction(transaction.getTransactionHash());
 
-  for (const auto& cachedTransaction : poolTransactions) {
-    size_t blockSizeLimit = (cachedTransaction.getTransactionFee() == 0) ? medianSize : maxTotalSize;
+          return false;
+      }
 
-    if (blockSizeLimit < transactionsSize + cachedTransaction.getTransactionBinaryArray().size()) {
-      continue;
-    }
+      /* Make sure that we have not already spent funds in this same block via
+         another transaction that we've already included in this block template */
+      if (!spentInputsChecker.haveSpentInputs(transaction.getTransaction()))
+      {
+          transactionsSize += transaction.getTransactionBinaryArray().size();
 
-    if (!validateBlockTemplateTransaction(cachedTransaction, height))
+          fee += transaction.getTransactionFee();
+
+          block.transactionHashes.emplace_back(transaction.getTransactionHash());
+
+          return true;
+      }
+      else
+      {
+          return false;
+      }
+    };
+
+    /* First we're going to loop through transactions that have a fee:
+       ie. the transactions that are paying to use the network */
+    for (const auto &transaction : regularTransactions)
     {
-        transactionPool->removeTransaction(cachedTransaction.getTransactionHash());
-        continue;
+        if (addTransactionToBlockTemplate(transaction))
+        {
+            logger(Logging::TRACE) << "Transaction " << transaction.getTransactionHash() << " included in block template";
+        }
+        else
+        {
+            logger(Logging::TRACE) << "Transaction " << transaction.getTransactionHash() << " not included in block template";
+        }
     }
 
-    if (!spentInputsChecker.haveSpentInputs(cachedTransaction.getTransaction())) {
-      transactionsSize += cachedTransaction.getTransactionBinaryArray().size();
-      fee += cachedTransaction.getTransactionFee();
-      block.transactionHashes.emplace_back(cachedTransaction.getTransactionHash());
-      logger(Logging::TRACE) << "Transaction " << cachedTransaction.getTransactionHash() << " included to block template";
-    } else {
-      logger(Logging::TRACE) << "Transaction " << cachedTransaction.getTransactionHash() << " is failed to include to block template";
+    /* Then we'll loop through the fusion transactions as they don't
+       pay anything to use the network */
+    for (const auto &transaction : fusionTransactions)
+    {
+        if (addTransactionToBlockTemplate(transaction))
+        {
+            logger(Logging::TRACE) << "Fusion transaction " << transaction.getTransactionHash() << " included in block template";
+        }
     }
-  }
 }
 
 void Core::deleteAlternativeChains() {
