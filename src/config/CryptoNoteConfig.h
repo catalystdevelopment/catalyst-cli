@@ -140,6 +140,7 @@ const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT                      = 1300000;
    and other possible unexpected behavior */
 const uint64_t TRANSACTION_SIGNATURE_COUNT_VALIDATION_HEIGHT = 1400000;
 const uint64_t BLOCK_BLOB_SHUFFLE_CHECK_HEIGHT               = 1600000;
+const uint64_t TRANSACTION_INPUT_BLOCKTIME_VALIDATION_HEIGHT = 1600000;
 
 /* This describes how many blocks of "wiggle" room transactions have regarding
    when the outputs can be spent based on a reasonable belief that the outputs
