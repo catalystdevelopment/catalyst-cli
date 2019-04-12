@@ -1,5 +1,5 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -61,6 +61,14 @@ const TransactionValidatorState& TransactionPoolCleanWrapper::getPoolTransaction
 
 std::vector<CachedTransaction> TransactionPoolCleanWrapper::getPoolTransactions() const {
   return transactionPool->getPoolTransactions();
+}
+
+std::vector<CachedTransaction> TransactionPoolCleanWrapper::getNormalTransactions() const {
+  return transactionPool->getNormalTransactions();
+}
+
+std::vector<CachedTransaction> TransactionPoolCleanWrapper::getFusionTransactions() const {
+  return transactionPool->getFusionTransactions();
 }
 
 uint64_t TransactionPoolCleanWrapper::getTransactionReceiveTime(const Crypto::Hash& hash) const {
