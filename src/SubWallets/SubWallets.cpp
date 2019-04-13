@@ -411,6 +411,13 @@ void SubWallets::storeTransactionInput(
     /* Check it exists */
     if (it != m_subWallets.end())
     {
+        if (!m_isViewWallet)
+        {
+            /* Add the new key image to the store, so we can detect when we
+               spent a key image easily */
+            m_keyImageOwners[input.keyImage] = publicSpendKey;
+        }
+
         /* If we have a view wallet, don't attempt to derive the key image */
         return it->second.storeTransactionInput(input, m_isViewWallet);
     }
@@ -421,20 +428,11 @@ void SubWallets::storeTransactionInput(
 std::tuple<bool, Crypto::PublicKey>
     SubWallets::getKeyImageOwner(const Crypto::KeyImage keyImage) const
 {
-    /* View wallet can't generate key images */
-    if (m_isViewWallet)
-    {
-        return {false, Crypto::PublicKey()};
-    }
+    const auto it = m_keyImageOwners.find(keyImage);
 
-    std::scoped_lock lock(m_mutex);
-
-    for (const auto & [publicKey, subWallet] : m_subWallets)
+    if (it != m_keyImageOwners.end())
     {
-        if (subWallet.hasKeyImage(keyImage))
-        {
-            return {true, subWallet.publicSpendKey()};
-        }
+        return {true, it->second};
     }
 
     return {false, Crypto::PublicKey()};
@@ -983,6 +981,18 @@ void SubWallets::fromJSON(const JSONObject &j)
         SubWallet s;
         s.fromJSON(x);
         m_subWallets[s.publicSpendKey()] = s;
+
+        /* Load the key images hashmap from the loaded subwallets */
+        if (!m_isViewWallet)
+        {
+            for (const auto &[pubKey, subWallet] : m_subWallets)
+            {
+                for (const auto &keyImage : subWallet.getKeyImages())
+                {
+                    m_keyImageOwners[keyImage] = pubKey;
+                }
+            }
+        }
     }
 
     for (const auto &x : getArrayFromJSON(j, "transactions"))

@@ -74,8 +74,6 @@ class SubWallet
 
         std::string address() const;
 
-        bool hasKeyImage(const Crypto::KeyImage keyImage) const;
-
         Crypto::PublicKey publicSpendKey() const;
         
         Crypto::SecretKey privateSpendKey() const;
@@ -106,6 +104,8 @@ class SubWallet
             const uint64_t height);
 
         void pruneSpentInputs(const uint64_t pruneHeight);
+
+        std::vector<Crypto::KeyImage> getKeyImages() const;
 
         /////////////////////////////
         /* Public member variables */
