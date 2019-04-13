@@ -232,6 +232,9 @@ class SubWallets
         /* Transaction private keys of sent transactions, used for auditing */
         std::unordered_map<Crypto::Hash, Crypto::SecretKey> m_transactionPrivateKeys;
 
+        /* A mapping of key images to the subwallet public spend key that owns them */
+        std::unordered_map<Crypto::KeyImage, Crypto::PublicKey> m_keyImageOwners;
+
         /* Need a mutex for accessing inputs, transactions, and locked
            transactions, etc as these are modified on multiple threads */
         mutable std::mutex m_mutex;
