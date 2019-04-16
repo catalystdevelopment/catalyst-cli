@@ -16,7 +16,7 @@ namespace CryptoNote
     class MainChainStorageRocksdb : public IMainChainStorage
     {
         public:
-            MainChainStorageRocksdb(const std::string &blocksFilename, const std::string &indexesFilename);
+            MainChainStorageRocksdb(const std::string &blocksFilename, const std::string &indexesFilename, const bool enableCompression);
 
             virtual ~MainChainStorageRocksdb();
 
@@ -33,5 +33,5 @@ namespace CryptoNote
             mutable std::atomic_int m_blockcount;
     };
 
-    std::unique_ptr<IMainChainStorage> createSwappedMainChainStorageRocksdb(const std::string &dataDir, const Currency &currency);
+    std::unique_ptr<IMainChainStorage> createSwappedMainChainStorageRocksdb(const std::string &dataDir, const Currency &currency, const bool enableCompression);
 }

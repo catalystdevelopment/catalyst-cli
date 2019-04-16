@@ -17,7 +17,10 @@
 
 namespace CryptoNote
 {
-    MainChainStorageRocksdb::MainChainStorageRocksdb(const std::string &blocksFilename, const std::string &indexesFilename)
+    MainChainStorageRocksdb::MainChainStorageRocksdb(
+      const std::string &blocksFilename, 
+      const std::string &indexesFilename, 
+      const bool enableDbCompression)
     {
         // setup db options
         rocksdb::DBOptions dbOpts;
@@ -29,11 +32,15 @@ namespace CryptoNote
         cfOpts.compaction_style = rocksdb::kCompactionStyleLevel;
         cfOpts.compression_per_level.resize(cfOpts.num_levels);
         cfOpts.num_levels = 10;
-        cfOpts.compression = rocksdb::kLZ4Compression;
+        
+        if(enableDbCompression)
+        {
+          cfOpts.compression = rocksdb::kLZ4Compression;
+        }
+        
         for (int i = 0; i < cfOpts.num_levels; ++i)
         {
-            // per level compression: standar lz4
-            cfOpts.compression_per_level[i] = rocksdb::kLZ4Compression;
+            cfOpts.compression_per_level[i] = enableDbCompression ? rocksdb::kLZ4Compression : rocksdb::kNoCompression;
         }
         rocksdb::BlockBasedTableOptions tblOpts;
         tblOpts.block_cache = rocksdb::NewLRUCache(32 * 1024 * 1024);
@@ -48,7 +55,8 @@ namespace CryptoNote
         
         // open DB
         rocksdb::Status s = rocksdb::DB::Open(options, blocksFilename, &m_db);
-        if (!s.ok()) {
+        if (!s.ok()) 
+        {
             throw std::runtime_error("Failed to load main chain storage from " + blocksFilename + ": " + s.ToString());
         }
         
@@ -77,7 +85,8 @@ namespace CryptoNote
         batch.Put("count", std::to_string(m_blockcount));
         rocksdb::Status s = m_db->Write(rocksdb::WriteOptions(), &batch);
         
-        if( !s.ok() ) {
+        if( !s.ok() ) 
+        {
             throw std::runtime_error("Failed to insert new block" + s.ToString());
         }
     }
@@ -144,7 +153,8 @@ namespace CryptoNote
             rocksdb::WriteOptions write_options;
             write_options.sync = true;
             s = m_db->Put(write_options, "count", "0");
-            if (!s.ok()) {
+            if (!s.ok()) 
+            {
                 throw std::runtime_error("Failed to get block count: " + s.ToString());
             }
         }
@@ -160,17 +170,22 @@ namespace CryptoNote
         rocksdb::Slice end = std::to_string(last);
         auto cf = m_db->DefaultColumnFamily();
         rocksdb::Status s = m_db->DeleteRange(rocksdb::WriteOptions(), cf, start, end);
-        if( !s.ok() ) {
+        if( !s.ok() ) 
+        {
             throw std::runtime_error("Failed to clear blocks: " + s.ToString());
         }
     }
 
-    std::unique_ptr<IMainChainStorage> createSwappedMainChainStorageRocksdb(const std::string &dataDir, const Currency &currency)
+    std::unique_ptr<IMainChainStorage> createSwappedMainChainStorageRocksdb(const std::string &dataDir, const Currency &currency, const bool enableDbCompression)
     {
         fs::path blocksFilename = fs::path(dataDir) / currency.blocksFileName();
         fs::path indexesFilename = fs::path(dataDir) / currency.blockIndexesFileName();
 
-        auto storage = std::make_unique<MainChainStorageRocksdb>(blocksFilename.string() + ".rocksdb", indexesFilename.string());
+        auto storage = std::make_unique<MainChainStorageRocksdb>(
+          blocksFilename.string() + ".rocksdb",
+          indexesFilename.string(),
+          enableDbCompression
+        );
 
         if (storage->getBlockCount() == 0)
         {

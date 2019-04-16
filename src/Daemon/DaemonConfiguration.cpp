@@ -49,10 +49,9 @@ namespace DaemonConfig{
       ("log-file", "Specify the <path> to the log file", cxxopts::value<std::string>()->default_value(config.logFile), "<path>")
       ("log-level", "Specify log level", cxxopts::value<int>()->default_value(std::to_string(config.logLevel)), "#")
       ("no-console", "Disable daemon console commands", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+      ("rocksdb", "Use Rocksdb for local cache files", cxxopts::value<bool>(config.useRocksdbForLocalCaches)->default_value("false")->implicit_value("true"))
       ("save-config", "Save the configuration to the specified <file>", cxxopts::value<std::string>(), "<file>")
-      ("sqlite", "Use SQLite3 for local cache files", cxxopts::value<bool>(config.useSqliteForLocalCaches)->default_value("false")->implicit_value("true"))
-      ("rocksdb", "Use Rocksdb for local cache files", cxxopts::value<bool>(config.useRocksdbForLocalCaches)->default_value("false")->implicit_value("true"));
-
+      ("sqlite", "Use SQLite3 for local cache files", cxxopts::value<bool>(config.useSqliteForLocalCaches)->default_value("false")->implicit_value("true"));
 
     options.add_options("RPC")
       ("enable-blockexplorer", "Enable the Blockchain Explorer RPC", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
@@ -77,11 +76,11 @@ namespace DaemonConfig{
       ("seed-node", "Connect to a node to retrieve the peer list and then disconnect", cxxopts::value<std::vector<std::string>>(), "<ip:port>");
 
     options.add_options("Database")
+      ("db-enable-compression", "Enable database compression", cxxopts::value<bool>(config.enableDbCompression)->default_value("false")->implicit_value("true"))
       ("db-max-open-files", "Number of files that can be used by the database at one time", cxxopts::value<int>()->default_value(std::to_string(config.dbMaxOpenFiles)), "#")
       ("db-read-buffer-size", "Size of the database read cache in megabytes (MB)", cxxopts::value<int>()->default_value(std::to_string(config.dbReadCacheSizeMB)), "#")
       ("db-threads", "Number of background threads used for compaction and flush operations", cxxopts::value<int>()->default_value(std::to_string(config.dbThreads)), "#")
-      ("db-write-buffer-size", "Size of the database write buffer in megabytes (MB)", cxxopts::value<int>()->default_value(std::to_string(config.dbWriteBufferSizeMB)), "#")
-      ("db-enable-compression", "Enable database compression", cxxopts::value<bool>(config.enableDbCompression)->default_value("false")->implicit_value("true"));
+      ("db-write-buffer-size", "Size of the database write buffer in megabytes (MB)", cxxopts::value<int>()->default_value(std::to_string(config.dbWriteBufferSizeMB)), "#");
 
     try
     {
@@ -166,6 +165,7 @@ namespace DaemonConfig{
       {
         config.useSqliteForLocalCaches = cli["sqlite"].as<bool>();
       }
+      
       if (cli.count("rocksdb") > 0)
       {
         config.useRocksdbForLocalCaches = cli["rocksdb"].as<bool>();
@@ -730,8 +730,8 @@ namespace DaemonConfig{
       {"log-file", config.logFile},
       {"log-level", config.logLevel},
       {"no-console", config.noConsole},
-      {"sqlite", config.useSqliteForLocalCaches},
       {"rocksdb", config.useRocksdbForLocalCaches},
+      {"sqlite", config.useSqliteForLocalCaches},
       {"db-enable-compression", config.enableDbCompression},
       {"db-max-open-files", config.dbMaxOpenFiles},
       {"db-read-buffer-size", (config.dbReadCacheSizeMB)},

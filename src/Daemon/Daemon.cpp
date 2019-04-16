@@ -264,7 +264,7 @@ int main(int argc, char* argv[])
       }
       else if (config.useRocksdbForLocalCaches )
       {
-        mainChainStorage = createSwappedMainChainStorageRocksdb(config.dataDirectory, currency);
+        mainChainStorage = createSwappedMainChainStorageRocksdb(config.dataDirectory, currency, config.enableDbCompression);
       }      
       else
       {
@@ -347,7 +347,7 @@ int main(int argc, char* argv[])
       std::unique_ptr<IBlockchainCacheFactory>(new DatabaseBlockchainCacheFactory(database, logger.getLogger())),
       (
         config.useSqliteForLocalCaches ? createSwappedMainChainStorageSqlite(config.dataDirectory, currency) :
-        ( config.useRocksdbForLocalCaches ? createSwappedMainChainStorageRocksdb(config.dataDirectory, currency) :
+        ( config.useRocksdbForLocalCaches ? createSwappedMainChainStorageRocksdb(config.dataDirectory, currency, config.enableDbCompression) :
           createSwappedMainChainStorage(config.dataDirectory, currency)
         )
       )

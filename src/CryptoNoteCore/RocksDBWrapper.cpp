@@ -202,7 +202,7 @@ rocksdb::Options RocksDBWrapper::getDBOptions(const DataBaseConfig& config) {
   fOptions.compaction_style = rocksdb::kCompactionStyleLevel;
 
   fOptions.compression_per_level.resize(fOptions.num_levels);
-  if(!config.getCompressionEnabled())
+  if(config.getCompressionEnabled())
   {
     fOptions.compression = rocksdb::kLZ4Compression;
   }
@@ -221,7 +221,6 @@ rocksdb::Options RocksDBWrapper::getDBOptions(const DataBaseConfig& config) {
       }
     }
   }
-
 
   rocksdb::BlockBasedTableOptions tableOptions;
   tableOptions.block_cache = rocksdb::NewLRUCache(config.getReadCacheSize());
