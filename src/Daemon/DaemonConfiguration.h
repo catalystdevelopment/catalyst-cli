@@ -44,6 +44,8 @@ namespace DaemonConfig {
       printGenesisTx = false;
       dumpConfig = false;
       useSqliteForLocalCaches = false;
+      useRocksdbForLocalCaches = false;
+      enableDbCompression = false;
       resync = false;
     }
 
@@ -87,6 +89,8 @@ namespace DaemonConfig {
     bool printGenesisTx;
     bool dumpConfig;
     bool useSqliteForLocalCaches;
+    bool useRocksdbForLocalCaches;    
+    bool enableDbCompression;
   };
 
   DaemonConfiguration initConfiguration(const char* path);

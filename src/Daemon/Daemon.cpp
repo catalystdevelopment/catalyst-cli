@@ -23,6 +23,7 @@
 #include "CryptoNoteCore/DatabaseBlockchainCacheFactory.h"
 #include "CryptoNoteCore/MainChainStorage.h"
 #include "CryptoNoteCore/MainChainStorageSqlite.h"
+#include "CryptoNoteCore/MainChainStorageRocksdb.h"
 #include "CryptoNoteCore/RocksDBWrapper.h"
 #include "CryptoNoteProtocol/CryptoNoteProtocolHandler.h"
 #include "P2p/NetNode.h"
@@ -199,6 +200,7 @@ int main(int argc, char* argv[])
       config.dataDirectory + "/" + CryptoNote::parameters::CRYPTONOTE_BLOCKINDEXES_FILENAME,
       config.dataDirectory + "/" + CryptoNote::parameters::P2P_NET_DATA_FILENAME,
       config.dataDirectory + "/" + CryptoNote::parameters::CRYPTONOTE_BLOCKS_FILENAME + ".sqlite3",
+      config.dataDirectory + "/" + CryptoNote::parameters::CRYPTONOTE_BLOCKS_FILENAME + ".rocksdb",
       config.dataDirectory + "/DB"
     };
 
@@ -248,6 +250,16 @@ int main(int argc, char* argv[])
       return 1;
     }
     CryptoNote::Currency currency = currencyBuilder.currency();
+    
+    DataBaseConfig dbConfig;
+    dbConfig.init(
+      config.dataDirectory,
+      config.dbThreads,
+      config.dbMaxOpenFiles,
+      config.dbWriteBufferSizeMB,
+      config.dbReadCacheSizeMB,
+      config.enableDbCompression
+    );
 
     /* If we were told to rewind the blockchain to a certain height
        we will remove blocks until we're back at the height specified */
@@ -260,15 +272,16 @@ int main(int argc, char* argv[])
       {
         mainChainStorage = createSwappedMainChainStorageSqlite(config.dataDirectory, currency);
       }
+      else if (config.useRocksdbForLocalCaches )
+      {
+        mainChainStorage = createSwappedMainChainStorageRocksdb(config.dataDirectory, currency, dbConfig);
+      }      
       else
       {
         mainChainStorage = createSwappedMainChainStorage(config.dataDirectory, currency);
       }
-
-      while(mainChainStorage->getBlockCount() >= config.rewindToHeight)
-      {
-        mainChainStorage->popBlock();
-      }
+      
+      mainChainStorage->rewindTo(config.rewindToHeight);
 
       logger(INFO) << "Blockchain rewound to: " << config.rewindToHeight << std::endl;
     }
@@ -301,9 +314,6 @@ int main(int argc, char* argv[])
       config.exclusiveNodes, config.priorityNodes,
       config.seedNodes);
 
-    DataBaseConfig dbConfig;
-    dbConfig.init(config.dataDirectory, config.dbThreads, config.dbMaxOpenFiles, config.dbWriteBufferSizeMB, config.dbReadCacheSizeMB);
-
     if (!Tools::create_directories_if_necessary(dbConfig.getDataDir()))
     {
       throw std::runtime_error("Can't create directory: " + dbConfig.getDataDir());
@@ -326,15 +336,28 @@ int main(int argc, char* argv[])
 
     System::Dispatcher dispatcher;
     logger(INFO) << "Initializing core...";
+    
+    std::unique_ptr<IMainChainStorage> tmainChainStorage;
+    if ( config.useSqliteForLocalCaches ) 
+    {
+      tmainChainStorage = createSwappedMainChainStorageSqlite(config.dataDirectory, currency);
+    }
+    else if ( config.useRocksdbForLocalCaches )
+    {
+      tmainChainStorage = createSwappedMainChainStorageRocksdb(config.dataDirectory, currency, dbConfig);
+    }
+    else
+    {
+      tmainChainStorage = createSwappedMainChainStorage(config.dataDirectory, currency);
+    }
+    
     CryptoNote::Core ccore(
       currency,
       logManager,
       std::move(checkpoints),
       dispatcher,
       std::unique_ptr<IBlockchainCacheFactory>(new DatabaseBlockchainCacheFactory(database, logger.getLogger())),
-      (config.useSqliteForLocalCaches) ?
-        createSwappedMainChainStorageSqlite(config.dataDirectory, currency) :
-        createSwappedMainChainStorage(config.dataDirectory, currency)
+      std::move(tmainChainStorage)
     );
 
     ccore.load();
