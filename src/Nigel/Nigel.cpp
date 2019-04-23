@@ -80,6 +80,7 @@ void Nigel::swapNode(const std::string daemonHost, const uint16_t daemonPort, co
     m_networkBlockCount = 0;
     m_peerCount = 0;
     m_lastKnownHashrate = 0;
+    m_isBlockchainCache = false;
 
     m_daemonHost = daemonHost;
     m_daemonPort = daemonPort;
@@ -203,6 +204,13 @@ bool Nigel::getDaemonInfo()
 
             m_lastKnownHashrate = j.at("difficulty").get<uint64_t>()
                                 / CryptoNote::parameters::DIFFICULTY_TARGET;
+
+            /* Look to see if the isCacheApi property exists in the response
+               and if so, set the internal value to whatever it found */
+            if (j.find("isCacheApi") != j.end())
+            {
+                m_isBlockchainCache = j.at("isCacheApi").get<bool>();
+            }
 
             return true;
         }

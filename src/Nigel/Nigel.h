@@ -127,6 +127,10 @@ class Nigel
         /* The hashrate (based on the last local block the daemon has synced) */
         std::atomic<uint64_t> m_lastKnownHashrate = 0;
 
+        /* Whether the daemon is a blockchain cache API
+           see: https://github.com/TurtlePay/blockchain-cache-api */
+        std::atomic<bool> m_isBlockchainCache = false;
+
         /* The address to send the node fee to (May be "") */
         std::string m_nodeFeeAddress;
 
