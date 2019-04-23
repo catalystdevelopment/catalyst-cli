@@ -564,7 +564,7 @@ std::tuple<std::vector<WalletTypes::TxInputAndOwner>, uint64_t, uint64_t>
     {
         /* Find out how many digits the amount has, i.e. 1337 has 4 digits,
            420 has 3 digits */
-        int numberOfDigits = log10(walletAmount.input.amount);
+        int numberOfDigits = floor(log10(walletAmount.input.amount)) + 1;
 
         /* Insert the amount into the correct bucket */
         buckets[numberOfDigits].push_back(walletAmount);
