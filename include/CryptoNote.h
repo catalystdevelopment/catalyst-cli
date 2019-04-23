@@ -114,7 +114,10 @@ inline void to_json(nlohmann::json &j, const CryptoNote::KeyInput &k)
 inline void from_json(const nlohmann::json &j, CryptoNote::KeyInput &k)
 {
     k.amount = j.at("amount").get<uint64_t>();
-    k.outputIndexes = j.at("key_offsets").get<std::vector<uint32_t>>();
+    if (j.find("key_offsets") != j.end())
+    {
+        k.outputIndexes = j.at("key_offsets").get<std::vector<uint32_t>>();
+    }
     k.keyImage = j.at("k_image").get<Crypto::KeyImage>();
 }
 
