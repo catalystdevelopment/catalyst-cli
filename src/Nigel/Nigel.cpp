@@ -80,6 +80,7 @@ void Nigel::swapNode(const std::string daemonHost, const uint16_t daemonPort, co
     m_networkBlockCount = 0;
     m_peerCount = 0;
     m_lastKnownHashrate = 0;
+    m_isBlockchainCache = false;
 
     m_daemonHost = daemonHost;
     m_daemonPort = daemonPort;
@@ -203,6 +204,13 @@ bool Nigel::getDaemonInfo()
 
             m_lastKnownHashrate = j.at("difficulty").get<uint64_t>()
                                 / CryptoNote::parameters::DIFFICULTY_TARGET;
+
+            /* Look to see if the isCacheApi property exists in the response
+               and if so, set the internal value to whatever it found */
+            if (j.find("isCacheApi") != j.end())
+            {
+                m_isBlockchainCache = j.at("isCacheApi").get<bool>();
+            }
 
             return true;
         }
@@ -359,27 +367,58 @@ std::tuple<bool, std::vector<CryptoNote::RandomOuts>> Nigel::getRandomOutsByAmou
         {"outs_count", requestedOuts}
     };
 
-    auto res = m_nodeClient->Post(
-        "/getrandom_outs", j.dump(), "application/json"
-    );
-
-    if (res && res->status == 200)
+    /* The blockchain cache doesn't call it outs_count
+       it calls it mixin */
+    if (m_isBlockchainCache)
     {
-        try
-        {
-            json j = json::parse(res->body);
+        j.erase("outs_count");
+        j["mixin"] = requestedOuts;
 
-            if (j.at("status").get<std::string>() != "OK")
+        /* We also need to handle the request and response a bit
+           differently so we'll do this here */
+        auto res = m_nodeClient->Post(
+            "/randomOutputs", j.dump(), "application/json"
+        );
+
+        if (res && res->status == 200)
+        {
+            try
             {
-                return {};
+                json j = json::parse(res->body);
+
+                const auto outs = j.get<std::vector<CryptoNote::RandomOuts>>();
+
+                return {true, outs};
             }
-
-            const auto outs = j.at("outs").get<std::vector<CryptoNote::RandomOuts>>();
-
-            return {true, outs};
+            catch (const json::exception &)
+            {
+            }
         }
-        catch (const json::exception &)
+    }
+    else
+    {
+        auto res = m_nodeClient->Post(
+            "/getrandom_outs", j.dump(), "application/json"
+        );
+
+        if (res && res->status == 200)
         {
+            try
+            {
+                json j = json::parse(res->body);
+
+                if (j.at("status").get<std::string>() != "OK")
+                {
+                    return {};
+                }
+
+                const auto outs = j.at("outs").get<std::vector<CryptoNote::RandomOuts>>();
+
+                return {true, outs};
+            }
+            catch (const json::exception &)
+            {
+            }
         }
     }
 
@@ -423,6 +462,14 @@ std::tuple<bool, std::unordered_map<Crypto::Hash, std::vector<uint64_t>>>
         const uint64_t startHeight,
         const uint64_t endHeight) const
 {
+    /* Blockchain cache API does not support this method and we
+       don't need it to because it returns the global indexes
+       with the key outputs when we get the wallet sync data */
+    if (m_isBlockchainCache)
+    {
+      return {false, {}};
+    }
+
     json j = {
         {"startHeight", startHeight},
         {"endHeight", endHeight}
