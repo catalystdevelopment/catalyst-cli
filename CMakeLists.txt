@@ -37,9 +37,6 @@ find_package(Threads)
 
 set(VERSION "0.1")
 
-## This section describes build options for additional support in the project
-set(ENABLE_SSL OFF CACHE STRING "Enable SSL support")
-
 ## This section describes our general CMake setup options
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_CONFIGURATION_TYPES Debug RelWithDebInfo Release CACHE TYPE INTERNAL)
@@ -256,19 +253,43 @@ elseif(NOT MSVC)
   set(Boost_LIBRARIES "${Boost_LIBRARIES};rt")
 endif()
 
-## Go get us some OpenSSL libraries if we need to
-if(ENABLE_SSL)
-  set(OPENSSL_USE_STATIC_LIBS OFF)
-  find_package(OpenSSL)
-  if(OPENSSL_FOUND)
-    include_directories(SYSTEM ${OPENSSL_INCLUDE_DIR})
-    add_definitions(-DCPPHTTPLIB_OPENSSL_SUPPORT)
-    message(STATUS "OpenSSL Found: ${OPENSSL_INCLUDE_DIR}")
-    message(STATUS "OpenSSL Libraries: ${OPENSSL_LIBRARIES}")
-  else()
-    message(STATUS "OpenSSL Found: No... Skipping...")
+## Let's see if we have any OpenSSL static libraries available
+set(OPENSSL_USE_STATIC_LIBS ON)
+## On MSVC, we need to link the RT/MT libraries
+if(MSVC)
+  set(OPENSSL_MSVC_STATIC_RT ON)
+endif()
+
+# We have to look for Homebrew OpenSSL a bit differently
+# Borrowed from https://github.com/tarantool/tarantool/commit/6eab201af1843f53a833c8928dc58fceffa08147
+if(APPLE)
+  find_program(HOMEBREW_EXECUTABLE brew)
+  execute_process(COMMAND ${HOMEBREW_EXECUTABLE} --prefix openssl
+                  OUTPUT_VARIABLE HOMEBREW_OPENSSL
+                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+  if (DEFINED HOMEBREW_OPENSSL)
+    if (NOT DEFINED OPENSSL_ROOT_DIR)
+        message(STATUS "Setting OpenSSL root to ${HOMEBREW_OPENSSL}")
+        set(OPENSSL_ROOT_DIR "${HOMEBREW_OPENSSL}")
+    endif()
   endif()
-endif(ENABLE_SSL)
+endif()
+
+find_package(OpenSSL)
+
+if(OPENSSL_FOUND)
+  ## On non MSVC build systems, we need to link ldl with the static OpenSSL library
+  if (NOT MSVC)
+    set(OPENSSL_LIBRARIES "${OPENSSL_LIBRARIES};dl")
+  endif()
+
+  include_directories(SYSTEM ${OPENSSL_INCLUDE_DIR})
+  add_definitions(-DCPPHTTPLIB_OPENSSL_SUPPORT)
+  message(STATUS "OpenSSL Found: ${OPENSSL_INCLUDE_DIR}")
+  message(STATUS "OpenSSL Libraries: ${OPENSSL_LIBRARIES}")
+else()
+  message(STATUS "OpenSSL Found: No... Skipping...")
+endif()
 
 add_subdirectory(external)
 add_subdirectory(src)
