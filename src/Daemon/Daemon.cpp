@@ -250,7 +250,7 @@ int main(int argc, char* argv[])
       return 1;
     }
     CryptoNote::Currency currency = currencyBuilder.currency();
-    
+
     DataBaseConfig dbConfig;
     dbConfig.init(
       config.dataDirectory,
@@ -275,12 +275,12 @@ int main(int argc, char* argv[])
       else if (config.useRocksdbForLocalCaches )
       {
         mainChainStorage = createSwappedMainChainStorageRocksdb(config.dataDirectory, currency, dbConfig);
-      }      
+      }
       else
       {
         mainChainStorage = createSwappedMainChainStorage(config.dataDirectory, currency);
       }
-      
+
       mainChainStorage->rewindTo(config.rewindToHeight);
 
       logger(INFO) << "Blockchain rewound to: " << config.rewindToHeight << std::endl;
@@ -336,9 +336,9 @@ int main(int argc, char* argv[])
 
     System::Dispatcher dispatcher;
     logger(INFO) << "Initializing core...";
-    
+
     std::unique_ptr<IMainChainStorage> tmainChainStorage;
-    if ( config.useSqliteForLocalCaches ) 
+    if ( config.useSqliteForLocalCaches )
     {
       tmainChainStorage = createSwappedMainChainStorageSqlite(config.dataDirectory, currency);
     }
@@ -350,7 +350,7 @@ int main(int argc, char* argv[])
     {
       tmainChainStorage = createSwappedMainChainStorage(config.dataDirectory, currency);
     }
-    
+
     CryptoNote::Core ccore(
       currency,
       logManager,
