@@ -13,7 +13,7 @@
 
 #include <unordered_map>
 #include <optional>
-#include <sstream>
+#include <string>
 
 namespace WalletTypes
 {
@@ -505,10 +505,9 @@ namespace WalletTypes
         {
             r.unlockTime = j.at("unlockTime").get<uint64_t>();
         }
-        catch (...)
+        catch (const nlohmann::json::exception &e)
         {
-            std::istringstream unlockTime(j.at("unlockTime").get<std::string>());
-            unlockTime >> r.unlockTime;
+            r.unlockTime = std::stoull(j.at("unlockTime").get<std::string>());
         }
     }
 
@@ -538,10 +537,9 @@ namespace WalletTypes
         {
             r.unlockTime = j.at("unlockTime").get<uint64_t>();
         }
-        catch (...)
+        catch (const nlohmann::json::exception &e)
         {
-            std::istringstream unlockTime(j.at("unlockTime").get<std::string>());
-            unlockTime >> r.unlockTime;
+            r.unlockTime = std::stoull(j.at("unlockTime").get<std::string>());
         }
         r.paymentID = j.at("paymentID").get<std::string>();
         r.keyInputs = j.at("inputs").get<std::vector<CryptoNote::KeyInput>>();
