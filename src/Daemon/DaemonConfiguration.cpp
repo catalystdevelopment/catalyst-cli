@@ -33,7 +33,7 @@ namespace DaemonConfig{
       ("help", "Display this help message", cxxopts::value<bool>()->implicit_value("true"))
       ("os-version", "Output Operating System version information", cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
       ("resync", "Forces the daemon to delete the blockchain data and start resyncing", cxxopts::value<bool>(config.resync)->default_value("false")->implicit_value("true"))
-      ("rewind", "Rewinds the local blockchain cache to the specified height.", cxxopts::value<uint32_t>(), "#")
+      ("rewind-to-height", "Rewinds the local blockchain cache to the specified height.", cxxopts::value<uint32_t>(), "#")
       ("version","Output daemon version information",cxxopts::value<bool>()->default_value("false")->implicit_value("true"));
 
     options.add_options("Genesis Block")
@@ -116,9 +116,9 @@ namespace DaemonConfig{
         config.osVersion = cli["os-version"].as<bool>();
       }
 
-      if (cli.count("rewind") > 0)
+      if (cli.count("rewind-to-height") > 0)
       {
-        uint32_t rewindHeight = cli["rewind"].as<uint32_t>();
+        uint32_t rewindHeight = cli["rewind-to-height"].as<uint32_t>();
         if (rewindHeight == 0)
         {
           std::cout << CryptoNote::getProjectCLIHeader()
