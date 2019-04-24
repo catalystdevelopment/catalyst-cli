@@ -108,19 +108,6 @@ std::tuple<bool, std::vector<WalletTypes::WalletBlockInfo>> Nigel::getWalletSync
         {"startTimestamp", startTimestamp}
     };
 
-    /* The blockchain cache does not support sending
-       both the startHeight and startTimestamp properties
-       and will kick a 500 error if we do. So, let's make sure
-       that we're only sending one of them */
-    if (m_isBlockchainCache && startHeight == 0)
-    {
-        j.erase("startHeight");
-    }
-    else if (m_isBlockchainCache && startTimestamp == 0)
-    {
-        j.erase("startTimestamp");
-    }
-
     auto res = m_nodeClient->Post(
         "/getwalletsyncdata", j.dump(), "application/json"
     );
