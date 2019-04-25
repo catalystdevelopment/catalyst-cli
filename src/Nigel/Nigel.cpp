@@ -76,6 +76,7 @@ void Nigel::swapNode(const std::string daemonHost, const uint16_t daemonPort, co
 {
     stop();
 
+    m_blockCount = CryptoNote::BLOCKS_SYNCHRONIZING_DEFAULT_COUNT;
     m_localDaemonBlockCount = 0;
     m_networkBlockCount = 0;
     m_peerCount = 0;
@@ -89,6 +90,19 @@ void Nigel::swapNode(const std::string daemonHost, const uint16_t daemonPort, co
     m_nodeClient = getClient(m_daemonHost, m_daemonPort, m_daemonSSL, m_timeout);
 
     init();
+}
+
+void Nigel::decreaseRequestedBlockCount()
+{
+    if (m_blockCount > 1)
+    {
+        m_blockCount = m_blockCount / 2;
+    }
+}
+
+void Nigel::resetRequestedBlockCount()
+{
+    m_blockCount = CryptoNote::BLOCKS_SYNCHRONIZING_DEFAULT_COUNT;
 }
 
 std::tuple<bool, std::vector<WalletTypes::WalletBlockInfo>> Nigel::getWalletSyncData(
@@ -105,7 +119,8 @@ std::tuple<bool, std::vector<WalletTypes::WalletBlockInfo>> Nigel::getWalletSync
     json j = {
         {"blockHashCheckpoints", blockHashCheckpoints},
         {"startHeight", startHeight},
-        {"startTimestamp", startTimestamp}
+        {"startTimestamp", startTimestamp},
+        {"blockCount", m_blockCount.load()}
     };
 
     auto res = m_nodeClient->Post(

@@ -10,6 +10,8 @@
 
 #include <Rpc/CoreRpcServerCommandsDefinitions.h>
 
+#include <config/CryptoNoteConfig.h>
+
 #include <string>
 
 #include <thread>
@@ -46,6 +48,10 @@ class Nigel
         void init();
 
         void swapNode(const std::string daemonHost, const uint16_t daemonPort, const bool daemonSSL);
+
+        void decreaseRequestedBlockCount();
+
+        void resetRequestedBlockCount();
 
         /* Returns whether we've received info from the daemon at some point */
         bool isOnline() const;
@@ -114,6 +120,9 @@ class Nigel
 
         /* If we should stop the background thread */
         std::atomic<bool> m_shouldStop = false;
+
+        /* Stores how many blocks we'll try to sync */
+        std::atomic<uint64_t> m_blockCount = CryptoNote::BLOCKS_SYNCHRONIZING_DEFAULT_COUNT;
 
         /* The amount of blocks the daemon we're connected to has */
         std::atomic<uint64_t> m_localDaemonBlockCount = 0;
