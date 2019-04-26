@@ -211,21 +211,15 @@ std::vector<WalletTypes::WalletBlockInfo> WalletSynchronizer::downloadBlocks()
         /* Only check if a timestamp isn't given */
         if (m_startTimestamp == 0)
         {
-            bool startHeightFoundInRange = false;
-
             /* Loop through the blocks we got back and make sure that
                we were given data for the start block we were looking for */
-            for (const auto &block : blocks)
-            {
-              if (block.blockHeight == m_startHeight)
-              {
-                startHeightFoundInRange = true;
-              }
-            }
+            const auto it = std::find_if(blocks.begin(), blocks.end(), [this](const auto &block) {
+                return block.blockHeight == m_startHeight;
+            });
 
             /* If we weren't given a block with the startHeight we were
                looking for then we don't need to store this data */
-            if (!startHeightFoundInRange)
+            if (it == blocks.end())
             {
                 std::stringstream stream;
 
