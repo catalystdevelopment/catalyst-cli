@@ -1,4 +1,4 @@
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -208,19 +208,30 @@ std::vector<WalletTypes::WalletBlockInfo> WalletSynchronizer::downloadBlocks()
     /* If checkpoints are empty, this is the first sync request. */
     if (blockCheckpoints.empty())
     {
-        const uint64_t actualHeight = blocks.front().blockHeight;
-
         /* Only check if a timestamp isn't given */
         if (m_startTimestamp == 0)
         {
-            /* The height we expect to get back from the daemon */
-            if (actualHeight != m_startHeight)
+            bool startHeightFoundInRange = false;
+
+            /* Loop through the blocks we got back and make sure that
+               we were given data for the start block we were looking for */
+            for (const auto &block : blocks)
+            {
+              if (block.blockHeight == m_startHeight)
+              {
+                startHeightFoundInRange = true;
+              }
+            }
+
+            /* If we weren't given a block with the startHeight we were
+               looking for then we don't need to store this data */
+            if (!startHeightFoundInRange)
             {
                 std::stringstream stream;
 
                 stream << "Received unexpected block height from daemon. "
-                       << "Expected " << m_startHeight << ", got "
-                       << actualHeight << ". Not returning any blocks.";
+                       << "Expected " << m_startHeight << ", but did not "
+                       "receive that block. Not returning any blocks.";
 
                 Logger::logger.log(
                     stream.str(),
