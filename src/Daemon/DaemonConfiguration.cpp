@@ -129,7 +129,7 @@ namespace DaemonConfig{
         if (rewindHeight == 0)
         {
           std::cout << CryptoNote::getProjectCLIHeader()
-            << "Please use the `--resync` option instead of `--rewind 0` to completely reset the synchronization state." << std::endl;
+            << "Please use the `--resync` option instead of `--rewind-to-height 0` to completely reset the synchronization state." << std::endl;
           exit(1);
         }
         else
