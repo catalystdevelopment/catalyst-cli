@@ -32,11 +32,10 @@
 #include "Common/StringOutputStream.h"
 #include "crypto/crypto.h"
 
-#include "Account.h"
 #include <config/CryptoNoteConfig.h>
-#include "CryptoNoteFormatUtils.h"
-#include "CryptoNoteTools.h"
-#include "TransactionExtra.h"
+
+#include <Common/CryptoNoteTools.h>
+#include <Common/TransactionExtra.h>
 
 using namespace Common;
 

@@ -20,7 +20,7 @@
 #include <System/TcpConnection.h>
 #include <System/TcpListener.h>
 
-#include "CryptoNoteCore/OnceInInterval.h"
+#include "P2p/OnceInInterval.h"
 #include "CryptoNoteProtocol/CryptoNoteProtocolHandler.h"
 #include "Logging/LoggerRef.h"
 

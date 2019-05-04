@@ -17,7 +17,7 @@
 #include "Common/Util.h"
 #include "Common/FileSystemShim.h"
 #include "crypto/hash.h"
-#include "CryptoNoteCore/CryptoNoteTools.h"
+#include "Common/CryptoNoteTools.h"
 #include "CryptoNoteCore/Core.h"
 #include "CryptoNoteCore/Currency.h"
 #include "CryptoNoteCore/DatabaseBlockchainCache.h"
