@@ -70,16 +70,16 @@ void printPrivateKeys(const std::shared_ptr<WalletBackend> walletBackend)
     {
         std::cout << SuccessMsg("\nPrivate spend key:\n")
                   << SuccessMsg(privateSpendKey) << "\n";
-
-        if (!error)
-        {
-            std::cout << SuccessMsg("\nMnemonic seed:\n")
-                      << SuccessMsg(mnemonicSeed) << "\n";
-        }
     }
 
     std::cout << SuccessMsg("Private view key:\n")
               << SuccessMsg(privateViewKey) << "\n";
+
+    if (!error)
+    {
+        std::cout << SuccessMsg("\nMnemonic seed:\n")
+                  << SuccessMsg(mnemonicSeed) << "\n";
+    }
 }
 
 void balance(const std::shared_ptr<WalletBackend> walletBackend)
