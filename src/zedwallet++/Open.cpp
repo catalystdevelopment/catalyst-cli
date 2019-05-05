@@ -103,11 +103,11 @@ std::shared_ptr<WalletBackend> importViewWallet(const Config &config)
 
 std::shared_ptr<WalletBackend> importWalletFromKeys(const Config &config)
 {
-    const Crypto::SecretKey privateSpendKey
-        = getPrivateKey("Enter your private spend key: ");
-
     const Crypto::SecretKey privateViewKey
         = getPrivateKey("Enter your private view key: ");
+
+    const Crypto::SecretKey privateSpendKey
+        = getPrivateKey("Enter your private spend key: ");
 
     const std::string walletFileName = getNewWalletFileName();
 
