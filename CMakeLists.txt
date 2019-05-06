@@ -93,11 +93,6 @@ if(DEFINED ENV{LABEL})
   message(STATUS "Found LABEL: ${LABEL}")
 endif()
 
-# We do not support 32-bit builds. When and if we do, this can be removed.
-if(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
-  message(FATAL_ERROR "Targeting a 32-bit architecture is not supported.")
-endif()
-
 ## We only build static binaries -- this is left here for our dependencies
 set(STATIC ON CACHE BOOL FORCE "Link libraries statically? Forced to ON")
 
@@ -188,6 +183,8 @@ if(NOT MSVC)
     set(CRYPTOPP_AARCH64 ON CACHE BOOL FORCE "Tell CryptoPP that we are building for aarch64")
   elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64" AND NOT "${LABEL}" STREQUAL "aarch64")
     set(MAES_FLAG "-maes")
+  else()
+    set(MAES_FLAG "")
   endif()
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 ${STATICASSERTC_FLAG} ${WARNINGS} ${C_WARNINGS} ${ARCH_FLAG} ${MAES_FLAG}")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 ${STATICASSERTCPP_FLAG} ${WARNINGS} ${CXX_WARNINGS} ${ARCH_FLAG} ${MAES_FLAG}")
