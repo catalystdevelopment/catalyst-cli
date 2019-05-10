@@ -9,9 +9,13 @@
 
 #include <numeric>
 
+#include <Common/CryptoNoteTools.h>
 #include <Common/ShuffleGenerator.h>
 #include <Common/Math.h>
 #include <Common/MemoryInputStream.h>
+#include <Common/TransactionExtra.h>
+
+#include <config/Constants.h>
 
 #include <CryptoNoteCore/BlockchainCache.h>
 #include <CryptoNoteCore/BlockchainStorage.h>
@@ -19,12 +23,10 @@
 #include <CryptoNoteCore/Core.h>
 #include <CryptoNoteCore/CoreErrors.h>
 #include <CryptoNoteCore/CryptoNoteFormatUtils.h>
-#include <CryptoNoteCore/CryptoNoteTools.h>
 #include <CryptoNoteCore/ITimeProvider.h>
 #include <CryptoNoteCore/MemoryBlockchainStorage.h>
 #include <CryptoNoteCore/Mixins.h>
 #include <CryptoNoteCore/TransactionApi.h>
-#include <CryptoNoteCore/TransactionExtra.h>
 #include <CryptoNoteCore/TransactionPool.h>
 #include <CryptoNoteCore/TransactionPoolCleaner.h>
 #include <CryptoNoteCore/UpgradeManager.h>
@@ -62,7 +64,7 @@ public:
   bool haveSpentInputs(const Transaction& transaction) {
     for (const auto& input : transaction.inputs) {
       if (input.type() == typeid(KeyInput)) {
-        auto inserted = alreadSpentKeyImages.insert(boost::get<KeyInput>(input).keyImage);
+        auto inserted = alreadySpentKeyImages.insert(boost::get<KeyInput>(input).keyImage);
         if (!inserted.second) {
           return true;
         }
@@ -73,7 +75,7 @@ public:
   }
 
 private:
-  std::unordered_set<Crypto::KeyImage> alreadSpentKeyImages;
+  std::unordered_set<Crypto::KeyImage> alreadySpentKeyImages;
 };
 
 inline IBlockchainCache* findIndexInChain(IBlockchainCache* blockSegment, const Crypto::Hash& blockHash) {
@@ -776,15 +778,13 @@ Crypto::PublicKey Core::getPubKeyFromExtra(const std::vector<uint8_t> &extra)
 {
     Crypto::PublicKey publicKey;
 
-    const int TX_EXTRA_PUBKEY_IDENTIFIER = 0x01;
-
     const int pubKeySize = 32;
 
     for (size_t i = 0; i < extra.size(); i++)
     {
         /* If the following data is the transaction public key, this is
            indicated by the preceding value being 0x01. */
-        if (extra[i] == TX_EXTRA_PUBKEY_IDENTIFIER)
+        if (extra[i] == Constants::TX_EXTRA_PUBKEY_IDENTIFIER)
         {
             /* The amount of data remaining in the vector (minus one because
                we start reading the public key from the next character) */
@@ -821,13 +821,10 @@ std::string Core::getPaymentIDFromExtra(const std::vector<uint8_t> &extra)
 {
     const int paymentIDSize = 32;
 
-    const int TX_EXTRA_PAYMENT_ID_IDENTIFIER = 0x00;
-    const int TX_EXTRA_NONCE_IDENTIFIER = 0x02;
-
     for (size_t i = 0; i < extra.size(); i++)
     {
         /* Extra nonce tag found */
-        if (extra[i] == TX_EXTRA_NONCE_IDENTIFIER)
+        if (extra[i] == Constants::TX_EXTRA_NONCE_IDENTIFIER)
         {
             /* Skip the extra nonce tag */
             size_t dataRemaining = extra.size() - i - 1;
@@ -842,7 +839,7 @@ std::string Core::getPaymentIDFromExtra(const std::vector<uint8_t> &extra)
             }
 
             /* Payment ID in extra nonce */
-            if (extra[i+2] == TX_EXTRA_PAYMENT_ID_IDENTIFIER)
+            if (extra[i+2] == Constants::TX_EXTRA_PAYMENT_ID_IDENTIFIER)
             {
                 /* Plus three to skip the two 0x02 0x00 tags and the size value */
                 const auto dataBegin = extra.begin() + i + 3;
@@ -1257,12 +1254,17 @@ void Core::actualizePoolTransactionsLite(const TransactionValidatorState& valida
   auto& pool = *transactionPool;
   auto hashes = pool.getTransactionHashes();
 
+  TransactionValidatorState validator = validatorState;
+
   for (auto& hash : hashes) {
     auto tx = pool.getTransaction(hash);
 
     auto txState = extractSpentOutputs(tx);
 
-    if (hasIntersections(validatorState, txState) || tx.getTransactionBinaryArray().size() > getMaximumTransactionAllowedSize(blockMedianSize, currency)) {
+    if (hasIntersections(validatorState, txState) ||
+        tx.getTransactionBinaryArray().size() > getMaximumTransactionAllowedSize(blockMedianSize, currency) ||
+        !isTransactionValidForPool(tx, validator))
+    {
       pool.removeTransaction(hash);
       notifyObservers(makeDelTransactionMessage({ hash }, Messages::DeleteTransaction::Reason::NotActual));
     }
@@ -2149,7 +2151,7 @@ void Core::importBlocksFromStorage() {
       logger(Logging::ERROR) << "Local blockchain corruption detected. " << std::endl
                              << "Block with index " << i << " and hash " << cachedBlock.getBlockHash()
                              << " has previous block hash " << blockTemplate.previousBlockHash << ", but parent has hash " << previousBlockHash << "." << std::endl
-                             << "Please try to repair this issue by starting the node with the option: --rewind " << i << std::endl
+                             << "Please try to repair this issue by starting the node with the option: --rewind-to-height " << i << std::endl
                              << "If the above does not repair the issue, please launch the node with the option: --resync" << std::endl;
       throw std::system_error(make_error_code(error::CoreErrorCode::CORRUPTED_BLOCKCHAIN));
     }
@@ -2490,58 +2492,77 @@ void Core::fillBlockTemplate(
     size_t& transactionsSize,
     uint64_t& fee) const {
 
-  transactionsSize = 0;
-  fee = 0;
+    transactionsSize = 0;
+    fee = 0;
 
-  size_t maxTotalSize = (125 * medianSize) / 100;
-  maxTotalSize = std::min(maxTotalSize, maxCumulativeSize) - currency.minerTxBlobReservedSize();
+    size_t maxTotalSize = (125 * medianSize) / 100;
 
-  TransactionSpentInputsChecker spentInputsChecker;
+    maxTotalSize = std::min(maxTotalSize, maxCumulativeSize) - currency.minerTxBlobReservedSize();
 
-  std::vector<CachedTransaction> poolTransactions = transactionPool->getPoolTransactions();
-  for (auto it = poolTransactions.rbegin(); it != poolTransactions.rend() && it->getTransactionFee() == 0; ++it) {
-    const CachedTransaction& transaction = *it;
+    TransactionSpentInputsChecker spentInputsChecker;
 
-    auto transactionBlobSize = transaction.getTransactionBinaryArray().size();
-    if (currency.fusionTxMaxSize() < transactionsSize + transactionBlobSize) {
-      continue;
-    }
+    /* Go get our regular and fusion transactions from the transaction pool */
+    auto [regularTransactions, fusionTransactions] = transactionPool->getPoolTransactionsForBlockTemplate();
 
-    if (!validateBlockTemplateTransaction(transaction, height))
+    /* Define our lambda function for checking and adding transactions to a block template */
+    const auto addTransactionToBlockTemplate = [this, &spentInputsChecker, maxTotalSize, height, &transactionsSize, &fee, &block](const CachedTransaction &transaction)
     {
-        transactionPool->removeTransaction(transaction.getTransactionHash());
-        continue;
-    }
+      /* If the current set of transactions included in the blocktemplate plus the transaction
+         we just passed in exceed the maximum size of a block, it won't fit so we'll move on */
+      if (transactionsSize + transaction.getTransactionBinaryArray().size() > maxTotalSize)
+      {
+          return false;
+      }
 
-    if (!spentInputsChecker.haveSpentInputs(transaction.getTransaction())) {
-      block.transactionHashes.emplace_back(transaction.getTransactionHash());
-      transactionsSize += transactionBlobSize;
-      logger(Logging::TRACE) << "Fusion transaction " << transaction.getTransactionHash() << " included to block template";
-    }
-  }
+      /* Check to validate that the transaction is valid for a block at this height */
+      if (!validateBlockTemplateTransaction(transaction, height))
+      {
+          transactionPool->removeTransaction(transaction.getTransactionHash());
 
-  for (const auto& cachedTransaction : poolTransactions) {
-    size_t blockSizeLimit = (cachedTransaction.getTransactionFee() == 0) ? medianSize : maxTotalSize;
+          return false;
+      }
 
-    if (blockSizeLimit < transactionsSize + cachedTransaction.getTransactionBinaryArray().size()) {
-      continue;
-    }
+      /* Make sure that we have not already spent funds in this same block via
+         another transaction that we've already included in this block template */
+      if (!spentInputsChecker.haveSpentInputs(transaction.getTransaction()))
+      {
+          transactionsSize += transaction.getTransactionBinaryArray().size();
 
-    if (!validateBlockTemplateTransaction(cachedTransaction, height))
+          fee += transaction.getTransactionFee();
+
+          block.transactionHashes.emplace_back(transaction.getTransactionHash());
+
+          return true;
+      }
+      else
+      {
+          return false;
+      }
+    };
+
+    /* First we're going to loop through transactions that have a fee:
+       ie. the transactions that are paying to use the network */
+    for (const auto &transaction : regularTransactions)
     {
-        transactionPool->removeTransaction(cachedTransaction.getTransactionHash());
-        continue;
+        if (addTransactionToBlockTemplate(transaction))
+        {
+            logger(Logging::TRACE) << "Transaction " << transaction.getTransactionHash() << " included in block template";
+        }
+        else
+        {
+            logger(Logging::TRACE) << "Transaction " << transaction.getTransactionHash() << " not included in block template";
+        }
     }
 
-    if (!spentInputsChecker.haveSpentInputs(cachedTransaction.getTransaction())) {
-      transactionsSize += cachedTransaction.getTransactionBinaryArray().size();
-      fee += cachedTransaction.getTransactionFee();
-      block.transactionHashes.emplace_back(cachedTransaction.getTransactionHash());
-      logger(Logging::TRACE) << "Transaction " << cachedTransaction.getTransactionHash() << " included to block template";
-    } else {
-      logger(Logging::TRACE) << "Transaction " << cachedTransaction.getTransactionHash() << " is failed to include to block template";
+    /* Then we'll loop through the fusion transactions as they don't
+       pay anything to use the network */
+    for (const auto &transaction : fusionTransactions)
+    {
+        if (addTransactionToBlockTemplate(transaction))
+        {
+            logger(Logging::TRACE) << "Fusion transaction " << transaction.getTransactionHash() << " included in block template";
+        }
     }
-  }
 }
 
 void Core::deleteAlternativeChains() {

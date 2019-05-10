@@ -16,12 +16,13 @@
 #include "Common/ShuffleGenerator.h"
 
 #include "CryptoNoteCore/CryptoNoteBasicImpl.h"
-#include "CryptoNoteCore/CryptoNoteSerialization.h"
-#include "CryptoNoteCore/CryptoNoteTools.h"
+#include "Common/CryptoNoteTools.h"
 #include "CryptoNoteCore/BlockchainStorage.h"
-#include "CryptoNoteCore/TransactionExtra.h"
+#include "Common/TransactionExtra.h"
 
+#include "Serialization/CryptoNoteSerialization.h"
 #include "Serialization/SerializationOverloads.h"
+
 #include "TransactionValidatiorState.h"
 
 namespace CryptoNote {
@@ -807,6 +808,18 @@ bool BlockchainCache::isTransactionSpendTimeUnlocked(uint64_t unlockTime, uint32
   if (unlockTime < currency.maxBlockHeight()) {
     // interpret as block index
     return blockIndex + currency.lockedTxAllowedDeltaBlocks() >= unlockTime;
+  }
+
+  if (blockIndex >= CryptoNote::parameters::TRANSACTION_INPUT_BLOCKTIME_VALIDATION_HEIGHT)
+  {
+    /* Get the last block timestamp from an existing method call */
+    const std::vector<uint64_t> lastBlockTimestamps = getLastTimestamps(1);
+
+    /* Pop the last timestamp off the vector */
+    const uint64_t lastBlockTimestamp = lastBlockTimestamps.at(0);
+
+    /* Compare our delta seconds plus our last time stamp against the unlock time */
+    return lastBlockTimestamp + currency.lockedTxAllowedDeltaSeconds() >= unlockTime;
   }
 
   // interpret as time

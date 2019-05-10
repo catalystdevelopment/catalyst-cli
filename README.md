@@ -27,21 +27,11 @@ If you would like to compile yourself, read on.
 
 ### How To Compile
 
-#### OpenSSL Support
-
-Both zedwallet++ (zedwallet-beta) and wallet-api now support connecting to a node using SSL. To enable it during compilation, you will need to pass `-DENABLE_SSL=1` in the any of the CMake commands below.
-
-**Note:** If you compile with SSL support, it will link OpenSSL as a shared library.
-
-If you enable SSL support but OpenSSL is not found on your system, you can tell CMake where it is located with the `-DOPENSSL_ROOT_DIR=<path>` option.
-
-Ex. `-DOPENSSL_ROOT_DIR=/usr/lib/openssl` or `-DOPENSSL_ROOT_DIR=C:/OpenSSL-Win64/include`
-
 #### Linux
 
 ##### Prerequisites
 
-You will need the following packages: boost, cmake (3.8 or higher), make, and git.
+You will need the following packages: [Boost](https://www.boost.org/), [OpenSSL](https://www.openssl.org/), cmake (3.8 or higher), make, and git.
 
 You will also need either GCC/G++, or Clang.
 
@@ -54,13 +44,13 @@ If you are using Clang, you will need Clang 6.0 or higher. You will also need li
 - `sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y`
 - `sudo apt-get update`
 - `sudo apt-get install aptitude -y`
-- `sudo aptitude install -y build-essential g++-8 gcc-8 git libboost-all-dev python-pip`
+- `sudo aptitude install -y build-essential g++-8 gcc-8 git libboost-all-dev python-pip libssl-dev`
 - `sudo pip install cmake`
 - `export CC=gcc-8`
 - `export CXX=g++-8`
-- `git clone https://github.com/dirtybits/catalyst` 
+- `git clone https://github.com/catalystdevelopment/catalyst` 
 <!--
-- `git clone -b master --single-branch https://github.com/dirtybits/cryptocatalyst`
+- `git clone -b master --single-branch https://github.com/catalystdevelopment/cryptocatalyst`
 -->
 - `cd catalyst`
 - `mkdir build`
@@ -93,11 +83,11 @@ You need to modify the below command for your version of ubuntu - see https://ap
 
 - `sudo apt-get update`
 - `sudo apt-get install aptitude -y`
-- `sudo aptitude install -y -o Aptitude::ProblemResolver::SolutionCost='100*canceled-actions,200*removals' build-essential clang-6.0 libstdc++-7-dev git libboost-all-dev python-pip`
+- `sudo aptitude install -y -o Aptitude::ProblemResolver::SolutionCost='100*canceled-actions,200*removals' build-essential clang-6.0 libstdc++-7-dev git libboost-all-dev python-pip libssl-dev`
 - `sudo pip install cmake`
 - `export CC=clang-6.0`
 - `export CXX=clang++-6.0`
-- `git clone https://github.com/dirtybits/catalyst`
+- `git clone https://github.com/catalystdevelopment/catalyst`
 - `cd catalyst`
 - `mkdir build`
 - `cd build`
@@ -116,7 +106,7 @@ Ensure you have the dependencies listed above.
 If you want to use clang, ensure you set the environment variables `CC` and `CXX`.
 See the ubuntu instructions for an example.
 
-- `git clone https://github.com/dirtybits/catalyst`
+- `git clone https://github.com/catalystdevelopment/catalyst`
 - `cd catalyst`
 - `mkdir build`
 - `cd build`
@@ -137,10 +127,10 @@ The binaries will be in the `src` folder when you are complete.
 ##### Building
 
 - `which brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
-- `brew install --force cmake boost llvm gcc@8`
+- `brew install --force cmake boost llvm gcc@8 openssl`
 - `export CC=gcc-8`
 - `export CXX=g++-8`
-- `git clone https://github.com/dirtybits/catalyst`
+- `git clone https://github.com/catalystdevelopment/catalyst`
 - `cd catalyst`
 - `mkdir build`
 - `cd build`
@@ -161,10 +151,10 @@ The binaries will be in the `src` folder when you are complete.
 ##### Building
 
 - `which brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
-- `brew install --force cmake boost llvm`
+- `brew install --force cmake boost llvm openssl`
 - `export CC=/usr/local/opt/llvm/bin/clang`
 - `export CXX=/usr/local/opt/llvm/bin/clang++`
-- `git clone https://github.com/dirtybits/catalyst`
+- `git clone https://github.com/catalystdevelopment/catalyst`
 - `cd catalyst`
 - `mkdir build`
 - `cd build`
@@ -181,12 +171,20 @@ The binaries will be in the `src` folder when you are complete.
 
 ##### Prerequisites
 
+You can build for 32-bit or 64-bit Windows. **If you're not sure, pick 64-bit.**
+
 - Install [Visual Studio 2017 Community Edition](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=15&page=inlineinstall)
 - When installing Visual Studio, it is **required** that you install **Desktop development with C++**
-- Install the latest version of [Boost](https://bintray.com/boostorg/release/download_file?file_path=1.68.0%2Fbinaries%2Fboost_1_68_0-msvc-14.1-64.exe) - Currently Boost 1.68.
+- Install the latest version of Boost (currently Boost 1.68). Select the appropriate version for your system:
+  - [Boost 64-bit](https://bintray.com/boostorg/release/download_file?file_path=1.68.0%2Fbinaries%2Fboost_1_68_0-msvc-14.1-64.exe)
+  - [Boost 32-bit](https://bintray.com/boostorg/release/download_file?file_path=1.68.0%2Fbinaries%2Fboost_1_68_0-msvc-14.1-32.exe)
+- Install the latest full version of OpenSSL (currently OpenSSL 1.1.1b). Select the appropriate version for your system:
+  - [OpenSSL 64-bit](https://slproweb.com/download/Win64OpenSSL-1_1_1b.exe)
+  - [OpenSSL 32-bit](https://slproweb.com/download/Win32OpenSSL-1_1_1b.exe)
 
 ##### Building
 
+For 64-bit:
 - From the start menu, open 'x64 Native Tools Command Prompt for vs2017'.
 - `cd <your_catalyst_directory>`
 - `mkdir build`
@@ -198,36 +196,20 @@ If you have errors on this step about not being able to find the following stati
 
 - `MSBuild Catalyst.sln /p:Configuration=Release /m`
 
+For 32-bit:
+- From the start menu, open 'x86 Native Tools Command Prompt for vs2017'.
+- `cd <your_catalyst_directory>`
+- `mkdir build`
+- `cd build`
+- `set PATH="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin";%PATH%`
+- `cmake -G "Visual Studio 15 2017" .. -DBOOST_ROOT=C:/local/boost_1_68_0`
+- `MSBuild Catalyst.sln /p:Configuration=Release /p:Platform=Win32 /m`
+
 The binaries will be in the `src/Release` folder when you are complete.
 
 - `cd src`
 - `cd Release`
 - `Catalystd.exe --version`
-
-#### Raspberry Pi 3 B+
-The following images are known to work. Your operation system image **MUST** be 64 bit.
-
-##### Known working images
-
-- https://github.com/Crazyhead90/pi64/releases
-- https://fedoraproject.org/wiki/Architectures/ARM/Raspberry_Pi#aarch64_supported_images_for_Raspberry_Pi_3
-- https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3
-
-Once you have a 64 bit image installed, setup proceeds the same as any Linux distribution. Ensure you have at least 2GB of ram, or the build is likely to fail. You may need to setup swap space.
-
-##### Building
-
-- `git clone https://github.com/dirtybits/catalyst`
-- `cd catalyst`
-- `mkdir build`
-- `cd build`
-- `cmake ..`
-- `make`
-
-The binaries will be in the `src` folder when you are complete.
-
-- `cd src`
-- `./Catalystd --version`
 
 #### Thanks
 Cryptonote Developers, Bytecoin Developers, Monero Developers, Forknote Project, TurtleCoin Community
@@ -240,7 +222,7 @@ Hi Catalyst contributor, thanks for forking and sending back Pull Requests. Exte
 ```
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 // Copyright (c) 2014-2018, The Monero Project
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
 // Copyright (c) 2018-2019, The Catalyst Developers
 // 
 // Please see the included LICENSE file for more information.
