@@ -12,15 +12,13 @@ https://discord.gg/rd3ss4G
 <!--
 #### Master Build Status
 [![Build Status](https://travis-ci.org/turtlecoin/turtlecoin.svg?branch=master)](https://travis-ci.org/turtlecoin/turtlecoin) [![Build status](https://ci.appveyor.com/api/projects/status/github/turtlecoin/turtlecoin?branch=master&svg=true)](https://ci.appveyor.com/project/RocksteadyTC/turtlecoin)
-
-#### Development Build Status
-[![Build Status](https://travis-ci.org/turtlecoin/turtlecoin.svg?branch=development)](https://travis-ci.org/turtlecoin/turtlecoin) [![Build status](https://ci.appveyor.com/api/projects/status/github/turtlecoin/turtlecoin?branch=development&svg=true)](https://ci.appveyor.com/project/RocksteadyTC/turtlecoin)
 -->
+#### Development Build Status
+[![Build Status](https://travis-ci.org/turtlecoin/turtlecoin.svg?branch=development)](https://travis-ci.org/dirtybits/catalyst) [![Build status](https://ci.appveyor.com/api/projects/status/github/catalystdevelopment/catalyst?branch=development&svg=true)](https://ci.appveyor.com/project/dirtybits/catalyst)
 
 ### Installing
-
-Pre-compiled Windows executables are available here: https://github.com/dirtybits/catalyst-executables/blob/master/Release_fixed.zip
 <!--
+Pre-compiled Windows executables are available here: https://github.com/dirtybits/catalyst-executables/blob/master/Release_fixed.zip
 We offer binary images of the latest releases here: https://latest.turtlecoin.lol
 -->
 If you would like to compile yourself, read on.
