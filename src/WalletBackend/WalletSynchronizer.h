@@ -11,7 +11,6 @@
 #include <SubWallets/SubWallets.h>
 
 #include <WalletBackend/EventHandler.h>
-#include <WalletBackend/ThreadSafeQueue.h>
 #include <WalletBackend/SynchronizationStatus.h>
 
 #include <WalletTypes.h>

@@ -18,6 +18,8 @@
 
 #include <Logger/Logger.h>
 
+#include <Utilities/ThreadSafeQueue.h>
+#include <Utilities/ThreadSafeDeque.h>
 #include <Utilities/Utilities.h>
 
 #include <WalletBackend/Constants.h>
@@ -96,7 +98,7 @@ void WalletSynchronizer::mainLoop()
     {
         const auto blocks = downloadBlocks();
 
-        for (const auto block : blocks)
+        for (const auto &block : blocks)
         {
             if (m_shouldStop)
             {
