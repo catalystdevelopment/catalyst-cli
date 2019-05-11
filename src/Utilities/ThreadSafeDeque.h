@@ -6,9 +6,9 @@
 
 #include <condition_variable>
 
-#include <mutex>
+#include <deque>
 
-#include <queue>
+#include <mutex>
 
 template <typename T>
 class ThreadSafeDeque
@@ -100,6 +100,44 @@ class ThreadSafeDeque
 
             /* Remove the first item from the queue */
             m_deque.pop_front();
+
+            /* Unlock the mutex before notifying, so it doesn't block after
+               waking up */
+            lock.unlock();
+
+            m_consumedData.notify_all();
+        }
+
+        /* Removes numElements from the start of the queue */
+        void pop_front_n(size_t numElements)
+        {
+            /* Aquire the lock */
+            std::unique_lock<std::mutex> lock(m_mutex);
+
+            /* Whilst we could allow deleting from an empty queue, i.e, waiting
+               for an item, then removing it, this could cause us to be stuck
+               waiting on data to arrive when the queue is empty. We can't
+               really return without removing the item. We could return a bool
+               saying if we completed it, but then the user has no real way to
+               force a removal short of running it in a while loop.
+               Instead, if we just force the queue to have to have data in,
+               we can make sure a removal always suceeds. */
+            if (m_deque.empty())
+            {
+                throw std::runtime_error("Cannot remove from an empty queue!");
+            }
+
+            if (m_deque.size() < numElements)
+            {
+                throw std::runtime_error("Cannot remove more elements than are stored!");
+            }
+
+            while (numElements > 0)
+            {
+                /* Remove first item from queue */
+                m_deque.pop_front();
+                numElements--;
+            }
 
             /* Unlock the mutex before notifying, so it doesn't block after
                waking up */
@@ -250,7 +288,7 @@ class ThreadSafeDeque
         
     private:
         /* The deque data structure */
-        std::vector<T> m_deque;
+        std::deque<T> m_deque;
 
         /* The mutex, to ensure we have atomic access to the queue */
         mutable std::mutex m_mutex;

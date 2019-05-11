@@ -8,14 +8,81 @@
 
 #include <Logger/Logger.h>
 
+BlockDownloader::~BlockDownloader()
+{
+    stop();
+}
+
+void BlockDownloader::start()
+{
+    m_shouldStop = false;
+
+    m_downloadThread = std::thread(&BlockDownloader::downloader, this);
+}
+
+void BlockDownloader::stop()
+{
+    m_shouldStop = true;
+
+    if (m_downloadThread.joinable())
+    {
+        m_downloadThread.join();
+    }
+}
+
+void BlockDownloader::downloader()
+{
+    while (!m_shouldStop)
+    {
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+
+            m_shouldTryFetch.wait(lock, [&]
+            {
+                if (m_shouldStop)
+                {
+                    return true;
+                }
+
+                return m_goFish.load();
+            });
+        }
+
+        if (m_shouldStop)
+        {
+            break;
+        }
+
+        while (shouldFetchMoreBlocks())
+        {
+            if (!downloadBlocks())
+            {
+                break;
+            }
+        }
+
+        m_goFish = false;
+    }
+}
+
+bool BlockDownloader::shouldFetchMoreBlocks() const
+{
+    /* TODO */
+    return true;
+}
+
+void BlockDownloader::dropBlock()
+{
+    m_storedBlocks.pop_front();
+
+    /* Indicate to the downloader that it should try and download more */
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_goFish = true;
+}
+
 std::vector<WalletTypes::WalletBlockInfo> BlockDownloader::fetchBlocks(const size_t blockCount) const
 {
     return m_storedBlocks.front_n(blockCount);
-}
-
-uint64_t BlockDownloader::getHeight() const
-{
-    return 0; /* TODO */
 }
 
 std::vector<Crypto::Hash> BlockDownloader::getStoredBlockCheckpoints() const
@@ -70,17 +137,15 @@ std::vector<Crypto::Hash> BlockDownloader::getBlockCheckpoints() const
     return result;
 }
 
-void BlockDownloader::downloadBlocks()
+bool BlockDownloader::downloadBlocks()
 {
-    std::scoped_lock lock(m_mutex);
-
     const uint64_t localDaemonBlockCount = m_daemon->localDaemonBlockCount();
 
-    const uint64_t walletBlockCount = getHeight();
+    const uint64_t walletBlockCount = m_synchronizationStatus->getHeight();
 
     if (localDaemonBlockCount < walletBlockCount)
     {
-        return;
+        return false;
     }
 
     const auto blockCheckpoints = getBlockCheckpoints();
@@ -105,7 +170,7 @@ void BlockDownloader::downloadBlocks()
             {Logger::SYNC}
         );
 
-        return;
+        return false;
     }
 
     /* If we received data back, we'll make sure we're back
@@ -150,10 +215,12 @@ void BlockDownloader::downloadBlocks()
                     {Logger::SYNC, Logger::DAEMON}
                 );
 
-                return;
+                return false;
             }
         }
     }
 
     m_storedBlocks.push_back_n(blocks.begin(), blocks.end());
+
+    return true;
 }
