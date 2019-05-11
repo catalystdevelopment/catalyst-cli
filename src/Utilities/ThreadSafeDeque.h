@@ -24,6 +24,37 @@ class ThreadSafeDeque
         {
         }
 
+        /* Add the items to the end of the queue. They are added in the order
+           of the iterators passed in, so once the operation has completed,
+           the item pointed to by end will be at the end of the queue. */
+        template<typename Iterator>
+        bool push_back_n(Iterator begin, Iterator end)
+        {
+            /* Aquire the lock */
+            std::unique_lock<std::mutex> lock(m_mutex);
+
+            /* Stopping, don't push data */
+            if (m_shouldStop)
+            {
+                return false;
+            }
+
+            for (auto it = begin; it < end; it++)
+            {
+                m_deque.push_back(*it);
+            }
+
+            /* Unlock the mutex before notifying, so it doesn't block after
+               waking up */
+            lock.unlock();
+
+            /* Notify the consumer that we have some data */
+            m_haveData.notify_all();
+
+            return true;
+        }
+
+        /* Add an item to the end of the queue */
         bool push_back(T item)
         {
             /* Aquire the lock */
@@ -110,7 +141,7 @@ class ThreadSafeDeque
             m_shouldStop = false;
         }
 
-        size_t size()
+        size_t size() const
         {
             /* Aquire the lock (I'm not sure if this is actually needed here,
                but hey) */
@@ -121,7 +152,7 @@ class ThreadSafeDeque
 
         /* Takes n elements, if available, starting at the head of the queue.
            Otherwise returns max available. Does not remove items from the queue. */
-        std::vector<T> pop_front_n(const size_t numElements)
+        std::vector<T> front_n(const size_t numElements) const
         {
             /* Aquire the lock */
             std::unique_lock<std::mutex> lock(m_mutex);
@@ -137,6 +168,29 @@ class ThreadSafeDeque
             {
                 results.resize(numElements);
                 std::copy(m_deque.begin(), m_deque.begin() + numElements, results.begin());
+            }
+
+            return results;
+        }
+
+        /* Takes n elements, if available, starting at the tail of the queue.
+           Otherwise returns max available. Does not remove items from the queue. */
+        std::vector<T> back_n(const size_t numElements) const
+        {
+            /* Aquire the lock */
+            std::unique_lock<std::mutex> lock(m_mutex);
+
+            std::vector<T> results;
+
+            if (m_deque.size() <= numElements)
+            {
+                results.resize(m_deque.size());
+                std::copy(m_deque.rbegin(), m_deque.rend(), results.begin());
+            }
+            else
+            {
+                results.resize(numElements);
+                std::copy(m_deque.rbegin(), m_deque.rbegin() + numElements, results.begin());
             }
 
             return results;
@@ -199,7 +253,7 @@ class ThreadSafeDeque
         std::vector<T> m_deque;
 
         /* The mutex, to ensure we have atomic access to the queue */
-        std::mutex m_mutex;
+        mutable std::mutex m_mutex;
 
         /* Whether we have data or not */
         std::condition_variable m_haveData;

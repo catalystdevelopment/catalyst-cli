@@ -33,6 +33,7 @@ void SynchronizationStatus::storeBlockHash(
                    << m_lastKnownBlockHeight + 1 << ", Received: "
                    << height << ".\nPossibly malicious daemon. Terminating.";
 
+            /* TODO: Convert to log message */
             throw std::runtime_error(stream.str());
         }
     }
@@ -70,6 +71,7 @@ void SynchronizationStatus::storeBlockHash(
    database, then returns the height it found. So, if you put your earliest
    block at the start of the vector, you're just going to start syncing from
    that block every time. */
+/* TODO: Remove */
 std::vector<Crypto::Hash> SynchronizationStatus::getBlockHashCheckpoints() const
 {
     std::vector<Crypto::Hash> results;
@@ -86,6 +88,16 @@ std::vector<Crypto::Hash> SynchronizationStatus::getBlockHashCheckpoints() const
               back_inserter(results));
 
     return results;
+}
+
+std::deque<Crypto::Hash> SynchronizationStatus::getBlockCheckpoints() const
+{
+    return m_blockHashCheckpoints;
+}
+
+std::deque<Crypto::Hash> SynchronizationStatus::getRecentBlockHashes() const
+{
+    return m_lastKnownBlockHashes;
 }
 
 void SynchronizationStatus::fromJSON(const JSONObject &j)
