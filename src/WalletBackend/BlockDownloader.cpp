@@ -6,7 +6,11 @@
 #include <WalletBackend/BlockDownloader.h>
 //////////////////////////////////////////
 
+#include <config/WalletConfig.h>
+
 #include <Logger/Logger.h>
+
+#include <Utilities/FormatTools.h>
 
 BlockDownloader::~BlockDownloader()
 {
@@ -67,8 +71,25 @@ void BlockDownloader::downloader()
 
 bool BlockDownloader::shouldFetchMoreBlocks() const
 {
-    /* TODO */
-    return true;
+    size_t ramUsage = m_storedBlocks.memoryUsage();
+
+    if (ramUsage + WalletConfig::maxBodyResponseSize < WalletConfig::blockStoreMemoryLimit)
+    {
+        std::stringstream stream;
+
+        stream << "Approximate ram usage of stored blocks: " << Utilities::prettyPrintBytes(ramUsage)
+               << ", fetching more.";
+
+        Logger::logger.log(
+            stream.str(),
+            Logger::DEBUG,
+            {Logger::SYNC}
+        );
+
+        return true;
+    }
+
+    return false;
 }
 
 void BlockDownloader::dropBlock()
@@ -80,8 +101,17 @@ void BlockDownloader::dropBlock()
     m_goFish = true;
 }
 
-std::vector<WalletTypes::WalletBlockInfo> BlockDownloader::fetchBlocks(const size_t blockCount) const
+std::vector<WalletTypes::WalletBlockInfo> BlockDownloader::fetchBlocks(const size_t blockCount)
 {
+    /* Attempt to fetch more blocks if we've run out */
+    if (m_storedBlocks.size() == 0)
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        m_goFish = true;
+
+        return {};
+    }
+
     return m_storedBlocks.front_n(blockCount);
 }
 

@@ -33,7 +33,7 @@ class BlockDownloader
         /* Retrieve blockCount blocks from the internal store. does not remove
            them. Returns as many as possible if the amount requested is not
            available. May be empty (this is the norm when synced.) */
-        std::vector<WalletTypes::WalletBlockInfo> fetchBlocks(const size_t blockCount) const;
+        std::vector<WalletTypes::WalletBlockInfo> fetchBlocks(const size_t blockCount);
 
         /* Drops the oldest block from the internal queue */
         void dropBlock();

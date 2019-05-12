@@ -8,9 +8,17 @@
 
 #include <deque>
 
+#include <experimental/type_traits>
+
 #include <mutex>
 
-template <typename T>
+template<typename T1>
+using HasMemoryUsage = decltype(std::declval<T1&>().memoryUsage());
+
+template<typename T1>
+constexpr bool CanMemoryUsage = std::experimental::is_detected_v<HasMemoryUsage, T1>;
+
+template<typename T>
 class ThreadSafeDeque
 {
     public:
@@ -232,6 +240,20 @@ class ThreadSafeDeque
             }
 
             return results;
+        }
+
+        size_t memoryUsage() const
+        {
+            if constexpr (CanMemoryUsage<T>)
+            {
+                return std::accumulate(m_deque.begin(), m_deque.end(), sizeof(m_deque), [](const auto acc, const auto item) {
+                    return acc + item.memoryUsage();
+                });
+            }
+            else
+            {
+                return m_deque.size() * sizeof(T) + sizeof(m_deque);
+            }
         }
 
     private:
