@@ -32,6 +32,22 @@ class ThreadSafeDeque
         {
         }
 
+        /* Move constructor */
+        ThreadSafeDeque(ThreadSafeDeque && old)
+        {
+            *this = std::move(old);
+        }
+
+        ThreadSafeDeque& operator=(ThreadSafeDeque && old)
+        {
+            /* Stop anything running */
+            stop();
+
+            m_deque = std::move(old.m_deque);
+
+            return *this;
+        }
+
         /* Add the items to the end of the queue. They are added in the order
            of the iterators passed in, so once the operation has completed,
            the item pointed to by end will be at the end of the queue. */
@@ -241,7 +257,9 @@ class ThreadSafeDeque
 
             return results;
         }
-
+        
+        /* Recommended to implement a .memoryUsage() method for your type, if not using
+           a simple type. Otherwise, sizeof() is unlikely to be accurate. */
         size_t memoryUsage() const
         {
             if constexpr (CanMemoryUsage<T>)

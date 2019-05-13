@@ -6,8 +6,6 @@
 
 #include <atomic>
 
-#include <config/Constants.h>
-
 #include <Nigel/Nigel.h>
 
 #include <SubWallets/SubWallets.h>
@@ -23,6 +21,21 @@
 class BlockDownloader
 {
     public:
+        BlockDownloader() {};
+
+        /* Constructor */
+        BlockDownloader(
+            const std::shared_ptr<Nigel> daemon,
+            const std::shared_ptr<SubWallets> subWallets,
+            const uint64_t startHeight,
+            const uint64_t startTimestamp);
+
+        /* Move constructor */
+        BlockDownloader(BlockDownloader && old);
+
+        /* Move assignment operator */
+        BlockDownloader& operator=(BlockDownloader && old);
+
         /* Destructor */
         ~BlockDownloader();
 
@@ -36,13 +49,27 @@ class BlockDownloader
         std::vector<WalletTypes::WalletBlockInfo> fetchBlocks(const size_t blockCount);
 
         /* Drops the oldest block from the internal queue */
-        void dropBlock();
+        void dropBlock(const uint64_t blockHeight, const Crypto::Hash blockHash);
 
         /* Start block downloading process */
         void start();
 
         /* Stop block downloading process */
         void stop();
+
+        /* Returns height of processed blocks */
+        uint64_t getHeight() const;
+
+        void fromJSON(
+            const JSONObject &j,
+            const uint64_t startHeight,
+            const uint64_t startTimestamp);
+
+        void toJSON(rapidjson::Writer<rapidjson::StringBuffer> &writer) const;
+
+        void setSubWallets(const std::shared_ptr<SubWallets> subWallets);
+
+        void initializeAfterLoad(const std::shared_ptr<Nigel> daemon);
 
     private:
 
@@ -82,7 +109,7 @@ class BlockDownloader
         uint64_t m_startHeight;
 
         /* Sync progress */
-        std::shared_ptr<SynchronizationStatus> m_synchronizationStatus;
+        SynchronizationStatus m_synchronizationStatus;
 
         std::shared_ptr<SubWallets> m_subWallets;
 
@@ -90,13 +117,13 @@ class BlockDownloader
         std::mutex m_mutex;
 
         /* Are we ready to go attempt to retrieve more data */
-        std::atomic<bool> m_goFish;
+        std::atomic<bool> m_goFish = true;
 
         /* Should we try and fetch more data (Used in conjunction with m_goFish) */
         std::condition_variable m_shouldTryFetch;
 
         /* Should we stop downloading */
-        std::atomic<bool> m_shouldStop;
+        std::atomic<bool> m_shouldStop = false;
 
         /* Thread that performs the actual downloading of blocks */
         std::thread m_downloadThread;

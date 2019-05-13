@@ -66,7 +66,4 @@ namespace Constants
         0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0,
     });
-
-    /* Amount of hashes to provide to daemon in /getWalletSyncData call, */
-    const size_t LAST_KNOWN_BLOCK_HASHES_SIZE = 50;
 }

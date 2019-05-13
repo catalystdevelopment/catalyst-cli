@@ -12,6 +12,52 @@
 
 #include <Utilities/FormatTools.h>
 
+#include <WalletBackend/Constants.h>
+
+/* Constructor */
+BlockDownloader::BlockDownloader(
+    const std::shared_ptr<Nigel> daemon,
+    const std::shared_ptr<SubWallets> subWallets,
+    const uint64_t startHeight,
+    const uint64_t startTimestamp) :
+
+    m_daemon(daemon),
+    m_subWallets(subWallets),
+    m_startHeight(startHeight),
+    m_startTimestamp(startTimestamp)
+{
+}
+
+/* Move constructor */
+BlockDownloader::BlockDownloader(BlockDownloader && old)
+{
+    /* Call the move assignment operator */
+    *this = std::move(old);
+}
+
+/* Move assignment operator */
+BlockDownloader& BlockDownloader::operator=(BlockDownloader && old)
+{
+    /* Stop any running threads */
+    stop();
+
+    m_storedBlocks = std::move(old.m_storedBlocks);
+
+    m_daemon = std::move(old.m_daemon);
+
+    m_startTimestamp = std::move(old.m_startTimestamp);
+    m_startHeight = std::move(old.m_startHeight);
+
+    m_synchronizationStatus = std::move(old.m_synchronizationStatus);
+
+    m_goFish = std::move(old.m_goFish.load());
+
+    m_shouldStop = std::move(old.m_shouldStop.load());
+
+    return *this;
+}
+
+/* Destructor */
 BlockDownloader::~BlockDownloader()
 {
     stop();
@@ -20,18 +66,24 @@ BlockDownloader::~BlockDownloader()
 void BlockDownloader::start()
 {
     m_shouldStop = false;
-
     m_downloadThread = std::thread(&BlockDownloader::downloader, this);
 }
 
 void BlockDownloader::stop()
 {
     m_shouldStop = true;
+    m_goFish = true;
+    m_shouldTryFetch.notify_one();
 
     if (m_downloadThread.joinable())
     {
         m_downloadThread.join();
     }
+}
+
+uint64_t BlockDownloader::getHeight() const
+{
+    return m_synchronizationStatus.getHeight();
 }
 
 void BlockDownloader::downloader()
@@ -57,7 +109,7 @@ void BlockDownloader::downloader()
             break;
         }
 
-        while (shouldFetchMoreBlocks())
+        while (shouldFetchMoreBlocks() && !m_shouldStop)
         {
             if (!downloadBlocks())
             {
@@ -92,13 +144,15 @@ bool BlockDownloader::shouldFetchMoreBlocks() const
     return false;
 }
 
-void BlockDownloader::dropBlock()
+void BlockDownloader::dropBlock(const uint64_t blockHeight, const Crypto::Hash blockHash)
 {
     m_storedBlocks.pop_front();
+    m_synchronizationStatus.storeBlockHash(blockHash, blockHeight);
 
     /* Indicate to the downloader that it should try and download more */
     std::lock_guard<std::mutex> lock(m_mutex);
     m_goFish = true;
+    m_shouldTryFetch.notify_one();
 }
 
 std::vector<WalletTypes::WalletBlockInfo> BlockDownloader::fetchBlocks(const size_t blockCount)
@@ -108,41 +162,46 @@ std::vector<WalletTypes::WalletBlockInfo> BlockDownloader::fetchBlocks(const siz
     {
         std::lock_guard<std::mutex> lock(m_mutex);
         m_goFish = true;
+        m_shouldTryFetch.notify_one();
 
         return {};
     }
 
-    return m_storedBlocks.front_n(blockCount);
+    const auto blocks = m_storedBlocks.front_n(blockCount);
+
+    Logger::logger.log(
+        "Fetched " + std::to_string(blocks.size()) + " blocks from internal store",
+        Logger::DEBUG,
+        {Logger::SYNC}
+    );
+
+    return blocks;
 }
 
 std::vector<Crypto::Hash> BlockDownloader::getStoredBlockCheckpoints() const
 {
-    const auto blocks = m_storedBlocks.front_n(Constants::LAST_KNOWN_BLOCK_HASHES_SIZE);
+    const auto blocks = m_storedBlocks.back_n(Constants::LAST_KNOWN_BLOCK_HASHES_SIZE);
 
     std::vector<Crypto::Hash> result;
 
     result.resize(blocks.size());
 
-    std::transform(blocks.rbegin(), blocks.rend(), result.begin(), [](const auto block) { return block.blockHash; });
+    std::transform(blocks.begin(), blocks.end(), result.begin(), [](const auto block) { return block.blockHash; });
 
     return result;
 }
 
 std::vector<Crypto::Hash> BlockDownloader::getBlockCheckpoints() const
 {
-    /* Note that these are in the wrong order - they are oldest to newest,
-       when we want the inverse. Skipping an inverse in getStoredBlockCheckpoints
-       since we need to concat these anyway which requires another iteration (?) */
     /* Hashes of blocks we have downloaded but not processed */
     const auto unprocessedBlockHashes = getStoredBlockCheckpoints();
 
+    std::vector<Crypto::Hash> result(unprocessedBlockHashes.size());
+
+    std::copy(unprocessedBlockHashes.begin(), unprocessedBlockHashes.end(), result.begin());
+
     /* Hashes of blocks we have processed in the wallet */
-    const auto recentProcessedBlockHashes = m_synchronizationStatus->getRecentBlockHashes();
-
-    std::vector<Crypto::Hash> result;
-
-    /* Add in reverse order for reasons mentioned previously */
-    std::copy(unprocessedBlockHashes.rbegin(), unprocessedBlockHashes.rend(), std::back_inserter(result));
+    const auto recentProcessedBlockHashes = m_synchronizationStatus.getRecentBlockHashes();
 
     /* If we don't have the desired 50 blocks, add on the recently processed
        block checkpoints. This fixes us not passing the right data when
@@ -160,7 +219,7 @@ std::vector<Crypto::Hash> BlockDownloader::getBlockCheckpoints() const
     }
 
     /* Infrequent checkpoints to handle deep forks */
-    const auto blockHashCheckpoints = m_synchronizationStatus->getBlockCheckpoints();
+    const auto blockHashCheckpoints = m_synchronizationStatus.getBlockCheckpoints();
 
     std::copy(blockHashCheckpoints.begin(), blockHashCheckpoints.end(), std::back_inserter(result));
 
@@ -171,7 +230,7 @@ bool BlockDownloader::downloadBlocks()
 {
     const uint64_t localDaemonBlockCount = m_daemon->localDaemonBlockCount();
 
-    const uint64_t walletBlockCount = m_synchronizationStatus->getHeight();
+    const uint64_t walletBlockCount = m_synchronizationStatus.getHeight();
 
     if (localDaemonBlockCount < walletBlockCount)
     {
@@ -179,6 +238,20 @@ bool BlockDownloader::downloadBlocks()
     }
 
     const auto blockCheckpoints = getBlockCheckpoints();
+
+    if (blockCheckpoints.size() > 0)
+    {
+        std::stringstream stream;
+
+        stream << "First checkpoint: " << blockCheckpoints.front()
+                  << "\nLast checkpoint: " << blockCheckpoints.back();
+
+        Logger::logger.log(
+            stream.str(),
+            Logger::DEBUG,
+            {Logger::SYNC}
+        );
+    }
 
     const auto [success, blocks] = m_daemon->getWalletSyncData(
         blockCheckpoints, m_startHeight, m_startTimestamp
@@ -250,7 +323,44 @@ bool BlockDownloader::downloadBlocks()
         }
     }
 
+    std::stringstream stream;
+
+    stream << "Downloaded " << blocks.size() << " blocks from daemon, ["
+           << blocks.front().blockHeight << ", " << blocks.back().blockHeight
+           << "]";
+
+    Logger::logger.log(
+        stream.str(),
+        Logger::DEBUG,
+        {Logger::SYNC}
+    );
+
     m_storedBlocks.push_back_n(blocks.begin(), blocks.end());
 
     return true;
+}
+
+void BlockDownloader::fromJSON(
+    const JSONObject &j,
+    const uint64_t startHeight,
+    const uint64_t startTimestamp)
+{
+    m_synchronizationStatus.fromJSON(j);
+    m_startHeight = startHeight;
+    m_startTimestamp = startTimestamp;
+}
+
+void BlockDownloader::toJSON(rapidjson::Writer<rapidjson::StringBuffer> &writer) const
+{
+    m_synchronizationStatus.toJSON(writer);
+}
+
+void BlockDownloader::setSubWallets(const std::shared_ptr<SubWallets> subWallets)
+{
+    m_subWallets = subWallets;
+}
+
+void BlockDownloader::initializeAfterLoad(const std::shared_ptr<Nigel> daemon)
+{
+    m_daemon = daemon;
 }
