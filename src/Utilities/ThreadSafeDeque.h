@@ -8,15 +8,7 @@
 
 #include <deque>
 
-#include <experimental/type_traits>
-
 #include <mutex>
-
-template<typename T1>
-using HasMemoryUsage = decltype(std::declval<T1&>().memoryUsage());
-
-template<typename T1>
-constexpr bool CanMemoryUsage = std::experimental::is_detected_v<HasMemoryUsage, T1>;
 
 template<typename T>
 class ThreadSafeDeque
@@ -258,20 +250,24 @@ class ThreadSafeDeque
             return results;
         }
         
-        /* Recommended to implement a .memoryUsage() method for your type, if not using
-           a simple type. Otherwise, sizeof() is unlikely to be accurate. */
+        /* Recommended to implement a memoryUsage() method for your type, if not using
+           a simple type, and pass to the below function instead.
+           Otherwise, sizeof() is unlikely to be accurate. */
         size_t memoryUsage() const
         {
-            if constexpr (CanMemoryUsage<T>)
-            {
-                return std::accumulate(m_deque.begin(), m_deque.end(), sizeof(m_deque), [](const auto acc, const auto item) {
-                    return acc + item.memoryUsage();
-                });
-            }
-            else
-            {
-                return m_deque.size() * sizeof(T) + sizeof(m_deque);
-            }
+            return m_deque.size() * sizeof(T) + sizeof(m_deque);
+        }
+
+        size_t memoryUsage(std::function<size_t(T)> memUsage) const
+        {
+            return std::accumulate(
+                m_deque.begin(),
+                m_deque.end(),
+                sizeof(m_deque),
+                [&memUsage](const auto acc, const auto item) {
+
+                return acc + memUsage(item);
+            });
         }
 
     private:

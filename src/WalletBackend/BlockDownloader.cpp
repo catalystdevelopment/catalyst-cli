@@ -123,7 +123,9 @@ void BlockDownloader::downloader()
 
 bool BlockDownloader::shouldFetchMoreBlocks() const
 {
-    size_t ramUsage = m_storedBlocks.memoryUsage();
+    size_t ramUsage = m_storedBlocks.memoryUsage([](const auto block) {
+        return block.memoryUsage();
+    });
 
     if (ramUsage + WalletConfig::maxBodyResponseSize < WalletConfig::blockStoreMemoryLimit)
     {
