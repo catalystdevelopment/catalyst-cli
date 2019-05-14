@@ -8,6 +8,7 @@
 /* This file contains the ARM versions of the CryptoNight slow-hash routines */
 
 #if !defined NO_AES && (defined(__arm__) || defined(__aarch64__))
+  #pragma message ("info: Using slow-hash-arm.c")
 
   #include "slow-hash-common.h"
 
@@ -264,7 +265,7 @@ void cn_slow_hash(const void *data, size_t length, char *hash, int light, int va
     #ifndef FORCE_USE_HEAP
     RDATA_ALIGN16 uint8_t hp_state[page_size];
     #else /* FORCE_USE_HEAP */
-      #pragma message ("warning: ACTIVATING FORCE_USE_HEAP IN aarch64 + crypto in slow-hash.c")
+      #pragma message ("warning: ACTIVATING FORCE_USE_HEAP IN aarch64 + crypto in slow-hash-arm.c")
     uint8_t *hp_state = (uint8_t *)aligned_malloc(page_size,16);
     #endif /* FORCE_USE_HEAP */
 

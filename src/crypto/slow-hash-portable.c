@@ -9,6 +9,7 @@
    for the CryptoNight hashing algorithm */
 
 #if !(!defined NO_AES && (defined(__arm__) || defined(__aarch64__))) || !(!defined NO_AES && (defined(__x86_64__) || (defined(_MSC_VER) && defined(_WIN64))))
+  #pragma message ("info: Using slow-hash-portable.c")
 
   #include "slow-hash-common.h"
 
@@ -120,7 +121,7 @@ void cn_slow_hash(const void *data, size_t length, char *hash, int light, int va
   #ifndef FORCE_USE_HEAP
     uint8_t long_state[page_size];
   #else
-    #pragma message ("warning: ACTIVATING FORCE_USE_HEAP IN portable slow-hash.c")
+    #pragma message ("warning: ACTIVATING FORCE_USE_HEAP IN portable slow-hash-portable.c")
     uint8_t *long_state = (uint8_t *)malloc(page_size);
   #endif
 

@@ -8,6 +8,7 @@
 /* This file contains the x86 version of the CryptoNight slow-hash routines */
 
 #if !defined NO_AES && (defined(__x86_64__) || (defined(_MSC_VER) && defined(_WIN64)))
+  #pragma message ("info: Using slow-hash-x86.c")
 
   #include "slow-hash-common.h"
 
