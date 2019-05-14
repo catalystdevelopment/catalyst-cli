@@ -50,7 +50,7 @@ BlockDownloader& BlockDownloader::operator=(BlockDownloader && old)
 
     m_synchronizationStatus = std::move(old.m_synchronizationStatus);
 
-    m_goFish = std::move(old.m_goFish.load());
+    m_consumedData = std::move(old.m_consumedData.load());
 
     m_shouldStop = std::move(old.m_shouldStop.load());
 
@@ -72,7 +72,7 @@ void BlockDownloader::start()
 void BlockDownloader::stop()
 {
     m_shouldStop = true;
-    m_goFish = true;
+    m_consumedData = true;
     m_shouldTryFetch.notify_one();
 
     if (m_downloadThread.joinable())
@@ -100,7 +100,7 @@ void BlockDownloader::downloader()
                     return true;
                 }
 
-                return m_goFish.load();
+                return m_consumedData.load();
             });
         }
 
@@ -117,7 +117,7 @@ void BlockDownloader::downloader()
             }
         }
 
-        m_goFish = false;
+        m_consumedData = false;
     }
 }
 
@@ -153,7 +153,7 @@ void BlockDownloader::dropBlock(const uint64_t blockHeight, const Crypto::Hash b
 
     /* Indicate to the downloader that it should try and download more */
     std::lock_guard<std::mutex> lock(m_mutex);
-    m_goFish = true;
+    m_consumedData = true;
     m_shouldTryFetch.notify_one();
 }
 
@@ -163,7 +163,7 @@ std::vector<WalletTypes::WalletBlockInfo> BlockDownloader::fetchBlocks(const siz
     if (m_storedBlocks.size() == 0)
     {
         std::lock_guard<std::mutex> lock(m_mutex);
-        m_goFish = true;
+        m_consumedData = true;
         m_shouldTryFetch.notify_one();
 
         return {};

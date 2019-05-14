@@ -117,9 +117,9 @@ class BlockDownloader
         std::mutex m_mutex;
 
         /* Are we ready to go attempt to retrieve more data */
-        std::atomic<bool> m_goFish = true;
+        std::atomic<bool> m_consumedData = true;
 
-        /* Should we try and fetch more data (Used in conjunction with m_goFish) */
+        /* Should we try and fetch more data (Used in conjunction with m_consumedData) */
         std::condition_variable m_shouldTryFetch;
 
         /* Should we stop downloading */
