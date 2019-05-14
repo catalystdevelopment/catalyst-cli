@@ -8,7 +8,7 @@
 /* This file contains the portable version of the slow-hash routines
    for the CryptoNight hashing algorithm */
 
-#if !(!defined NO_AES && (defined(__arm__) || defined(__aarch64__))) || !(!defined NO_AES && (defined(__x86_64__) || (defined(_MSC_VER) && defined(_WIN64))))
+#if !(!defined NO_AES && (defined(__arm__) || defined(__aarch64__))) && !(!defined NO_AES && (defined(__x86_64__) || (defined(_MSC_VER) && defined(_WIN64))))
   #pragma message ("info: Using slow-hash-portable.c")
 
   #include "slow-hash-common.h"
