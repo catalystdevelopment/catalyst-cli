@@ -34,6 +34,8 @@
 
 cmake_minimum_required(VERSION 2.8.12)
 
+message(STATUS "Setting up build environment for RocksDB")
+
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
   message(STATUS "Found ccache package... Activating...")
@@ -51,6 +53,7 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/modules/")
 
+set(ARCH native CACHE STRING "CPU to build for: -march value or native")
 option(WITH_JEMALLOC "build with JeMalloc" OFF)
 option(WITH_SNAPPY "build with SNAPPY" OFF)
 option(WITH_LZ4 "build with lz4" OFF)
