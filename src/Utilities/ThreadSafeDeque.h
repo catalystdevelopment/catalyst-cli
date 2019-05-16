@@ -238,9 +238,6 @@ class ThreadSafeDeque
            Otherwise returns max available. Does not remove items from the queue. */
         std::vector<T> front_n(const size_t numElements) const
         {
-            std::cout << "Requested " << numElements << " blocks. Available: "
-                      << m_deque.size() << std::endl;
-
             /* Aquire the lock */
             std::unique_lock<std::mutex> lock(m_mutex);
 
