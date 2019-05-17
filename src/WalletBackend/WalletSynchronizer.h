@@ -20,7 +20,7 @@
 #include <WalletTypes.h>
 
 typedef std::vector<std::tuple<Crypto::PublicKey, WalletTypes::TransactionInput>> BlockInputsAndOwners;
-typedef std::tuple<WalletTypes::WalletBlockInfo, BlockInputsAndOwners> SemiProcessedBlock;
+typedef std::tuple<WalletTypes::WalletBlockInfo, BlockInputsAndOwners, uint32_t> SemiProcessedBlock;
 
 /* Used to store the data we have accumulating when scanning a specific
    block. We can't add the items directly, because we may stop midway
@@ -38,12 +38,14 @@ struct BlockScanTmpInfo
     std::vector<std::tuple<Crypto::PublicKey, Crypto::KeyImage>> keyImagesToMarkSpent;
 };
 
-class OrderByHeight
+class OrderByArrivalIndex
 {
     public:
+        /* Ordering based on the arrival index of the blocks, not on the block
+           height. This is needed to ensure correct handling of network forks. */
         bool operator() (SemiProcessedBlock a, SemiProcessedBlock b)
         {
-            return std::get<0>(a).blockHeight > std::get<0>(b).blockHeight;
+            return std::get<2>(a) > std::get<2>(b);
         }
 };
 
@@ -182,7 +184,7 @@ class WalletSynchronizer
         std::shared_ptr<SubWallets> m_subWallets;
 
         /* Stores blocks for processing by processing threads */
-        ThreadSafeDeque<WalletTypes::WalletBlockInfo> m_blockProcessingQueue;
+        ThreadSafeDeque<std::tuple<WalletTypes::WalletBlockInfo, uint32_t>> m_blockProcessingQueue;
 
         /* Synchronizes the child threads waiting for blocks to process
            and the parent pushing blocks in */
@@ -196,9 +198,9 @@ class WalletSynchronizer
 
         /* yeah.... that's a thread safe queue, which holds a block, and it's
            corresponding inputs, and the subwallet public key that each input
-           belongs to. The blocks with smaller height come at the front of
+           belongs to. The blocks which arrived earlier come at the front of
            the queue. */
-        ThreadSafePriorityQueue<SemiProcessedBlock, OrderByHeight> m_processedBlocks;
+        ThreadSafePriorityQueue<SemiProcessedBlock, OrderByArrivalIndex> m_processedBlocks;
 
         /* Amount of sync threads to run */
         unsigned int m_threadCount;

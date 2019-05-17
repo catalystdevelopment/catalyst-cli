@@ -143,7 +143,8 @@ void WalletSynchronizer::mainLoop()
                     blocks are available) */
                 std::unique_lock<std::mutex> lock(m_mutex);
 
-                m_haveProcessedBlocksToHandle.wait(lock, [&]{
+                m_haveProcessedBlocksToHandle.wait(lock, [&]
+                {
                     if (m_shouldStop)
                     {
                         return true;
@@ -164,7 +165,7 @@ void WalletSynchronizer::mainLoop()
                use mutex to access */
             while (!m_processedBlocks.empty_unsafe())
             {
-                const auto [block, ourInputs] = m_processedBlocks.top_unsafe();
+                const auto [block, ourInputs, arrivalIndex] = m_processedBlocks.top_unsafe();
                 completeBlockProcessing(block, ourInputs);
                 m_processedBlocks.pop_unsafe();
             }
@@ -206,7 +207,8 @@ void WalletSynchronizer::blockProcessingThread()
             std::unique_lock<std::mutex> lock(m_mutex);
 
             /* Wait for blocks to be available */
-            m_haveBlocksToProcess.wait(lock, [&]{
+            m_haveBlocksToProcess.wait(lock, [&]
+            {
                 if (m_shouldStop)
                 {
                     return true;
@@ -226,7 +228,7 @@ void WalletSynchronizer::blockProcessingThread()
         /* Process blocks while we've got more to process */
         while (!chunk.empty() && !m_shouldStop)
         {
-            for (const auto &block : chunk)
+            for (const auto &[block, arrivalIndex] : chunk)
             {
                 Logger::logger.log(
                     "Processing block " + std::to_string(block.blockHeight),
@@ -273,7 +275,7 @@ void WalletSynchronizer::blockProcessingThread()
                     }
                 }
 
-                processedBlocks.push_back({ block, ourInputs });
+                processedBlocks.push_back({ block, ourInputs, arrivalIndex });
             }
 
             chunk = m_blockProcessingQueue.front_n_and_remove(chunkSize);
