@@ -163,7 +163,7 @@ void WalletSynchronizer::mainLoop()
             /* Nothing else should be pushing to the queue here, since the
                child threads are waiting for a new chunk, so don't need to
                use mutex to access */
-            while (!m_processedBlocks.empty_unsafe())
+            while (!m_processedBlocks.empty_unsafe() && !m_shouldStop)
             {
                 const auto [block, ourInputs, arrivalIndex] = m_processedBlocks.top_unsafe();
                 completeBlockProcessing(block, ourInputs);
