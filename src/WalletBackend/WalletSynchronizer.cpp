@@ -335,7 +335,7 @@ void WalletSynchronizer::completeBlockProcessing(
     const std::vector<std::tuple<Crypto::PublicKey, WalletTypes::TransactionInput>> &ourInputs)
 {
     /* Chain forked, invalidate previous transactions */
-    if (m_blockDownloader.getHeight() >= block.blockHeight)
+    if (m_blockDownloader.getHeight() >= block.blockHeight && block.blockHeight != 0)
     {
         Logger::logger.log(
             "Blockchain forked, resolving...",
@@ -414,7 +414,7 @@ void WalletSynchronizer::completeBlockProcessing(
     }
 
     Logger::logger.log(
-        "Finshed processing block " + std::to_string(block.blockHeight),
+        "Finished processing block " + std::to_string(block.blockHeight),
         Logger::DEBUG,
         {Logger::SYNC}
     );
