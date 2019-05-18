@@ -194,10 +194,18 @@ void WalletSynchronizer::blockProcessingThread()
     /* Take the max chunk size, split by the threads, divided by 2. So in
        theory, each thread processes 2 chunks. This is to decrease locking,
        while also trying to stop slower threads from delaying the system. */
-    const size_t chunkSize = std::max(
-        (Constants::BLOCK_PROCESSING_CHUNK / m_threadCount) / 2,
-        1ul
-    );
+    size_t chunkSize = Constants::BLOCK_PROCESSING_CHUNK / m_threadCount / 2;
+
+    if (chunkSize == 0)
+    {
+        chunkSize = 1;
+    }
+
+    /* No point splitting into chunks if we're only using 1 thread */
+    if (m_threadCount == 1)
+    {
+        chunkSize = Constants::BLOCK_PROCESSING_CHUNK;
+    }
 
     std::vector<SemiProcessedBlock> processedBlocks;
 
