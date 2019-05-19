@@ -293,11 +293,17 @@ class ThreadSafeDeque
            Otherwise, sizeof() is unlikely to be accurate. */
         size_t memoryUsage() const
         {
+            /* Aquire the lock */
+            std::unique_lock<std::mutex> lock(m_mutex);
+
             return m_deque.size() * sizeof(T) + sizeof(m_deque);
         }
 
         size_t memoryUsage(std::function<size_t(T)> memUsage) const
         {
+            /* Aquire the lock */
+            std::unique_lock<std::mutex> lock(m_mutex);
+
             return std::accumulate(
                 m_deque.begin(),
                 m_deque.end(),
