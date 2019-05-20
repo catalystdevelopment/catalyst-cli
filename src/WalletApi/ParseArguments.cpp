@@ -30,10 +30,9 @@ Config parseArguments(int argc, char **argv)
 
     options.add_options("Core")
         ("h,help", "Display this help message", cxxopts::value<bool>(help)->implicit_value("true"))
-
-        ("v,version", "Output software version information", cxxopts::value<bool>(version)->default_value("false")->implicit_value("true"))
         ("log-level", "Specify log level", cxxopts::value<int>(logLevel)->default_value(std::to_string(config.logLevel)), "#")
-        ("threads", "Specify number of wallet sync threads", cxxopts::value<unsigned int>(threads)->default_value(std::to_string(std::max(1u, std::thread::hardware_concurrency()))), "#");
+        ("threads", "Specify number of wallet sync threads", cxxopts::value<unsigned int>(threads)->default_value(std::to_string(std::max(1u, std::thread::hardware_concurrency()))), "#")
+        ("v,version", "Output software version information", cxxopts::value<bool>(version)->default_value("false")->implicit_value("true"));
 
     options.add_options("Network")
         ("p,port", "The port to listen on for http requests",
