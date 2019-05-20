@@ -124,7 +124,7 @@ void BlockDownloader::downloader()
 bool BlockDownloader::shouldFetchMoreBlocks() const
 {
     size_t ramUsage = m_storedBlocks.memoryUsage([](const auto block) {
-        return block.memoryUsage();
+        return std::get<0>(block).memoryUsage();
     });
 
     if (ramUsage + WalletConfig::maxBodyResponseSize < WalletConfig::blockStoreMemoryLimit)
@@ -157,7 +157,7 @@ void BlockDownloader::dropBlock(const uint64_t blockHeight, const Crypto::Hash b
     m_shouldTryFetch.notify_one();
 }
 
-std::vector<WalletTypes::WalletBlockInfo> BlockDownloader::fetchBlocks(const size_t blockCount)
+std::vector<std::tuple<WalletTypes::WalletBlockInfo, uint32_t>> BlockDownloader::fetchBlocks(const size_t blockCount)
 {
     /* Attempt to fetch more blocks if we've run out */
     if (m_storedBlocks.size() == 0)
@@ -188,7 +188,10 @@ std::vector<Crypto::Hash> BlockDownloader::getStoredBlockCheckpoints() const
 
     result.resize(blocks.size());
 
-    std::transform(blocks.begin(), blocks.end(), result.begin(), [](const auto block) { return block.blockHash; });
+    std::transform(blocks.begin(), blocks.end(), result.begin(), [](const auto block)
+    {
+        return std::get<0>(block).blockHash;
+    });
 
     return result;
 }
@@ -337,7 +340,14 @@ bool BlockDownloader::downloadBlocks()
         {Logger::SYNC}
     );
 
-    m_storedBlocks.push_back_n(blocks.begin(), blocks.end());
+    std::vector<std::tuple<WalletTypes::WalletBlockInfo, uint32_t>> blocksWithIndex;
+
+    for (const auto block : blocks)
+    {
+        blocksWithIndex.push_back({block, m_arrivalIndex++});
+    }
+
+    m_storedBlocks.push_back_n(blocksWithIndex.begin(), blocksWithIndex.end());
 
     return true;
 }
