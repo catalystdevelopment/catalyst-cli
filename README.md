@@ -1,9 +1,11 @@
 ![Imgur Image](https://i.imgur.com/SF4M5F5.png)
 
+Launched:
 #### v0.0.1.0 November 25, 2018
+<!--
 #### v0.0.1.1 November 27, 2018
 #### v0.2.0.0 December 8, 2018
-
+-->
 www.cryptocatalyst.net
 
 Discord (most active here)
