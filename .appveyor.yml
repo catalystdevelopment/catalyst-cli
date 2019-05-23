@@ -25,8 +25,8 @@ after_build:
   - if not defined APPVEYOR_REPO_TAG_NAME (set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_COMMIT%)
   - cd src\Release
   - mkdir catalyst-%APPVEYOR_REPO_TAG_NAME%
-  - copy *.exe turtlecoin-%APPVEYOR_REPO_TAG_NAME%
-  - copy ..\..\..\LICENSE turtlecoin-%APPVEYOR_REPO_TAG_NAME%
+  - copy *.exe catalyst-%APPVEYOR_REPO_TAG_NAME%
+  - copy ..\..\..\LICENSE catalyst-%APPVEYOR_REPO_TAG_NAME%
   - 7z a catalyst-%APPVEYOR_REPO_TAG_NAME%-windows.zip catalyst-%APPVEYOR_REPO_TAG_NAME%
   - copy catalyst-%APPVEYOR_REPO_TAG_NAME%-windows.zip ..\..\..\
 
