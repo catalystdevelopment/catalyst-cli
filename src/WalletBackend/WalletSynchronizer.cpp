@@ -311,10 +311,10 @@ std::vector<std::tuple<Crypto::PublicKey, WalletTypes::TransactionInput>> Wallet
 {
     std::vector<std::tuple<Crypto::PublicKey, WalletTypes::TransactionInput>> inputs;
 
-    if (WalletConfig::processCoinbaseTransactions)
+    if (WalletConfig::processCoinbaseTransactions && block.coinbaseTransaction)
     {
         const auto newInputs = processTransactionOutputs(
-            block.coinbaseTransaction, block.blockHeight
+            *(block.coinbaseTransaction), block.blockHeight
         );
 
         inputs.insert(inputs.end(), newInputs.begin(), newInputs.end());
@@ -463,7 +463,7 @@ std::optional<WalletTypes::Transaction> WalletSynchronizer::processCoinbaseTrans
     const WalletTypes::WalletBlockInfo &block,
     const std::vector<std::tuple<Crypto::PublicKey, WalletTypes::TransactionInput>> &inputs) const
 {
-    const auto tx = block.coinbaseTransaction;
+    const auto tx = *(block.coinbaseTransaction);
 
     std::unordered_map<Crypto::PublicKey, int64_t> transfers;
 

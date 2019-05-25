@@ -582,6 +582,7 @@ bool Core::getWalletSyncData(
     const uint64_t startHeight,
     const uint64_t startTimestamp,
     const uint64_t blockCount,
+    const bool skipCoinbaseTransactions,
     std::vector<WalletTypes::WalletBlockInfo> &walletBlocks) const
 {
     throwIfNotInitialized();
@@ -665,7 +666,16 @@ bool Core::getWalletSyncData(
             return true;
         }
 
-        std::vector<RawBlock> rawBlocks = mainChain->getBlocksByHeight(startIndex, endIndex);
+        std::vector<RawBlock> rawBlocks;
+
+        if (skipCoinbaseTransactions)
+        {
+            //rawBlocks = mainChain->getNonEmptyBlocks(actualBlockCount);
+        }
+        else
+        {
+            rawBlocks = mainChain->getBlocksByHeight(startIndex, endIndex);
+        }
 
         for (const auto rawBlock : rawBlocks)
         {
@@ -679,9 +689,12 @@ bool Core::getWalletSyncData(
             walletBlock.blockHash = CachedBlock(block).getBlockHash();
             walletBlock.blockTimestamp = block.timestamp;
 
-            walletBlock.coinbaseTransaction = getRawCoinbaseTransaction(
-                block.baseTransaction
-            );
+            if (!skipCoinbaseTransactions)
+            {
+                walletBlock.coinbaseTransaction = getRawCoinbaseTransaction(
+                    block.baseTransaction
+                );
+            }
 
             for (const auto &transaction : rawBlock.transactions)
             {

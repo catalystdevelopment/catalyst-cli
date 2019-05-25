@@ -65,6 +65,7 @@ public:
     const uint64_t startHeight,
     const uint64_t startTimestamp,
     const uint64_t blockCount,
+    const bool skipEmptyBlocks,
     std::vector<WalletTypes::WalletBlockInfo> &blocks) const = 0;
 
   virtual bool getTransactionsStatus(
