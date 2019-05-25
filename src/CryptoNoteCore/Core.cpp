@@ -594,6 +594,7 @@ bool Core::getWalletSyncData(
 
         /* Current height */
         uint64_t currentIndex = mainChain->getTopBlockIndex();
+        Crypto::Hash currentHash = mainChain->getTopBlockHash();
 
         uint64_t actualBlockCount = std::min(BLOCKS_SYNCHRONIZING_DEFAULT_COUNT, blockCount);
 
@@ -705,6 +706,12 @@ bool Core::getWalletSyncData(
             }
 
             walletBlocks.push_back(walletBlock);
+        }
+
+        if (walletBlocks.empty())
+        {
+            topBlockInfo->height = currentIndex;
+            topBlockInfo->hash = currentHash;
         }
 
         return true;
