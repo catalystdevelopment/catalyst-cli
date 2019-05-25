@@ -104,6 +104,12 @@ void serialize(WalletTypes::KeyOutput &keyOutput, ISerializer &s)
     s(keyOutput.amount, "amount");
 }
 
+void serialize(WalletTypes::TopBlock &topBlock, ISerializer &s)
+{
+    KV_MEMBER(topBlock.hash);
+    KV_MEMBER(topBlock.height);
+}
+
 namespace {
 
 template <typename Command>
@@ -360,7 +366,8 @@ bool RpcServer::on_get_wallet_sync_data(const COMMAND_RPC_GET_WALLET_SYNC_DATA::
         req.startTimestamp,
         req.blockCount,
         req.skipCoinbaseTransactions,
-        res.items
+        res.items,
+        res.topBlock
     );
 
     if (!success)

@@ -497,6 +497,12 @@ namespace WalletTypes
         }
     };
 
+    struct TopBlock
+    {
+        Crypto::Hash hash;
+        uint64_t height;
+    };
+
     inline void to_json(nlohmann::json &j, const WalletBlockInfo &w)
     {
         j = {

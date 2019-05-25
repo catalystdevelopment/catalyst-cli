@@ -583,7 +583,8 @@ bool Core::getWalletSyncData(
     const uint64_t startTimestamp,
     const uint64_t blockCount,
     const bool skipCoinbaseTransactions,
-    std::vector<WalletTypes::WalletBlockInfo> &walletBlocks) const
+    std::vector<WalletTypes::WalletBlockInfo> &walletBlocks,
+    std::optional<WalletTypes::TopBlock> &topBlockInfo) const
 {
     throwIfNotInitialized();
 

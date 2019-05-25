@@ -835,11 +835,20 @@ struct COMMAND_RPC_GET_WALLET_SYNC_DATA {
     {
         std::string status;
         std::vector<WalletTypes::WalletBlockInfo> items;
+        bool synced;
+
+        /* If synced, these are present */
+        std::optional<WalletTypes::TopBlock> topBlock;
 
         void serialize(ISerializer &s)
         {
             KV_MEMBER(status)
             KV_MEMBER(items);
+
+            if (topBlock)
+            {
+                KV_MEMBER(*topBlock);
+            }
         }
     };
 };
