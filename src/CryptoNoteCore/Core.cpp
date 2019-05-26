@@ -672,7 +672,7 @@ bool Core::getWalletSyncData(
 
         if (skipCoinbaseTransactions)
         {
-            //rawBlocks = mainChain->getNonEmptyBlocks(actualBlockCount);
+            rawBlocks = mainChain->getNonEmptyBlocks(startIndex, actualBlockCount);
         }
         else
         {
@@ -687,8 +687,10 @@ bool Core::getWalletSyncData(
 
             WalletTypes::WalletBlockInfo walletBlock;
 
-            walletBlock.blockHeight = startIndex++;
-            walletBlock.blockHash = CachedBlock(block).getBlockHash();
+            CachedBlock cachedBlock(block);
+
+            walletBlock.blockHeight = cachedBlock.getBlockIndex();
+            walletBlock.blockHash = cachedBlock.getBlockHash();
             walletBlock.blockTimestamp = block.timestamp;
 
             if (!skipCoinbaseTransactions)

@@ -595,6 +595,43 @@ size_t BlockchainCache::getTransactionCount() const {
   return count;
 }
 
+std::vector<RawBlock> BlockchainCache::getNonEmptyBlocks(
+    const uint64_t startHeight,
+    const size_t blockCount) const
+{
+    std::vector<RawBlock> blocks;
+
+    if (startHeight < startIndex)
+    {
+        blocks = parent->getNonEmptyBlocks(startHeight, blockCount);
+
+        if (blocks.size() == blockCount)
+        {
+            return blocks;
+        }
+    }
+
+    uint64_t storageBlockCount = storage->getBlockCount();
+
+    uint64_t i = 0;
+
+    while (blocks.size() < blockCount && i < storageBlockCount)
+    {
+        auto block = storage->getBlockByIndex(i);
+
+        if (block.transactions.empty())
+        {
+            continue;
+        }
+
+        blocks.push_back(block);
+
+        i++;
+    }
+
+    return blocks;
+}
+
 std::vector<RawBlock> BlockchainCache::getBlocksByHeight(
     const uint64_t startHeight, uint64_t endHeight) const
 {
