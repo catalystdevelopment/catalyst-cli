@@ -23,10 +23,17 @@ void SynchronizationStatus::storeBlockHash(
 {
     m_lastKnownBlockHeight = height;
 
+    /* Already added this hash */
+    if (!m_lastKnownBlockHashes.empty() && m_lastKnownBlockHashes.back() == hash)
+    {
+        return;
+    }
+
     /* If we're at a checkpoint height, add the hash to the infrequent
        checkpoints (at the beginning of the queue) */
-    if (height % Constants::BLOCK_HASH_CHECKPOINTS_INTERVAL == 0)
+    if (m_lastSavedCheckpointAt + Constants::BLOCK_HASH_CHECKPOINTS_INTERVAL < height)
     {
+        m_lastSavedCheckpointAt = height;
         m_blockHashCheckpoints.push_front(hash);
     }
 

@@ -503,6 +503,20 @@ namespace WalletTypes
         uint64_t height;
     };
 
+    inline void to_json(nlohmann::json &j, const TopBlock &t)
+    {
+        j = {
+            {"hash", t.hash},
+            {"height", t.height}
+        };
+    }
+
+    inline void from_json(const nlohmann::json &j, TopBlock &t)
+    {
+        t.hash = j.at("hash").get<Crypto::Hash>();
+        t.height = j.at("height").get<uint64_t>();
+    }
+
     inline void to_json(nlohmann::json &j, const WalletBlockInfo &w)
     {
         j = {

@@ -106,8 +106,8 @@ void serialize(WalletTypes::KeyOutput &keyOutput, ISerializer &s)
 
 void serialize(WalletTypes::TopBlock &topBlock, ISerializer &s)
 {
-    KV_MEMBER(topBlock.hash);
-    KV_MEMBER(topBlock.height);
+    s(topBlock.hash, "hash");
+    s(topBlock.height, "height");
 }
 
 namespace {

@@ -844,10 +844,11 @@ struct COMMAND_RPC_GET_WALLET_SYNC_DATA {
         {
             KV_MEMBER(status)
             KV_MEMBER(items);
+            KV_MEMBER(synced);
 
             if (topBlock)
             {
-                KV_MEMBER(*topBlock);
+                s(*topBlock, "topBlock");
             }
         }
     };

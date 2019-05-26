@@ -8,6 +8,7 @@
 
 #include <Common/StringTools.h>
 
+#include <config/Config.h>
 #include <config/WalletConfig.h>
 
 #include <crypto/crypto.h>
@@ -184,7 +185,7 @@ void WalletSynchronizer::mainLoop()
                 lastCheckedLockedTransactions = now;
             }
 
-            std::this_thread::sleep_for(std::chrono::seconds(5));
+            Utilities::sleepUnlessStopping(std::chrono::seconds(5), m_shouldStop);
         }
     }
 }
@@ -311,7 +312,7 @@ std::vector<std::tuple<Crypto::PublicKey, WalletTypes::TransactionInput>> Wallet
 {
     std::vector<std::tuple<Crypto::PublicKey, WalletTypes::TransactionInput>> inputs;
 
-    if (WalletConfig::processCoinbaseTransactions && block.coinbaseTransaction)
+    if (!Config::config.wallet.skipCoinbaseTransactions && block.coinbaseTransaction)
     {
         const auto newInputs = processTransactionOutputs(
             *(block.coinbaseTransaction), block.blockHeight
@@ -426,7 +427,7 @@ BlockScanTmpInfo WalletSynchronizer::processBlockTransactions(
 {
     BlockScanTmpInfo txData;
 
-    if (WalletConfig::processCoinbaseTransactions)
+    if (!Config::config.wallet.skipCoinbaseTransactions)
     {
         const auto tx = processCoinbaseTransaction(block, inputs);
 

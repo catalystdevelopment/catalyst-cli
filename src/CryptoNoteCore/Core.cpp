@@ -617,6 +617,7 @@ bool Core::getWalletSyncData(
            synced. */
         if (startTimestamp != 0 && !success)
         {
+            topBlockInfo = WalletTypes::TopBlock({ currentHash, currentIndex });
             return true;
         }
 
@@ -665,6 +666,7 @@ bool Core::getWalletSyncData(
            current block. */
         if (currentIndex < startIndex)
         {
+            topBlockInfo = WalletTypes::TopBlock({ currentHash, currentIndex });
             return true;
         }
 
@@ -712,8 +714,7 @@ bool Core::getWalletSyncData(
 
         if (walletBlocks.empty())
         {
-            topBlockInfo->height = currentIndex;
-            topBlockInfo->hash = currentHash;
+            topBlockInfo = WalletTypes::TopBlock({ currentHash, currentIndex });
         }
 
         return true;

@@ -73,10 +73,6 @@ namespace WalletConfig
     const uint64_t mixinZeroDisabledHeight
         = CryptoNote::parameters::MIXIN_LIMITS_V2_HEIGHT;
 
-    /* Should we process coinbase transactions? We can skip them to speed up
-       syncing, as most people don't have solo mined transactions */
-    const bool processCoinbaseTransactions = true;
-
     /**
      * Max size of a post body response - 10MB
      * Will decrease the amount of blocks requested from the daemon if this

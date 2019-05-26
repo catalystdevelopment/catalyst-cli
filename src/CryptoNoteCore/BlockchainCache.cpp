@@ -619,7 +619,7 @@ std::vector<RawBlock> BlockchainCache::getNonEmptyBlocks(
     {
         auto block = storage->getBlockByIndex(i);
 
-        i++
+        i++;
 
         if (block.transactions.empty())
         {

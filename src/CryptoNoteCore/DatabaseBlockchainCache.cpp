@@ -1650,39 +1650,35 @@ std::vector<RawBlock> DatabaseBlockchainCache::getNonEmptyBlocks(
 {
     std::vector<RawBlock> orderedBlocks;
 
-    /* Lets try taking the amount we need *2, to try and balance not needing
-       multiple DB requests to get the amount we need of non empty blocks, with
-       not taking too many */
-    const uint64_t endHeight = startHeight + (blockCount * 2);
-
     const uint32_t storageBlockCount = getBlockCount();
-
-    auto blockBatch = BlockchainReadBatch().requestRawBlocks(startHeight, endHeight);
-
-    auto rawBlocks = readDatabase(blockBatch).getRawBlocks();
 
     uint64_t height = startHeight;
 
-    while (orderedBlocks.size() < blockCount && orderedBlocks.size() < rawBlocks.size())
+    while (orderedBlocks.size() < blockCount && height < storageBlockCount)
     {
-        const auto block = rawBlocks.at(height);
-        
-        height++;
+        uint64_t startHeight = height;
 
-        if (block.transactions.empty())
+        /* Lets try taking the amount we need *2, to try and balance not needing
+           multiple DB requests to get the amount we need of non empty blocks, with
+           not taking too many */
+        uint64_t endHeight = startHeight + (blockCount * 2);
+
+        auto blockBatch = BlockchainReadBatch().requestRawBlocks(startHeight, endHeight);
+        const auto rawBlocks = readDatabase(blockBatch).getRawBlocks();
+
+        while (orderedBlocks.size() < blockCount && height < startHeight + rawBlocks.size())
         {
-            continue;
+            const auto block = rawBlocks.at(height);
+            
+            height++;
+
+            if (block.transactions.empty())
+            {
+                continue;
+            }
+
+            orderedBlocks.push_back(block);
         }
-
-        orderedBlocks.push_back(block);
-    }
-
-    /* Not got as many blocks as we wanted. Go for another batch. */
-    if (orderedBlocks.size() < blockCount && height <= storageBlockCount)
-    {
-        const auto moreBlocks = getNonEmptyBlocks(height, blockCount - orderedBlocks.size());
-
-        std::copy(moreBlocks.begin(), moreBlocks.end(), std::back_inserter(orderedBlocks));
     }
 
     return orderedBlocks;

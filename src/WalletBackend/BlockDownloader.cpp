@@ -11,8 +11,11 @@
 #include <Logger/Logger.h>
 
 #include <Utilities/FormatTools.h>
+#include <Utilities/Utilities.h>
 
 #include <WalletBackend/Constants.h>
+
+#include <config/Config.h>
 
 /* Constructor */
 BlockDownloader::BlockDownloader(
@@ -111,8 +114,11 @@ void BlockDownloader::downloader()
 
         while (shouldFetchMoreBlocks() && !m_shouldStop)
         {
-            if (!downloadBlocks())
+            const bool blocksDownloaded = downloadBlocks();
+
+            if (!blocksDownloaded)
             {
+                Utilities::sleepUnlessStopping(std::chrono::seconds(5), m_shouldStop);
                 break;
             }
         }
@@ -249,7 +255,7 @@ bool BlockDownloader::downloadBlocks()
         std::stringstream stream;
 
         stream << "First checkpoint: " << blockCheckpoints.front()
-                  << "\nLast checkpoint: " << blockCheckpoints.back();
+               << "\nLast checkpoint: " << blockCheckpoints.back();
 
         Logger::logger.log(
             stream.str(),
@@ -258,14 +264,24 @@ bool BlockDownloader::downloadBlocks()
         );
     }
 
-    const auto [success, blocks] = m_daemon->getWalletSyncData(
-        blockCheckpoints, m_startHeight, m_startTimestamp
+    const auto [success, blocks, topBlock] = m_daemon->getWalletSyncData(
+        blockCheckpoints,
+        m_startHeight,
+        m_startTimestamp,
+        Config::config.wallet.skipCoinbaseTransactions
     );
 
+    /* Synced, store the top block so sync status displayes correctly if
+       we are not scanning coinbase tx only blocks */
+    if (success && blocks.empty() && topBlock)
+    {
+        m_synchronizationStatus.storeBlockHash(topBlock->hash, topBlock->height);
+        return false;
+    }
     /* If we get no blocks, we are fully synced.
        (Or timed out/failed to get blocks)
        Sleep a bit so we don't spam the daemon. */
-    if (!success || blocks.empty())
+    else if (!success || blocks.empty())
     {
         /* We may have also failed because we requested
            more data than could be returned in a reasonable
@@ -293,39 +309,6 @@ bool BlockDownloader::downloadBlocks()
         m_startHeight = blocks.front().blockHeight;
 
         m_subWallets->convertSyncTimestampToHeight(m_startTimestamp, m_startHeight);
-    }
-
-    /* If checkpoints are empty, this is the first sync request. */
-    if (blockCheckpoints.empty())
-    {
-        /* Only check if a timestamp isn't given */
-        if (m_startTimestamp == 0)
-        {
-            /* Loop through the blocks we got back and make sure that
-               we were given data for the start block we were looking for */
-            const auto it = std::find_if(blocks.begin(), blocks.end(), [this](const auto &block) {
-                return block.blockHeight == m_startHeight;
-            });
-
-            /* If we weren't given a block with the startHeight we were
-               looking for then we don't need to store this data */
-            if (it == blocks.end())
-            {
-                std::stringstream stream;
-
-                stream << "Received unexpected block height from daemon. "
-                       << "Expected " << m_startHeight << ", but did not "
-                       << "receive that block. Not storing any blocks.";
-
-                Logger::logger.log(
-                    stream.str(),
-                    Logger::WARNING,
-                    {Logger::SYNC, Logger::DAEMON}
-                );
-
-                return false;
-            }
-        }
     }
 
     std::stringstream stream;
