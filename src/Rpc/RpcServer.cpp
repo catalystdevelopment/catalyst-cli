@@ -370,14 +370,13 @@ bool RpcServer::on_get_wallet_sync_data(const COMMAND_RPC_GET_WALLET_SYNC_DATA::
         res.topBlock
     );
 
-    res.synced = res.items.empty();
-
     if (!success)
     {
         res.status = "Failed to perform query";
         return false;
     }
 
+    res.synced = res.items.empty();
     res.status = CORE_RPC_STATUS_OK;
 
     return true;
