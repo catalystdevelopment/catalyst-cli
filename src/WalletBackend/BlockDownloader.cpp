@@ -69,6 +69,7 @@ BlockDownloader::~BlockDownloader()
 void BlockDownloader::start()
 {
     m_shouldStop = false;
+    m_storedBlocks.start();
     m_downloadThread = std::thread(&BlockDownloader::downloader, this);
 }
 
@@ -77,6 +78,7 @@ void BlockDownloader::stop()
     m_shouldStop = true;
     m_consumedData = true;
     m_shouldTryFetch.notify_one();
+    m_storedBlocks.stop();
 
     if (m_downloadThread.joinable())
     {

@@ -611,13 +611,15 @@ std::vector<RawBlock> BlockchainCache::getNonEmptyBlocks(
         }
     }
 
+    uint64_t startOffset = std::max(startHeight, static_cast<uint64_t>(startIndex));
+
     uint64_t storageBlockCount = storage->getBlockCount();
 
-    uint64_t i = 0;
+    uint64_t i = startOffset;
 
-    while (blocks.size() < blockCount && i < storageBlockCount)
+    while (blocks.size() < blockCount && i < startIndex + storageBlockCount)
     {
-        auto block = storage->getBlockByIndex(i);
+        auto block = storage->getBlockByIndex(i - startIndex);
 
         i++;
 
