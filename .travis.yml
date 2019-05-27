@@ -98,10 +98,6 @@ install:
 - if [[ "${LABEL:0:3}" == "osx" ]]; then travis_retry brew install ccache ; fi
 - if [[ "${LABEL:0:3}" == "osx" ]]; then export PATH="/usr/local/opt/ccache/libexec:$PATH" ; fi
 
-# Install the correct gcc version
-- if [[ "$LABEL" == "osx-g++-8" ]]; then travis_retry brew install gcc@8 ; fi
-- if [[ "$LABEL" == "osx-g++-7" ]]; then travis_retry brew install gcc@7 ; fi
-
 script:
 - eval $MATRIX_EVAL
 # If we're cross compiling aarch64, make sure our build enivornment is setup
