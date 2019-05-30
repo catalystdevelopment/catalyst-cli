@@ -24,7 +24,7 @@
 #include <zedwallet++/PasswordContainer.h>
 #include <zedwallet++/Utilities.h>
 
-std::shared_ptr<WalletBackend> importViewWallet(const Config &config)
+std::shared_ptr<WalletBackend> importViewWallet(const ZedConfig &config)
 {
     std::cout << WarningMsg("View wallets are only for viewing incoming ")
               << WarningMsg("transactions, and cannot make transfers.")
@@ -101,7 +101,7 @@ std::shared_ptr<WalletBackend> importViewWallet(const Config &config)
     return walletBackend;
 }
 
-std::shared_ptr<WalletBackend> importWalletFromKeys(const Config &config)
+std::shared_ptr<WalletBackend> importWalletFromKeys(const ZedConfig &config)
 {
     const Crypto::SecretKey privateSpendKey
         = getPrivateKey("Enter your private spend key: ");
@@ -141,7 +141,7 @@ std::shared_ptr<WalletBackend> importWalletFromKeys(const Config &config)
     return walletBackend;
 }
 
-std::shared_ptr<WalletBackend> importWalletFromSeed(const Config &config)
+std::shared_ptr<WalletBackend> importWalletFromSeed(const ZedConfig &config)
 {
     std::string mnemonicSeed;
 
@@ -198,7 +198,7 @@ std::shared_ptr<WalletBackend> importWalletFromSeed(const Config &config)
     return walletBackend;
 }
 
-std::shared_ptr<WalletBackend> createWallet(const Config &config)
+std::shared_ptr<WalletBackend> createWallet(const ZedConfig &config)
 {
     const std::string walletFileName = getNewWalletFileName();
 
@@ -232,7 +232,7 @@ std::shared_ptr<WalletBackend> createWallet(const Config &config)
     return walletBackend;
 }
 
-std::shared_ptr<WalletBackend> openWallet(const Config &config)
+std::shared_ptr<WalletBackend> openWallet(const ZedConfig &config)
 {
     const std::string walletFileName = getExistingWalletFileName(config);
 
@@ -347,7 +347,7 @@ Crypto::SecretKey getPrivateKey(const std::string outputMsg)
     }
 }
 
-std::string getExistingWalletFileName(const Config &config)
+std::string getExistingWalletFileName(const ZedConfig &config)
 {
     bool initial = true;
 
