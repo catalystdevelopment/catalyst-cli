@@ -6,46 +6,63 @@
 //
 // Please see the included LICENSE file for more information.
 
-#include "WalletGreen.h"
+///////////////////////////////
+#include <Wallet/WalletGreen.h>
+///////////////////////////////
 
 #include <algorithm>
-#include <ctime>
+
 #include <cassert>
+
+#include <Common/CryptoNoteTools.h>
+#include <Common/ScopeExit.h>
+#include <Common/ShuffleGenerator.h>
+#include <Common/StdInputStream.h>
+#include <Common/StdOutputStream.h>
+#include <Common/StreamTools.h>
+#include <Common/StringOutputStream.h>
+#include <Common/StringTools.h>
+
+#include <crypto/crypto.h>
+#include <crypto/random.h>
+
+#include <CryptoNoteCore/Account.h>
+#include <CryptoNoteCore/Currency.h>
+#include <CryptoNoteCore/CryptoNoteBasicImpl.h>
+#include <CryptoNoteCore/CryptoNoteFormatUtils.h>
+#include <CryptoNoteCore/TransactionApi.h>
+
+#include <ctime>
+
 #include <fstream>
+
+#include "ITransaction.h"
+
 #include <numeric>
+
 #include <random>
+
+#include <Serialization/CryptoNoteSerialization.h>
+
 #include <set>
-#include <tuple>
-#include <utility>
 
 #include <System/EventLock.h>
 #include <System/RemoteContext.h>
 
-#include "ITransaction.h"
+#include <Transfers/TransfersContainer.h>
 
-#include "Common/ScopeExit.h"
-#include "Common/ShuffleGenerator.h"
-#include "Common/StdInputStream.h"
-#include "Common/StdOutputStream.h"
-#include "Common/StreamTools.h"
-#include "Common/StringOutputStream.h"
-#include "Common/StringTools.h"
-#include "CryptoNoteCore/Account.h"
-#include "CryptoNoteCore/Currency.h"
-#include "CryptoNoteCore/CryptoNoteBasicImpl.h"
-#include "CryptoNoteCore/CryptoNoteFormatUtils.h"
-#include "Serialization/CryptoNoteSerialization.h"
-#include "Common/CryptoNoteTools.h"
-#include "CryptoNoteCore/TransactionApi.h"
-#include "crypto/crypto.h"
-#include <crypto/random.h>
-#include "Transfers/TransfersContainer.h"
-#include "WalletSerializationV2.h"
-#include "WalletErrors.h"
-#include "WalletUtils.h"
+#include <tuple>
+
+#include <utility>
 
 #include <Utilities/Addresses.h>
 #include <Utilities/Utilities.h>
+
+#include <Wallet/WalletSerializationV2.h>
+#include <Wallet/WalletErrors.h>
+#include <Wallet/WalletUtils.h>
+
+#include <WalletBackend/Constants.h>
 
 using namespace Common;
 using namespace Crypto;
@@ -3674,6 +3691,46 @@ size_t WalletGreen::getMaxTxSize()
 
     return std::min(x, y) - CryptoNote::parameters
                                       ::CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE;
+}
+
+void WalletGreen::upgradeWalletFormat() const
+{
+    rapidjson::StringBuffer sb;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(sb);
+
+    writer.StartObject();
+
+    /* File format */
+    writer.Key("walletFileFormatVersion");
+    writer.Uint(Constants::WALLET_FILE_FORMAT_VERSION);
+
+    /* Subwallets */
+    writer.Key("subWallets");
+    writer.StartObject();
+
+    writer.Key("transactionSynchronizerStatus");
+    writer.StartObject();
+    writer.EndObject();
+
+    /* Timestamp to start syncing from */
+    writer.Key("startTimestamp");
+    writer.Uint64(0);
+
+    writer.Key("startHeight");
+    writer.Uint64(0);
+
+    writer.EndObject();
+
+    /* Sync status */
+    writer.Key("walletSynchronizer");
+    writer.StartObject();
+    writer.EndObject();
+    
+    writer.EndObject();
+
+    std::string json = sb.GetString();
+
+    std::cout << json << std::endl;
 }
 
 } //namespace CryptoNote
