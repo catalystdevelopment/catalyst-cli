@@ -3693,39 +3693,96 @@ size_t WalletGreen::getMaxTxSize()
                                       ::CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE;
 }
 
+uint64_t WalletGreen::getMinTimestamp() const
+{
+    uint64_t minTimestamp = std::numeric_limits<uint64_t>::max();
+
+    if (m_containerStorage.size() == 0)
+    {
+        return 0;
+    }
+
+    for (const auto subWallet : m_containerStorage)
+    {
+        Crypto::PublicKey ignore1;
+        Crypto::SecretKey ignore2;
+
+        uint64_t creationTimestamp = 0;
+
+        decryptKeyPair(subWallet, ignore1, ignore2, creationTimestamp);
+
+        if (creationTimestamp < minTimestamp)
+        {
+            minTimestamp = creationTimestamp;
+        }
+    }
+
+    return minTimestamp;
+}
+
 void WalletGreen::upgradeWalletFormat() const
 {
     rapidjson::StringBuffer sb;
     rapidjson::Writer<rapidjson::StringBuffer> writer(sb);
 
     writer.StartObject();
+    {
+        /* File format */
+        writer.Key("walletFileFormatVersion");
+        writer.Uint(Constants::WALLET_FILE_FORMAT_VERSION);
 
-    /* File format */
-    writer.Key("walletFileFormatVersion");
-    writer.Uint(Constants::WALLET_FILE_FORMAT_VERSION);
+        /* Subwallets */
+        writer.Key("subWallets");
+        writer.StartObject();
+        {
+        }
+        writer.EndObject();
 
-    /* Subwallets */
-    writer.Key("subWallets");
-    writer.StartObject();
+        /* Sync status */
+        writer.Key("walletSynchronizer");
+        writer.StartObject();
+        {
+            /* Sync history */
+            writer.Key("transactionSynchronizerStatus");
+            writer.StartObject();
+            {
+                writer.Key("blockHashCheckpoints");
+                writer.StartArray();
+                {
+                }
+                writer.EndArray();
 
-    writer.Key("transactionSynchronizerStatus");
-    writer.StartObject();
-    writer.EndObject();
+                writer.Key("lastKnownBlockHashes");
+                writer.StartArray();
+                {
+                    for (const auto hash : m_blockchainSynchronizer.getLastKnownBlockHashes())
+                    {
+                        hash.toJSON(writer);
+                    }
+                }
+                writer.EndArray();
 
-    /* Timestamp to start syncing from */
-    writer.Key("startTimestamp");
-    writer.Uint64(0);
+                writer.Key("lastKnownBlockHeight");
+                writer.Uint64(0);
+            }
+            writer.EndObject();
 
-    writer.Key("startHeight");
-    writer.Uint64(0);
+            /* Timestamp to start syncing from */
+            writer.Key("startTimestamp");
+            writer.Uint64(getMinTimestamp());
 
-    writer.EndObject();
+            /* Height to start syncing from - We convert a scan height to a scan
+               timestamp on init with WalletGreen, so this will always be 0 */
+            writer.Key("startHeight");
+            writer.Uint64(0);
 
-    /* Sync status */
-    writer.Key("walletSynchronizer");
-    writer.StartObject();
-    writer.EndObject();
-    
+            /* The private view key */
+            writer.Key("privateViewKey");
+            m_viewSecretKey.toJSON(writer);
+
+        }
+        writer.EndObject();
+    }
     writer.EndObject();
 
     std::string json = sb.GetString();
