@@ -3735,6 +3735,48 @@ void WalletGreen::upgradeWalletFormat() const
         writer.Key("subWallets");
         writer.StartObject();
         {
+            /* The public spend keys of all the subwallets */
+            writer.Key("publicSpendKeys");
+            writer.StartArray();
+            {
+            }
+            writer.EndArray();
+
+            /* Each subwallet */
+            writer.Key("subWallet");
+            writer.StartArray();
+            {
+            }
+            writer.EndArray();
+
+            /* Transactions in a block */
+            writer.Key("transactions");
+            writer.StartArray();
+            {
+            }
+            writer.EndArray();
+
+            /* Outgoing transactions not in a block yet */
+            writer.Key("lockedTransactions");
+            writer.StartArray();
+            {
+            }
+            writer.EndArray();
+
+            /* The shared private view key */
+            writer.Key("privateViewKey");
+            m_viewSecretKey.toJSON(writer);
+
+            /* Whether this is a view only wallet */
+            writer.Key("isViewWallet");
+            writer.Bool(getTrackingMode() == WalletTrackingMode::TRACKING);
+
+            /* Private keys of each transaction. Not stored in walletgreen. */
+            writer.Key("txPrivateKeys");
+            writer.StartArray();
+            {
+            }
+            writer.EndArray();
         }
         writer.EndObject();
 
@@ -3746,12 +3788,14 @@ void WalletGreen::upgradeWalletFormat() const
             writer.Key("transactionSynchronizerStatus");
             writer.StartObject();
             {
+                /* Lets not bother with this - it's all handed by lastKnownBlockHashes */
                 writer.Key("blockHashCheckpoints");
                 writer.StartArray();
                 {
                 }
                 writer.EndArray();
 
+                /* Hashes for sync history */
                 writer.Key("lastKnownBlockHashes");
                 writer.StartArray();
                 {
@@ -3762,6 +3806,8 @@ void WalletGreen::upgradeWalletFormat() const
                 }
                 writer.EndArray();
 
+                /* We could get the height of the largest hash above... but it
+                   doesn't really matter */
                 writer.Key("lastKnownBlockHeight");
                 writer.Uint64(0);
             }
