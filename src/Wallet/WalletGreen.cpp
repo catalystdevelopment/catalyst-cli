@@ -3720,6 +3720,25 @@ uint64_t WalletGreen::getMinTimestamp() const
     return minTimestamp;
 }
 
+std::vector<Crypto::PublicKey> WalletGreen::getPublicSpendKeys() const
+{
+    std::vector<Crypto::PublicKey> result;
+
+    for (const auto subWallet : m_containerStorage)
+    {
+        Crypto::PublicKey publicSpendKey;
+
+        Crypto::SecretKey ignore1;
+        uint64_t ignore2;
+
+        decryptKeyPair(subWallet, publicSpendKey, ignore1, ignore2);
+
+        result.push_back(publicSpendKey);
+    }
+
+    return result;
+}
+
 void WalletGreen::upgradeWalletFormat() const
 {
     rapidjson::StringBuffer sb;
@@ -3739,6 +3758,10 @@ void WalletGreen::upgradeWalletFormat() const
             writer.Key("publicSpendKeys");
             writer.StartArray();
             {
+                for (const auto key : getPublicSpendKeys())
+                {
+                    key.toJSON(writer);
+                }
             }
             writer.EndArray();
 

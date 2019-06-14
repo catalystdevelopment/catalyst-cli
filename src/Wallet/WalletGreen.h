@@ -352,6 +352,7 @@ protected:
   void deleteFromUncommitedTransactions(const std::vector<size_t>& deletedTransactions);
 
   uint64_t getMinTimestamp() const;
+  std::vector<Crypto::PublicKey> getPublicSpendKeys() const;
 
   System::Dispatcher& m_dispatcher;
   const Currency& m_currency;
