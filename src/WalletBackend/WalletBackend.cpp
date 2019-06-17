@@ -517,6 +517,87 @@ std::tuple<Error, std::shared_ptr<WalletBackend>> WalletBackend::openWallet(
     }
 }
 
+Error WalletBackend::saveWalletJSONToDisk(
+    std::string walletJSON,
+    std::string filename,
+    std::string password)
+{
+    /* Add an identifier to the start of the string so we can verify the wallet
+       has been correctly decrypted */
+    std::string identiferAsString(
+        Constants::IS_CORRECT_PASSWORD_IDENTIFIER.begin(),
+        Constants::IS_CORRECT_PASSWORD_IDENTIFIER.end()
+    );
+
+    /* Add magic identifier, and get wallet as a JSON string */
+    std::string walletData = identiferAsString + walletJSON;
+
+    using namespace CryptoPP;
+
+    /* The key we use for AES encryption, generated with PBKDF2 */
+    byte key[16];
+
+    /* The salt we use for both PBKDF2, and AES Encryption */
+    byte salt[16];
+
+    /* Generate 16 random bytes for the salt */
+    Random::randomBytes(16, salt);
+
+    /* Using SHA256 as the algorithm */
+    CryptoPP::PKCS5_PBKDF2_HMAC<CryptoPP::SHA256> pbkdf2;
+
+    /* Generate the AES Key using pbkdf2 */
+    pbkdf2.DeriveKey(
+        key, sizeof(key), 0, (byte *)password.c_str(),
+        password.size(), salt, sizeof(salt), Constants::PBKDF2_ITERATIONS
+    );
+
+    CBC_Mode<AES>::Encryption cbcEncryption;
+
+    /* Initialize our encryptor with the key and salt/iv */
+    cbcEncryption.SetKeyWithIV(key, sizeof(key), salt);
+
+    /* This will store the encrypted data */
+    std::string encryptedData;
+
+    /* Encrypt, and pad */
+    StringSource(walletData, true, new StreamTransformationFilter(
+        cbcEncryption, new StringSink(encryptedData))
+    );
+
+    std::ofstream file(filename, std::ios_base::binary);
+
+    if (!file)
+    {
+        Logger::logger.log(
+            std::string("Wallet filename: ") + filename + " is invalid",
+            Logger::FATAL,
+            {Logger::FILESYSTEM, Logger::SAVE}
+        );
+
+        return INVALID_WALLET_FILENAME;
+    }
+
+    std::string saltString = std::string(salt, salt + sizeof(salt));
+
+    /* Write the isAWalletIdentifier to the file, so when we open it we can
+       verify that it is a wallet file */
+    std::copy(Constants::IS_A_WALLET_IDENTIFIER.begin(),
+              Constants::IS_A_WALLET_IDENTIFIER.end(),
+              std::ostreambuf_iterator<char>(file));
+
+    /* Write the salt to the file, so we can use it to unencrypt the file
+       later. Note that the salt is unencrypted. */
+    std::copy(std::begin(salt), std::end(salt),
+              std::ostreambuf_iterator<char>(file));
+
+    /* Write the encrypted wallet data to the file */
+    std::copy(encryptedData.begin(), encryptedData.end(),
+              std::ostreambuf_iterator<char>(file));
+
+    return SUCCESS;
+}
+
 /////////////////////
 /* CLASS FUNCTIONS */
 /////////////////////
@@ -572,80 +653,7 @@ Error WalletBackend::save() const
    blockchain synchronizer first (Call save()) */
 Error WalletBackend::unsafeSave() const
 {
-    /* Add an identifier to the start of the string so we can verify the wallet
-       has been correctly decrypted */
-    std::string identiferAsString(
-        Constants::IS_CORRECT_PASSWORD_IDENTIFIER.begin(),
-        Constants::IS_CORRECT_PASSWORD_IDENTIFIER.end()
-    );
-
-    /* Add magic identifier, and get wallet as a JSON string */
-    std::string walletData = identiferAsString + this->toJSON();
-
-    using namespace CryptoPP;
-
-    /* The key we use for AES encryption, generated with PBKDF2 */
-    byte key[16];
-
-    /* The salt we use for both PBKDF2, and AES Encryption */
-    byte salt[16];
-
-    /* Generate 16 random bytes for the salt */
-    Random::randomBytes(16, salt);
-
-    /* Using SHA256 as the algorithm */
-    CryptoPP::PKCS5_PBKDF2_HMAC<CryptoPP::SHA256> pbkdf2;
-
-    /* Generate the AES Key using pbkdf2 */
-    pbkdf2.DeriveKey(
-        key, sizeof(key), 0, (byte *)m_password.c_str(),
-        m_password.size(), salt, sizeof(salt), Constants::PBKDF2_ITERATIONS
-    );
-
-    CBC_Mode<AES>::Encryption cbcEncryption;
-
-    /* Initialize our encryptor with the key and salt/iv */
-    cbcEncryption.SetKeyWithIV(key, sizeof(key), salt);
-
-    /* This will store the encrypted data */
-    std::string encryptedData;
-
-    /* Encrypt, and pad */
-    StringSource(walletData, true, new StreamTransformationFilter(
-        cbcEncryption, new StringSink(encryptedData))
-    );
-
-    std::ofstream file(m_filename, std::ios_base::binary);
-
-    if (!file)
-    {
-        Logger::logger.log(
-            std::string("Wallet filename: ") + m_filename + " is invalid",
-            Logger::FATAL,
-            {Logger::FILESYSTEM, Logger::SAVE}
-        );
-
-        return INVALID_WALLET_FILENAME;
-    }
-
-    std::string saltString = std::string(salt, salt + sizeof(salt));
-
-    /* Write the isAWalletIdentifier to the file, so when we open it we can
-       verify that it is a wallet file */
-    std::copy(Constants::IS_A_WALLET_IDENTIFIER.begin(),
-              Constants::IS_A_WALLET_IDENTIFIER.end(),
-              std::ostreambuf_iterator<char>(file));
-
-    /* Write the salt to the file, so we can use it to unencrypt the file
-       later. Note that the salt is unencrypted. */
-    std::copy(std::begin(salt), std::end(salt),
-              std::ostreambuf_iterator<char>(file));
-
-    /* Write the encrypted wallet data to the file */
-    std::copy(encryptedData.begin(), encryptedData.end(),
-              std::ostreambuf_iterator<char>(file));
-
-    return SUCCESS;
+    return WalletBackend::saveWalletJSONToDisk(toJSON(), m_filename, m_password);
 }
 
 /* Get the balance for one subwallet (error, unlocked, locked) */

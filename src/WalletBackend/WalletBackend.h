@@ -111,6 +111,11 @@ class WalletBackend
             const bool daemonSSL,
             const unsigned int syncThreadCount = std::thread::hardware_concurrency());
 
+        static Error saveWalletJSONToDisk(
+            std::string walletJSON,
+            std::string filename,
+            std::string password);
+
         /////////////////////////////
         /* Public member functions */
         /////////////////////////////

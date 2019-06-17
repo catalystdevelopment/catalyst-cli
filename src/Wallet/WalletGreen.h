@@ -117,6 +117,8 @@ public:
 
   void upgradeWalletFormat() const;
 
+  std::string toNewFormatJSON() const;
+
 protected:
   struct NewAddressData {
     Crypto::PublicKey spendPublicKey;
@@ -351,8 +353,28 @@ protected:
   std::vector<size_t> deleteTransfersForAddress(const std::string& address, std::vector<size_t>& deletedTransactions);
   void deleteFromUncommitedTransactions(const std::vector<size_t>& deletedTransactions);
 
+  /****************************************************************************/
+  /* These set of functions are used to assist in upgrading the wallet format */
+
   uint64_t getMinTimestamp() const;
+
   std::vector<Crypto::PublicKey> getPublicSpendKeys() const;
+
+  std::string getPrimaryAddress() const;
+
+  std::vector<WalletTypes::TransactionInput> getInputs(
+    const WalletRecord subWallet,
+    const bool isViewWallet,
+    const bool unspent) const;
+
+  Crypto::KeyImage getKeyImage(
+        const Crypto::PublicKey transactionPublicKey,
+        const uint64_t outputIndex,
+        const Crypto::PublicKey key,
+        const Crypto::SecretKey privateSpendKey,
+        const Crypto::PublicKey publicSpendKey) const;
+
+  /****************************************************************************/
 
   System::Dispatcher& m_dispatcher;
   const Currency& m_currency;
