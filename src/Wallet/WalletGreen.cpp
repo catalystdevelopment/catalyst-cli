@@ -3812,12 +3812,12 @@ Crypto::KeyImage WalletGreen::getKeyImage(
     return keyImage;
 }
 
-std::vector<WalletTypes::TransactionInput> WalletGreen::getInputs(
+std::vector<std::tuple<WalletTypes::TransactionInput, Crypto::Hash>> WalletGreen::getInputs(
     const WalletRecord subWallet,
     const bool isViewWallet,
     const bool unspent) const
 {
-    std::vector<WalletTypes::TransactionInput> result;
+    std::vector<std::tuple<WalletTypes::TransactionInput, Crypto::Hash>> result;
 
     std::vector<SpentTransactionOutput> inputs;
 
@@ -3857,7 +3857,7 @@ std::vector<WalletTypes::TransactionInput> WalletGreen::getInputs(
         newInput.unlockTime = input.unlockTime;
         newInput.parentTransactionHash = input.transactionHash;
 
-        result.push_back(newInput);
+        result.push_back({newInput, input.spendingTransactionHash});
     }
 
     return result;
@@ -3927,7 +3927,7 @@ std::string WalletGreen::toNewFormatJSON() const
                         writer.Key("unspentInputs");
                         writer.StartArray();
                         {
-                            for (const auto &input : getInputs(subWallet, isViewWallet, true))
+                            for (const auto &[input, spendingTransactionHash] : getInputs(subWallet, isViewWallet, true))
                             {
                                 transfers[input.parentTransactionHash].push_back({input.amount, subWallet.spendPublicKey});
                                 input.toJSON(writer);
@@ -3950,9 +3950,10 @@ std::string WalletGreen::toNewFormatJSON() const
                         writer.Key("spentInputs");
                         writer.StartArray();
                         {
-                            for (const auto &input : getInputs(subWallet, isViewWallet, false))
+                            for (const auto &[input, spendingTransactionHash] : getInputs(subWallet, isViewWallet, false))
                             {
-                                transfers[input.parentTransactionHash].push_back({-input.amount, subWallet.spendPublicKey});
+                                transfers[input.parentTransactionHash].push_back({input.amount, subWallet.spendPublicKey});
+                                transfers[spendingTransactionHash].push_back({-input.amount, subWallet.spendPublicKey});
                                 input.toJSON(writer);
                             }
                         }

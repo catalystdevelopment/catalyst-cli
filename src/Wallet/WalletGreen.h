@@ -362,7 +362,7 @@ protected:
 
   std::string getPrimaryAddress() const;
 
-  std::vector<WalletTypes::TransactionInput> getInputs(
+  std::vector<std::tuple<WalletTypes::TransactionInput, Crypto::Hash>> getInputs(
     const WalletRecord subWallet,
     const bool isViewWallet,
     const bool unspent) const;

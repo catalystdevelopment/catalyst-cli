@@ -164,6 +164,7 @@ public:
   //only type flags are feasible for this function
   virtual std::vector<TransactionOutputInformation> getTransactionInputs(const Crypto::Hash& transactionHash, uint32_t flags) const override;
   virtual void getUnconfirmedTransactions(std::vector<Crypto::Hash>& transactions) const override;
+
   virtual std::vector<SpentTransactionOutput> getUnspentInputs() const override;
   virtual std::vector<SpentTransactionOutput> getSpentInputs() const override;
 
