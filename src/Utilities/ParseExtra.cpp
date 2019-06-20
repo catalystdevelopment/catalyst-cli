@@ -31,6 +31,12 @@ namespace Utilities
 
         for (auto it = extra.begin(); it != extra.end(); it++)
         {
+            /* Nothing else to parse. */
+            if (seenPubKey && seenPaymentID)
+            {
+                break;
+            }
+
             const uint8_t c = *it;
 
             const auto elementsRemaining = std::distance(it, extra.end());
