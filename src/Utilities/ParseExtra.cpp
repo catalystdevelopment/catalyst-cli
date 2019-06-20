@@ -22,17 +22,28 @@ namespace Utilities
         return parsed.transactionPublicKey;
     }
 
+    MergedMiningTag getMergedMiningTagFromExtra(const std::vector<uint8_t> &extra)
+    {
+        const ParsedExtra parsed = parseExtra(extra);
+        return parsed.mergedMiningTag;
+    }
+
     ParsedExtra parseExtra(const std::vector<uint8_t> &extra)
     {
-        ParsedExtra parsed { Constants::NULL_PUBLIC_KEY, std::string() } ;
+        ParsedExtra parsed {
+            Constants::NULL_PUBLIC_KEY,
+            std::string(),
+            { 0, Constants::NULL_HASH }
+        };
 
         bool seenPubKey = false;
         bool seenPaymentID = false;
+        bool seenMergedMiningTag = false;
 
         for (auto it = extra.begin(); it != extra.end(); it++)
         {
             /* Nothing else to parse. */
-            if (seenPubKey && seenPaymentID)
+            if (seenPubKey && seenPaymentID && seenMergedMiningTag)
             {
                 break;
             }
@@ -98,6 +109,36 @@ namespace Utilities
 
                 /* And continue parsing */
                 continue;
+            }
+
+            if (c == Constants::TX_EXTRA_MERGE_MINING_IDENTIFIER 
+                && elementsRemaining > 1
+                && !seenMergedMiningTag)
+            {
+                /* Get the length of the following data (Probably 33 bytes for depth+hash) */
+                const uint8_t dataSize = *(it + 1);
+
+                if (elementsRemaining > dataSize + 1 && dataSize >= 33)
+                {
+                    const uint8_t depth = *(it + 2);
+                    
+                    Crypto::Hash merkleRoot;
+
+                    const auto dataBegin = it + 3;
+
+                    std::copy(dataBegin, dataBegin + 32, std::begin(merkleRoot.data));
+
+                    parsed.mergedMiningTag.depth = depth;
+                    parsed.mergedMiningTag.merkleRoot = merkleRoot;
+
+                    /* Advance past the mm tag */
+                    it += dataSize + 1;
+
+                    seenMergedMiningTag = true;
+
+                    /* Can continue parsing */
+                    continue;
+                }
             }
         }
 
