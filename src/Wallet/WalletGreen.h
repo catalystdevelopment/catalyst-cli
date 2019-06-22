@@ -356,6 +356,8 @@ protected:
   /****************************************************************************/
   /* These set of functions are used to assist in upgrading the wallet format */
 
+  uint64_t getMinTimestamp() const;
+
   std::vector<Crypto::PublicKey> getPublicSpendKeys() const;
 
   std::string getPrimaryAddress() const;

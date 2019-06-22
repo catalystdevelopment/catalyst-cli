@@ -3695,6 +3695,28 @@ size_t WalletGreen::getMaxTxSize()
                                       ::CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE;
 }
 
+uint64_t WalletGreen::getMinTimestamp() const
+{
+    uint64_t minTimestamp = std::numeric_limits<uint64_t>::max();
+
+    if (m_containerStorage.size() == 0)
+    {
+        return 0;
+    }
+
+    auto &walletsIndex = m_walletsContainer.get<RandomAccessIndex>();
+
+    for (const auto subWallet : walletsIndex)
+    {
+        if (static_cast<uint64_t>(subWallet.creationTimestamp) < minTimestamp)
+        {
+            minTimestamp = subWallet.creationTimestamp;
+        }
+    }
+
+    return minTimestamp;
+}
+
 std::vector<Crypto::PublicKey> WalletGreen::getPublicSpendKeys() const
 {
     std::vector<Crypto::PublicKey> result;
@@ -3899,7 +3921,7 @@ std::string WalletGreen::toNewFormatJSON() const
 
                         /* Timestamp to begin syncing at */
                         writer.Key("syncStartTimestamp");
-                        writer.Uint64(0);
+                        writer.Uint64(subWallet.creationTimestamp);
 
                         /* Inputs that have been received and not spent */
                         writer.Key("unspentInputs");
@@ -4046,8 +4068,10 @@ std::string WalletGreen::toNewFormatJSON() const
 
             /* Timestamp to start syncing from */
             writer.Key("startTimestamp");
-            writer.Uint64(0);
+            writer.Uint64(getMinTimestamp());
 
+            /* Height to start syncing from - We convert a scan height to a scan
+               timestamp on init with WalletGreen, so this will always be 0 */
             writer.Key("startHeight");
             writer.Uint64(0);
 
