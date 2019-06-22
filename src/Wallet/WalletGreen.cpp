@@ -4066,8 +4066,17 @@ std::string WalletGreen::toNewFormatJSON() const
 void WalletGreen::upgradeWalletFormat() const
 {
     const std::string json = toNewFormatJSON();
-    WalletBackend::saveWalletJSONToDisk(json, "new-" + m_containerStorage.getPath(), m_password);
-    std::cout << json << std::endl;
+
+    Error error = WalletBackend::saveWalletJSONToDisk(json, "new-" + m_containerStorage.getPath(), m_password);
+
+    if (error)
+    {
+        std::cout << "Failed to upgrade wallet format: " << error.toString() << std::endl;
+    }
+    else
+    {
+        std::cout << "Upgraded wallet saved to new-" << m_containerStorage.getPath() << std::endl;
+    }
 }
 
 } //namespace CryptoNote

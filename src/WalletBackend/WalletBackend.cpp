@@ -11,6 +11,8 @@
 
 #include <config/CryptoNoteConfig.h>
 
+#include <CryptoNoteCore/Currency.h>
+
 #include <crypto/crypto.h>
 #include <crypto/random.h>
 
@@ -32,8 +34,11 @@
 #include "JsonHelper.h"
 
 #include <Logger/Logger.h>
+#include <Logging/LoggerManager.h>
 
 #include <Mnemonics/Mnemonics.h>
+
+#include <NodeRpcProxy/NodeRpcProxy.h>
 
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
@@ -377,6 +382,55 @@ std::tuple<Error, std::shared_ptr<WalletBackend>> WalletBackend::createWallet(
     return {error, wallet};
 }
 
+bool WalletBackend::tryUpgradeWalletFormat(
+    const std::string filename,
+    const std::string password,
+    const std::string daemonHost,
+    const uint16_t daemonPort)
+{
+    try
+    {
+        const auto logManager = std::make_shared<Logging::LoggerManager>();
+
+        /* Currency contains our coin parameters, such as decimal places, supply */
+        const CryptoNote::Currency currency 
+            = CryptoNote::CurrencyBuilder(logManager).currency();
+
+        System::Dispatcher localDispatcher;
+        System::Dispatcher *dispatcher = &localDispatcher;
+
+        /* Our connection to turtlecoind */
+        std::unique_ptr<CryptoNote::INode> node(
+            new CryptoNote::NodeRpcProxy(daemonHost, daemonPort, 10, logManager)
+        );
+
+        CryptoNote::WalletGreen wallet(*dispatcher, currency, *node, logManager);
+
+        wallet.load(filename, password);
+
+        /* Cool, it worked. Upgrade to the new format. */
+        const std::string json = wallet.toNewFormatJSON();
+
+        /* Save old wallet to backup file */
+        wallet.exportWallet("old-version-backup-" + filename);
+
+        /* Save to disk with the new format. */
+        Error error = saveWalletJSONToDisk(json, filename, password);
+
+        if (error)
+        {
+            return false;
+        }
+
+        return true;
+    }
+    /* Not a WalletGreen format. */
+    catch (const std::system_error &)
+    {
+        return false;
+    }
+}
+
 /* Opens a wallet already on disk with the given filename + password */
 std::tuple<Error, std::shared_ptr<WalletBackend>> WalletBackend::openWallet(
     const std::string filename,
@@ -406,9 +460,23 @@ std::tuple<Error, std::shared_ptr<WalletBackend>> WalletBackend::openWallet(
         NOT_A_WALLET_FILE, NOT_A_WALLET_FILE
     );
 
+    /* Not a WalletBackend wallet */
     if (error)
     {
-        return {error, nullptr};
+        /* See if it's a WalletGreen wallet, and upgrade if it is */
+        const bool isWalletGreenFile = tryUpgradeWalletFormat(
+            filename, password, daemonHost, daemonPort
+        );
+
+        if (isWalletGreenFile)
+        {
+            /* Then try and open again */
+            return openWallet(filename, password, daemonHost, daemonPort, daemonSSL, syncThreadCount);
+        }
+        else
+        {
+            return {error, nullptr};
+        }
     }
 
     using namespace CryptoPP;

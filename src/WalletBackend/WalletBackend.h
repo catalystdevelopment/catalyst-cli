@@ -8,17 +8,17 @@
 
 #include <Errors/Errors.h>
 
+#include <Nigel/Nigel.h>
+
 #include "rapidjson/document.h"
 
 #include <string>
 
+#include <SubWallets/SubWallets.h>
+
 #include <tuple>
 
 #include <vector>
-
-#include <Nigel/Nigel.h>
-
-#include <SubWallets/SubWallets.h>
 
 #include <WalletBackend/WalletSynchronizer.h>
 #include <WalletBackend/WalletSynchronizerRAIIWrapper.h>
@@ -312,6 +312,12 @@ class WalletBackend
         Error unsafeSave() const;
 
         void init();
+
+        static bool tryUpgradeWalletFormat(
+            const std::string filename,
+            const std::string password,
+            const std::string daemonHost,
+            const uint16_t daemonPort);
 
         //////////////////////////////
         /* Private member variables */
