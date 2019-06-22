@@ -131,8 +131,6 @@ public:
 
   virtual uint64_t get_current_blockchain_height() const;
 
-  static std::string getPaymentIDFromExtra(const std::vector<uint8_t> &extra);
-
 private:
   const Currency& currency;
   System::Dispatcher& dispatcher;

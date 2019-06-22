@@ -57,6 +57,7 @@
 #include <utility>
 
 #include <Utilities/Addresses.h>
+#include <Utilities/ParseExtra.h>
 #include <Utilities/Utilities.h>
 
 #include <Wallet/WalletSerializationV2.h>
@@ -3999,7 +4000,7 @@ std::string WalletGreen::toNewFormatJSON() const
                     newTX.fee = tx.fee;
                     newTX.blockHeight = tx.blockHeight;
                     newTX.timestamp = tx.timestamp;
-                    newTX.paymentID = CryptoNote::Core::getPaymentIDFromExtra(Common::asBinaryArray(tx.extra));
+                    newTX.paymentID = Utilities::getPaymentIDFromExtra(Common::asBinaryArray(tx.extra));
                     newTX.unlockTime = tx.unlockTime;
                     newTX.isCoinbaseTransaction = tx.isBase;
 
