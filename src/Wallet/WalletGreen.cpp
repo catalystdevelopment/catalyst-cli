@@ -3921,7 +3921,7 @@ std::string WalletGreen::toNewFormatJSON() const
 
                         /* Timestamp to begin syncing at */
                         writer.Key("syncStartTimestamp");
-                        writer.Uint64(subWallet.creationTimestamp);
+                        writer.Uint64(0);
 
                         /* Inputs that have been received and not spent */
                         writer.Key("unspentInputs");
@@ -3962,7 +3962,7 @@ std::string WalletGreen::toNewFormatJSON() const
                         /* Height to begin syncing at - Always stored as timestamp
                            in WalletGreen so static at 0 */
                         writer.Key("syncStartHeight");
-                        writer.Uint64(0);
+                        writer.Uint64(Utilities::timestampToScanHeight(subWallet.creationTimestamp));
 
                         writer.Key("isPrimaryAddress");
                         writer.Bool(address == primaryAddress);
@@ -4068,12 +4068,10 @@ std::string WalletGreen::toNewFormatJSON() const
 
             /* Timestamp to start syncing from */
             writer.Key("startTimestamp");
-            writer.Uint64(getMinTimestamp());
-
-            /* Height to start syncing from - We convert a scan height to a scan
-               timestamp on init with WalletGreen, so this will always be 0 */
-            writer.Key("startHeight");
             writer.Uint64(0);
+
+            writer.Key("startHeight");
+            writer.Uint64(Utilities::timestampToScanHeight(getMinTimestamp()));
 
             /* The private view key */
             writer.Key("privateViewKey");
@@ -4095,7 +4093,7 @@ void WalletGreen::upgradeWalletFormat() const
 
     if (error)
     {
-        std::cout << "Failed to upgrade wallet format: " << error.toString() << std::endl;
+        std::cout << "Failed to upgrade wallet format: " << error << std::endl;
     }
     else
     {
