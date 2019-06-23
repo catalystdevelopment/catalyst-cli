@@ -3818,6 +3818,8 @@ std::vector<std::tuple<WalletTypes::TransactionInput, Crypto::Hash>> WalletGreen
     const bool isViewWallet,
     const bool unspent) const
 {
+    const uint64_t height = getBlockCount();
+
     std::vector<std::tuple<WalletTypes::TransactionInput, Crypto::Hash>> result;
 
     std::vector<SpentTransactionOutput> inputs;
@@ -3835,9 +3837,15 @@ std::vector<std::tuple<WalletTypes::TransactionInput, Crypto::Hash>> WalletGreen
     {
         const auto tx = getTransaction(input.transactionHash);
 
+        /* Input is spent and is old enough to not need storing */
+        const bool oldSpentInput = !unspent &&
+                                   tx.transaction.blockHeight + Constants::PRUNE_SPENT_INPUTS_INTERVAL < height;
+
         WalletTypes::TransactionInput newInput;
         
-        if (!isViewWallet)
+        /* Don't generate key image for inputs that will be discarded by
+           WalletBackend */
+        if (!isViewWallet && !oldSpentInput)
         {
             newInput.keyImage = getKeyImage(
                 input.transactionPublicKey,
