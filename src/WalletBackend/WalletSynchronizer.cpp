@@ -335,11 +335,13 @@ void WalletSynchronizer::completeBlockProcessing(
     const WalletTypes::WalletBlockInfo &block,
     const std::vector<std::tuple<Crypto::PublicKey, WalletTypes::TransactionInput>> &ourInputs)
 {
+    const uint64_t walletHeight = m_blockDownloader.getHeight();
+
     /* Chain forked, invalidate previous transactions */
-    if (m_blockDownloader.getHeight() >= block.blockHeight && block.blockHeight != 0)
+    if (walletHeight >= block.blockHeight && block.blockHeight != 0)
     {
         Logger::logger.log(
-            "Blockchain forked, resolving...",
+            "Blockchain forked, resolving... (Old height: " + std::to_string(walletHeight) + ", new height: " + std::to_string(block.blockHeight) + ")",
             Logger::INFO,
             {Logger::SYNC}
         );
