@@ -67,6 +67,8 @@
 #include <WalletBackend/Constants.h>
 #include <WalletBackend/WalletBackend.h>
 
+#undef ERROR
+
 using namespace Common;
 using namespace Crypto;
 using namespace CryptoNote;
