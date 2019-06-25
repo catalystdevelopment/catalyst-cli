@@ -159,13 +159,6 @@ void PaymentGateService::runWalletService(const CryptoNote::Currency& currency, 
     return;
   }
 
-    /* Upgrade to wallet api format and exit */
-    if (config.serviceConfig.upgradeWalletFormat)
-    {
-        service->upgradeWalletFormat();
-        return;
-    }
-
     if (config.serviceConfig.printAddresses)
     {
         // print addresses and exit

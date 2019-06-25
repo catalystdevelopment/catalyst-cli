@@ -115,8 +115,6 @@ public:
   virtual bool isFusionTransaction(size_t transactionId) const override;
   virtual IFusionManager::EstimateResult estimate(uint64_t threshold, const std::vector<std::string>& sourceAddresses = {}) const override;
 
-  void upgradeWalletFormat() const;
-
   std::string toNewFormatJSON() const;
 
 protected:

@@ -50,7 +50,6 @@ public:
 
   void init();
   void saveWallet();
-  void upgradeWalletFormat() const;
 
   std::error_code saveWalletNoThrow();
   std::error_code exportWallet(const std::string& fileName);

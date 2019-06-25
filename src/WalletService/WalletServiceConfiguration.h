@@ -91,9 +91,6 @@ namespace PaymentService
 
         bool syncFromZero = false;
 
-        /* Should we upgrade the given wallet file to the WalletBackend format */
-        bool upgradeWalletFormat = false;
-
         /* Height to begin scanning at (on initial import) */
         uint64_t scanHeight;
     };

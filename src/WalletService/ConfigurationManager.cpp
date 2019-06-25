@@ -134,9 +134,7 @@ bool ConfigurationManager::init(int argc, char** argv)
     throw std::runtime_error("--container-file parameter is required");
   }
 
-  /* If we are making a new wallet, or upgrading the wallet format, we don't
-     need to perform the RPC password checks */
-  if (serviceConfig.generateNewContainer || serviceConfig.upgradeWalletFormat)
+  if (serviceConfig.generateNewContainer)
   {
     return true;
   }

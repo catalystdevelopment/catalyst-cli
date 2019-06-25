@@ -534,11 +534,6 @@ void WalletService::loadTransactionIdIndex() {
   }
 }
 
-void WalletService::upgradeWalletFormat() const
-{
-    wallet.upgradeWalletFormat();
-}
-
 std::error_code WalletService::saveWalletNoThrow() {
   try {
     System::EventLock lk(readyEvent);
