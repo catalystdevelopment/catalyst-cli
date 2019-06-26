@@ -8,17 +8,17 @@
 
 #include <Errors/Errors.h>
 
+#include <Nigel/Nigel.h>
+
 #include "rapidjson/document.h"
 
 #include <string>
 
+#include <SubWallets/SubWallets.h>
+
 #include <tuple>
 
 #include <vector>
-
-#include <Nigel/Nigel.h>
-
-#include <SubWallets/SubWallets.h>
 
 #include <WalletBackend/WalletSynchronizer.h>
 #include <WalletBackend/WalletSynchronizerRAIIWrapper.h>
@@ -110,6 +110,11 @@ class WalletBackend
             const uint16_t daemonPort,
             const bool daemonSSL,
             const unsigned int syncThreadCount = std::thread::hardware_concurrency());
+
+        static Error saveWalletJSONToDisk(
+            std::string walletJSON,
+            std::string filename,
+            std::string password);
 
         /////////////////////////////
         /* Public member functions */
@@ -307,6 +312,12 @@ class WalletBackend
         Error unsafeSave() const;
 
         void init();
+
+        static bool tryUpgradeWalletFormat(
+            const std::string filename,
+            const std::string password,
+            const std::string daemonHost,
+            const uint16_t daemonPort);
 
         //////////////////////////////
         /* Private member variables */

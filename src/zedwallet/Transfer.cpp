@@ -15,7 +15,7 @@
 #include <Common/CryptoNoteTools.h>
 #include <Common/TransactionExtra.h>
 
-#include "IWallet.h"
+#include "WalletGreenTypes.h"
 
 #include <NodeRpcProxy/NodeErrors.h>
 
