@@ -275,7 +275,13 @@ bool BlockDownloader::downloadBlocks()
 
     /* Synced, store the top block so sync status displayes correctly if
        we are not scanning coinbase tx only blocks */
-    if (success && blocks.empty() && topBlock)
+    /* We can have an issue where we download a block, say, block 1000,
+       then because we have space for more blocks, we go to fetch more,
+       and this time get none, because we're synced. We then store the
+       topblock, which is also 1000, as having being processed, when in
+       fact, we're still waiting for it to be processed. So, if we only store
+       it if we have no blocks waiting to be processed, it fixes this issue */
+    if (success && blocks.empty() && topBlock && m_storedBlocks.size() == 0)
     {
         m_synchronizationStatus.storeBlockHash(topBlock->hash, topBlock->height);
         return false;
