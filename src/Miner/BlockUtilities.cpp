@@ -75,29 +75,19 @@ Crypto::Hash getBlockLongHash(const CryptoNote::BlockTemplate &block)
 {
     const auto rawHashingBlock = getBlockHashingBinaryArray(block);
 
-    Crypto::Hash hash;
+    try
+    {
+        const auto hashingAlgorithm
+            = CryptoNote::HASHING_ALGORITHMS_BY_BLOCK_VERSION.at(block.majorVersion);
 
-    if (block.majorVersion == CryptoNote::BLOCK_MAJOR_VERSION_1)
-    {
-        cn_slow_hash_v0(rawHashingBlock.data(), rawHashingBlock.size(), hash);
+        Crypto::Hash hash;
+
+        hashingAlgorithm(rawHashingBlock.data(), rawHashingBlock.size(), hash); 
+
+        return hash;
     }
-    else if (block.majorVersion == CryptoNote::BLOCK_MAJOR_VERSION_2
-          || block.majorVersion == CryptoNote::BLOCK_MAJOR_VERSION_3)
-    {
-        cn_slow_hash_v0(rawHashingBlock.data(), rawHashingBlock.size(), hash); 
-    }
-    else if (block.majorVersion == CryptoNote::BLOCK_MAJOR_VERSION_4)
-    {
-        cn_lite_slow_hash_v1(rawHashingBlock.data(), rawHashingBlock.size(), hash);
-    }
-    else if (block.majorVersion >= CryptoNote::BLOCK_MAJOR_VERSION_5)
-    {
-        cn_turtle_lite_slow_hash_v2(rawHashingBlock.data(), rawHashingBlock.size(), hash);
-    }
-    else 
+    catch (const std::out_of_range &)
     {
         throw std::runtime_error("Unknown block major version.");
     }
-
-    return hash;
 }
