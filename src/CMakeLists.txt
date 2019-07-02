@@ -142,7 +142,7 @@ target_link_libraries(CryptoNoteCore Utilities Common Logging Crypto P2P Rpc Htt
 target_link_libraries(cryptotest Crypto Common)
 target_link_libraries(Errors Crypto SubWallets Utilities)
 target_link_libraries(Logging Common)
-target_link_libraries(miner CryptoNoteCore Crypto Errors Utilities)
+target_link_libraries(miner Crypto Errors Utilities System Serialization)
 target_link_libraries(Nigel Errors)
 target_link_libraries(NodeRpcProxy Rpc)
 target_link_libraries(P2P upnpc-static Serialization)

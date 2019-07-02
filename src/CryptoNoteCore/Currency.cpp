@@ -4,22 +4,27 @@
 //
 // Please see the included LICENSE file for more information.
 
+/////////////////////
 #include "Currency.h"
-#include <cctype>
+/////////////////////
+
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/lexical_cast.hpp>
-#include "../Common/Base58.h"
-#include "../Common/int-util.h"
-#include "../Common/StringTools.h"
 
-#include "Account.h"
-#include "CheckDifficulty.h"
-#include "CryptoNoteBasicImpl.h"
-#include "CryptoNoteFormatUtils.h"
+#include <cctype>
+
+#include <Common/Base58.h>
+#include <Common/CheckDifficulty.h>
 #include <Common/CryptoNoteTools.h>
-#include "Difficulty.h"
-#include "Common/TransactionExtra.h"
-#include "UpgradeDetector.h"
+#include <Common/int-util.h>
+#include <Common/StringTools.h>
+#include <Common/TransactionExtra.h>
+
+#include <CryptoNoteCore/Account.h>
+#include <CryptoNoteCore/CryptoNoteBasicImpl.h>
+#include <CryptoNoteCore/CryptoNoteFormatUtils.h>
+#include <CryptoNoteCore/Difficulty.h>
+#include <CryptoNoteCore/UpgradeDetector.h>
 
 #include <config/Constants.h>
 
