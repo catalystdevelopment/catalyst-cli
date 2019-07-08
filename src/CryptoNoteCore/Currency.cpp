@@ -1,6 +1,6 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 // Copyright (c) 2014-2018, The Monero Project
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -50,14 +50,6 @@ bool Currency::init() {
     return false;
   }
 
-  if (isTestnet()) {
-    m_upgradeHeightV2 = 0;
-    m_upgradeHeightV3 = static_cast<uint32_t>(-1);
-    m_blocksFileName = "testnet_" + m_blocksFileName;
-    m_blockIndexesFileName = "testnet_" + m_blockIndexesFileName;
-    m_txPoolFileName = "testnet_" + m_txPoolFileName;
-  }
-
   return true;
 }
 
@@ -80,9 +72,7 @@ bool Currency::generateGenesisBlock() {
   genesisBlockTemplate.minorVersion = BLOCK_MINOR_VERSION_0;
   genesisBlockTemplate.timestamp = 0;
   genesisBlockTemplate.nonce = 70;
-  if (m_testnet) {
-    ++genesisBlockTemplate.nonce;
-  }
+
   //miner::find_nonce_for_given_block(bl, 1, 0);
   cachedGenesisBlock.reset(new CachedBlock(genesisBlockTemplate));
   return true;
@@ -658,7 +648,6 @@ m_genesisBlockReward(currency.m_genesisBlockReward),
 m_zawyDifficultyBlockIndex(currency.m_zawyDifficultyBlockIndex),
 m_zawyDifficultyV2(currency.m_zawyDifficultyV2),
 m_zawyDifficultyBlockVersion(currency.m_zawyDifficultyBlockVersion),
-m_testnet(currency.m_testnet),
 genesisBlockTemplate(std::move(currency.genesisBlockTemplate)),
 cachedGenesisBlock(new CachedBlock(genesisBlockTemplate)),
 logger(currency.logger) {
@@ -722,8 +711,7 @@ zawyDifficultyBlockVersion(parameters::ZAWY_DIFFICULTY_DIFFICULTY_BLOCK_VERSION)
   blockIndexesFileName(parameters::CRYPTONOTE_BLOCKINDEXES_FILENAME);
   txPoolFileName(parameters::CRYPTONOTE_POOLDATA_FILENAME);
 
-    isBlockexplorer(false);
-  testnet(false);
+  isBlockexplorer(false);
 }
 
 Transaction CurrencyBuilder::generateGenesisTransaction() {

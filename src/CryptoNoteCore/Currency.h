@@ -1,6 +1,6 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 // Copyright (c) 2014-2018, The Monero Project
-// Copyright (c) 2018, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -127,7 +127,6 @@ size_t difficultyBlocksCountByBlockVersion(uint8_t blockMajorVersion, uint32_t h
   const std::string& txPoolFileName() const { return m_txPoolFileName; }
 
   bool isBlockexplorer() const { return m_isBlockexplorer; }
-  bool isTestnet() const { return m_testnet; }
 
   const BlockTemplate& genesisBlock() const { return cachedGenesisBlock->getBlock(); }
   const Crypto::Hash& genesisBlockHash() const { return cachedGenesisBlock->getBlockHash(); }
@@ -230,9 +229,6 @@ private:
   std::string m_blockIndexesFileName;
   std::string m_txPoolFileName;
 
-
-
-  bool m_testnet;
   bool m_isBlockexplorer;
 
   BlockTemplate genesisBlockTemplate;
@@ -315,7 +311,6 @@ public:
   CurrencyBuilder& txPoolFileName(const std::string& val) { m_currency.m_txPoolFileName = val; return *this; }
 
   CurrencyBuilder& isBlockexplorer(const bool val) { m_currency.m_isBlockexplorer = val; return *this; }
-  CurrencyBuilder& testnet(bool val) { m_currency.m_testnet = val; return *this; }
 
 private:
   Currency m_currency;
