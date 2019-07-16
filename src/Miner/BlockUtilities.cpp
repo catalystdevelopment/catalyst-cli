@@ -69,7 +69,7 @@ Crypto::Hash getBlockHash(const CryptoNote::BlockTemplate &block)
 
     if (block.majorVersion >= CryptoNote::BLOCK_MAJOR_VERSION_2)
     {
-        const auto& parentBlock = getParentBlockBinaryArray(block, false);
+        const auto& parentBlock = getParentBlockHashingBinaryArray(block, false);
         blockHashingBinaryArray.insert(blockHashingBinaryArray.end(), parentBlock.begin(), parentBlock.end());
     }
 
