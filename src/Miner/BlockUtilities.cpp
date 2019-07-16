@@ -12,18 +12,28 @@
 #include <Serialization/CryptoNoteSerialization.h>
 #include <Serialization/SerializationTools.h>
 
+std::vector<uint8_t> getParentBlockHashingBinaryArray(const CryptoNote::BlockTemplate &block, const bool headerOnly)
+{
+    return getParentBinaryArray(block, true, headerOnly);
+}
+
 std::vector<uint8_t> getParentBlockBinaryArray(const CryptoNote::BlockTemplate &block, const bool headerOnly)
 {
-    std::vector<uint8_t> parentBlockBinaryArray;
+    return getParentBinaryArray(block, false, headerOnly);
+}
 
-    auto serializer = makeParentBlockSerializer(block, false, headerOnly);
+std::vector<uint8_t> getParentBinaryArray(const CryptoNote::BlockTemplate &block, const bool hashTransaction, const bool headerOnly)
+{
+    std::vector<uint8_t> binaryArray;
 
-    if (!toBinaryArray(serializer, parentBlockBinaryArray))
+    auto serializer = makeParentBlockSerializer(block, hashTransaction, headerOnly);
+
+    if (!toBinaryArray(serializer, binaryArray))
     {
-        throw std::runtime_error("Can't serialize parent block header.");
+        throw std::runtime_error("Can't serialize parent block");
     }
 
-    return parentBlockBinaryArray;
+    return binaryArray;
 }
 
 std::vector<uint8_t> getBlockHashingBinaryArray(const CryptoNote::BlockTemplate &block)
@@ -75,7 +85,7 @@ Crypto::Hash getBlockLongHash(const CryptoNote::BlockTemplate &block)
 {
     const std::vector<uint8_t> rawHashingBlock = block.majorVersion == CryptoNote::BLOCK_MAJOR_VERSION_1
         ? getBlockHashingBinaryArray(block)
-        : getParentBlockBinaryArray(block, true);
+        : getParentBlockHashingBinaryArray(block, true);
 
     Crypto::Hash hash;
 

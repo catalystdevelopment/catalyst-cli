@@ -13,6 +13,10 @@
 
 std::vector<uint8_t> getParentBlockBinaryArray(const CryptoNote::BlockTemplate &block, const bool headerOnly);
 
+std::vector<uint8_t> getParentBlockHashingBinaryArray(const CryptoNote::BlockTemplate &block, const bool headerOnly);
+
+std::vector<uint8_t> getParentBinaryArray(const CryptoNote::BlockTemplate &block, const bool hashTransaction, const bool headerOnly);
+
 std::vector<uint8_t> getBlockHashingBinaryArray(const CryptoNote::BlockTemplate &block);
 
 Crypto::Hash getBlockHash(const CryptoNote::BlockTemplate &block);
