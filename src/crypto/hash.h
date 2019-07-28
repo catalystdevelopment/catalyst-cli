@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "argon2.h"
+
 #include <CryptoTypes.h>
 #include <stddef.h>
 
@@ -43,12 +45,21 @@
 #error The CryptoNight Soft Shell Parameters you supplied will exceed normal paging operations.
 #endif
 
+// Chukwa Definitions
+#define CHUKWA_HASHLEN 32 // The length of the resulting hash in bytes
+#define CHUKWA_SALTLEN 16 // The length of our salt in bytes
+#define CHUKWA_THREADS 1 // How many threads to use at once
+#define CHUKWA_ITERS 3 // How many iterations we perform as part of our slow-hash
+#define CHUKWA_MEMORY 512 // This value is in KiB (0.5MB)
+
 namespace Crypto
 {
     extern "C"
     {
 #include "hash-ops.h"
     }
+
+    static bool argon2_optimization_selected = false;
 
     /*
       Cryptonight hash functions
@@ -350,6 +361,27 @@ namespace Crypto
         uint32_t pagesize = scratchpad;
 
         cn_slow_hash(data, length, reinterpret_cast<char *>(&hash), 1, 2, 0, pagesize, scratchpad, iterations);
+    }
+
+    inline void chukwa_slow_hash(const void *data, size_t length, Hash &hash)
+    {
+        uint8_t salt[CHUKWA_SALTLEN];
+        memcpy(salt, data, sizeof(salt));
+
+        /* If this is the first time we've called this hash function then
+           we need to have the Argon2 library check to see if any of the
+           available CPU instruction sets are going to help us out */
+        if (!argon2_optimization_selected)
+        {
+            /* Call the library quick benchmark test to set which CPU
+               instruction sets will be used */
+            argon2_select_impl(NULL, NULL);
+
+            argon2_optimization_selected = true;
+        }
+
+        argon2id_hash_raw(
+            CHUKWA_ITERS, CHUKWA_MEMORY, CHUKWA_THREADS, data, length, salt, CHUKWA_SALTLEN, hash.data, CHUKWA_HASHLEN);
     }
 
     inline void tree_hash(const Hash *hashes, size_t count, Hash &root_hash)
