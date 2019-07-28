@@ -225,7 +225,7 @@ namespace Utilities
 
         ss << "Height: " << iresp.height << "/" << iresp.network_height << " ("
            << get_sync_percentage(iresp.height, iresp.network_height) << "%) "
-           << "on mainnet" << (iresp.synced ? "synced, " : "syncing, ") << "net hash "
+           << "on mainnet " << (iresp.synced ? "synced, " : "syncing, ") << "net hash "
            << get_mining_speed(iresp.hashrate) << ", "
            << "v" << +iresp.major_version << ","
            << get_update_status(forkStatus, iresp.network_height, iresp.upgrade_heights) << ", "
