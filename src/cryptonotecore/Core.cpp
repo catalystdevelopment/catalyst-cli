@@ -3337,6 +3337,7 @@ namespace CryptoNote
         }
         transactionDetails.extra.publicKey = transaction->getTransactionPublicKey();
         transaction->getExtraNonce(transactionDetails.extra.nonce);
+        transactionDetails.extra.raw = transaction->getExtra();
 
         transactionDetails.signatures = rawTransaction.signatures;
 
