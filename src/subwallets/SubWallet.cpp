@@ -217,6 +217,7 @@ void SubWallet::markInputAsLocked(const Crypto::KeyImage keyImage)
 std::vector<Crypto::KeyImage> SubWallet::removeForkedInputs(const uint64_t forkHeight, const bool isViewWallet)
 {
     std::vector<Crypto::KeyImage> keyImagesToRemove;
+
     for (const auto input : m_lockedInputs)
     {
         keyImagesToRemove.push_back(input.keyImage);
@@ -226,23 +227,34 @@ std::vector<Crypto::KeyImage> SubWallet::removeForkedInputs(const uint64_t forkH
     m_lockedInputs.clear();
     m_unconfirmedIncomingAmounts.clear();
 
-    /* Unspent inputs which we recieved in a block after the fork. Remove them. */
-    auto it = std::remove_if(
-        m_unspentInputs.begin(), m_unspentInputs.end(), [forkHeight, &keyImagesToRemove](const auto input) {
-            if (input.blockHeight >= forkHeight)
-            {
-                keyImagesToRemove.push_back(input.keyImage);
-            }
-            return input.blockHeight >= forkHeight;
-        });
-    if (it != m_unspentInputs.end())
+    auto isForked = [forkHeight, &keyImagesToRemove](const auto input)
     {
-        m_unspentInputs.erase(it, m_unspentInputs.end());
-    }
+        if (input.blockHeight >= forkHeight)
+        {
+            keyImagesToRemove.push_back(input.keyImage);
+        }
+
+        return input.blockHeight >= forkHeight;
+    };
+
+    auto removeForked = [isForked](auto &inputVector)
+    {
+        const auto it = std::remove_if(inputVector.begin(), inputVector.end(), isForked);
+
+        if (it != inputVector.end())
+        {
+            inputVector.erase(it, inputVector.end());
+        }
+    };
+
+    /* Remove both spent and unspent inputs that were recieved after the fork
+       height */
+    removeForked(m_unspentInputs);
+    removeForked(m_spentInputs);
 
     /* If the input was spent after the fork height, but received before the
        fork height, then we keep it, but move it into the unspent vector */
-    it = std::remove_if(m_spentInputs.begin(), m_spentInputs.end(), [&forkHeight, this](auto &input) {
+    const auto it = std::remove_if(m_spentInputs.begin(), m_spentInputs.end(), [&forkHeight, this](auto &input) {
         if (input.spendHeight >= forkHeight)
         {
             /* Reset spend height */
@@ -250,18 +262,23 @@ std::vector<Crypto::KeyImage> SubWallet::removeForkedInputs(const uint64_t forkH
 
             /* Readd to the unspent vector */
             m_unspentInputs.push_back(input);
+
             return true;
         }
+
         return false;
     });
+
     if (it != m_spentInputs.end())
     {
         m_spentInputs.erase(it, m_spentInputs.end());
     }
+
     if (isViewWallet)
     {
         return {};
     }
+
     return keyImagesToRemove;
 }
 
