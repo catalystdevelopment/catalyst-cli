@@ -250,7 +250,6 @@ namespace CryptoNote
            need to change it manually. */
         const uint8_t CURRENT_FORK_INDEX = FORK_HEIGHTS_SIZE == 0 ? 0 : SOFTWARE_SUPPORTED_FORK_INDEX;
 
-        static_assert(CURRENT_FORK_INDEX >= 0, "CURRENT FORK INDEX must be >= 0");
         /* Make sure CURRENT_FORK_INDEX is a valid index, unless FORK_HEIGHTS is empty */
         static_assert(
             FORK_HEIGHTS_SIZE == 0 || CURRENT_FORK_INDEX < FORK_HEIGHTS_SIZE,
