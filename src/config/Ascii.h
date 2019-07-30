@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <string>
+
 const std::string windowsAsciiArt =
       "\n                                       \n"
       "   ______      __        __           __ \n"
@@ -28,7 +30,9 @@ const std::string nonWindowsAsciiArt =
    art works fine on Windows and Linux terminals, just replace 'asciiArt' with
    the art itself, and remove these two #ifdefs and above ascii arts */
 #ifdef _WIN32
+
 const std::string asciiArt = windowsAsciiArt;
+
 #else
 const std::string asciiArt = nonWindowsAsciiArt;
 #endif

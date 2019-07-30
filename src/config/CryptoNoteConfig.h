@@ -7,12 +7,13 @@
 
 #pragma once
 
+#include <boost/uuid/uuid.hpp>
+#include <crypto/hash.h>
 #include <cstddef>
 #include <cstdint>
-#include <string>
-#include <limits>
 #include <initializer_list>
-#include <boost/uuid/uuid.hpp>
+#include <limits>
+#include <string>
 
 namespace CryptoNote
 {
@@ -87,7 +88,7 @@ namespace CryptoNote
         /* The heights to activate the mixin limits at */
         const uint32_t MIXIN_LIMITS_V1_HEIGHT                        = 0;
         const uint32_t MIXIN_LIMITS_V2_HEIGHT                        = 1;
-        const uint32_t MIXIN_LIMITS_V3_HEIGHT                        = 800000;
+        const uint32_t MIXIN_LIMITS_V3_HEIGHT                        = 770000;
 
         /* The mixin to use by default with zedwallet and turtle-service */
         /* DEFAULT_MIXIN_V0 is the mixin used before MIXIN_LIMITS_V1_HEIGHT is started */
@@ -100,7 +101,7 @@ namespace CryptoNote
         const uint64_t DEFAULT_DUST_THRESHOLD_V2                     = UINT64_C(0);
 
         const uint32_t DUST_THRESHOLD_V2_HEIGHT                      = MIXIN_LIMITS_V2_HEIGHT;
-        const uint32_t FUSION_DUST_THRESHOLD_HEIGHT_V2               = 800000;
+        const uint32_t FUSION_DUST_THRESHOLD_HEIGHT_V2               = 770000;
         const uint64_t EXPECTED_NUMBER_OF_BLOCKS_PER_DAY             = 24 * 60 * 60 / DIFFICULTY_TARGET;
 
         const size_t   DIFFICULTY_WINDOW                             = 17;
@@ -148,8 +149,15 @@ namespace CryptoNote
         const uint32_t UPGRADE_HEIGHT_V2                             = 1;
         const uint32_t UPGRADE_HEIGHT_V3                             = 2;
         const uint32_t UPGRADE_HEIGHT_V4                             = 3; // Upgrade height for CN-Lite Variant 1 switch.
-        const uint32_t UPGRADE_HEIGHT_V5                            = 490000;
+        const uint32_t UPGRADE_HEIGHT_V5                             = 489999; // Upgrade height for CN-Turtle Variant 2 switch.
+        const uint32_t UPGRADE_HEIGHT_V6                             = 490000; // Upgrade height for Chukwa switch.
         const uint32_t UPGRADE_HEIGHT_CURRENT                        = UPGRADE_HEIGHT_V4;
+
+            /* This value is here to handle the difficult reset needed for the PoW upgrade
+       at block major version V6 */
+        const uint64_t DIFFICULTY_RESET_HEIGHT_V1 = UPGRADE_HEIGHT_V6;
+        const float DIFFICULTY_RESET_MULTIPLIER_V1 = 0.1;
+        const uint64_t DIFFICULTY_RESET_WINDOW_V1 = DIFFICULTY_BLOCKS_COUNT_V3;
 
         const unsigned UPGRADE_VOTING_THRESHOLD                      = 90;               // percent
         const uint32_t UPGRADE_VOTING_WINDOW                         = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
@@ -167,13 +175,13 @@ namespace CryptoNote
         };
 
         /* MAKE SURE TO UPDATE THIS VALUE WITH EVERY MAJOR RELEASE BEFORE A FORK */
-        const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX                 = 1;
+        const uint64_t SOFTWARE_SUPPORTED_FORK_INDEX                 = 2;
 
         const uint64_t FORK_HEIGHTS_SIZE = sizeof(FORK_HEIGHTS) / sizeof(*FORK_HEIGHTS);
 
         /* The index in the FORK_HEIGHTS array that this version of the software will
            support. For example, if CURRENT_FORK_INDEX is 3, this version of the
-           software will support the fork at 670,000 blocks.
+           software will support the fork at 770,000 blocks.
 
            This will default to zero if the FORK_HEIGHTS array is empty, so you don't
            need to change it manually. */
@@ -188,7 +196,7 @@ namespace CryptoNote
         const char     CRYPTONOTE_POOLDATA_FILENAME[]                = "poolstate.bin";
         const char     P2P_NET_DATA_FILENAME[]                       = "p2pstate.bin";
         const char     MINER_CONFIG_FILE_NAME[]                      = "miner_conf.json";
-        } // parameters
+    } // parameters
 
     const char     CRYPTONOTE_NAME[]                             = "Catalyst";
 
@@ -196,14 +204,25 @@ namespace CryptoNote
     const uint8_t  TRANSACTION_VERSION_2                         =  2;
     const uint8_t  CURRENT_TRANSACTION_VERSION                   =  TRANSACTION_VERSION_1;
 
-    const uint8_t  BLOCK_MAJOR_VERSION_1                         =  1;
-    const uint8_t  BLOCK_MAJOR_VERSION_2                         =  2;
-    const uint8_t  BLOCK_MAJOR_VERSION_3                         =  3;
-    const uint8_t  BLOCK_MAJOR_VERSION_4                         =  4;
-    const uint8_t  BLOCK_MAJOR_VERSION_5                         =  5;
+    const uint8_t  BLOCK_MAJOR_VERSION_1                         =  1; /* From zero */
+    const uint8_t  BLOCK_MAJOR_VERSION_2                         =  2; /* UPGRADE_HEIGHT_V2 */
+    const uint8_t  BLOCK_MAJOR_VERSION_3                         =  3; /* UPGRADE_HEIGHT_V3 */
+    const uint8_t  BLOCK_MAJOR_VERSION_4                         =  4; /* UPGRADE_HEIGHT_V4 */
+    const uint8_t  BLOCK_MAJOR_VERSION_5                         =  5; /* UPGRADE_HEIGHT_V5 */
+    const uint8_t  BLOCK_MAJOR_VERSION_6                         =  6; /* UPGRADE_HEIGHT_V6 */
 
     const uint8_t  BLOCK_MINOR_VERSION_0                         =  0;
     const uint8_t  BLOCK_MINOR_VERSION_1                         =  1;
+
+    const std::unordered_map<uint8_t, std::function<void(const void *data, size_t length, Crypto::Hash &hash)>>
+            HASHING_ALGORITHMS_BY_BLOCK_VERSION = {
+            {BLOCK_MAJOR_VERSION_1, Crypto::cn_slow_hash_v0}, /* From zero */
+            {BLOCK_MAJOR_VERSION_2, Crypto::cn_slow_hash_v0}, /* UPGRADE_HEIGHT_V2 */
+            {BLOCK_MAJOR_VERSION_3, Crypto::cn_slow_hash_v0}, /* UPGRADE_HEIGHT_V3 */
+            {BLOCK_MAJOR_VERSION_4, Crypto::cn_lite_slow_hash_v1}, /* UPGRADE_HEIGHT_V4 */
+            {BLOCK_MAJOR_VERSION_5, Crypto::cn_turtle_lite_slow_hash_v2}, /* UPGRADE_HEIGHT_V5 */
+            {BLOCK_MAJOR_VERSION_6, Crypto::chukwa_slow_hash} /* UPGRADE_HEIGHT_V6 */
+    };
 
     const size_t   BLOCKS_IDS_SYNCHRONIZING_DEFAULT_COUNT        =  10000;  //by default, blocks ids count in synchronizing
     const uint64_t BLOCKS_SYNCHRONIZING_DEFAULT_COUNT            =  100;    //by default, blocks count in blocks downloading
@@ -218,8 +237,8 @@ namespace CryptoNote
 
     // P2P Network Configuration Section - This defines our current P2P network version
     // and the minimum version for communication between nodes
-    const uint8_t  P2P_CURRENT_VERSION                           = 4;
-    const uint8_t  P2P_MINIMUM_VERSION                           = 3;
+    const uint8_t  P2P_CURRENT_VERSION                           = 6;
+    const uint8_t  P2P_MINIMUM_VERSION                           = 4;
 
     // This defines the minimum P2P version required for lite blocks propogation
     const uint8_t P2P_LITE_BLOCKS_PROPOGATION_VERSION            = 4;
@@ -230,20 +249,23 @@ namespace CryptoNote
 
     const size_t   P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE          = 32 * 1024 * 1024; // 32 MB
     const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                 = 8;
+
     const size_t   P2P_DEFAULT_WHITELIST_CONNECTIONS_PERCENT     = 70;
+
     const uint32_t P2P_DEFAULT_HANDSHAKE_INTERVAL                = 60;            // seconds
     const uint32_t P2P_DEFAULT_PACKET_MAX_SIZE                   = 50000000;      // 50000000 bytes maximum packet size
     const uint32_t P2P_DEFAULT_PEERS_IN_HANDSHAKE                = 250;
+
     const uint32_t P2P_DEFAULT_CONNECTION_TIMEOUT                = 5000;          // 5 seconds
     const uint32_t P2P_DEFAULT_PING_CONNECTION_TIMEOUT           = 2000;          // 2 seconds
     const uint64_t P2P_DEFAULT_INVOKE_TIMEOUT                    = 60 * 2 * 1000; // 2 minutes
     const size_t   P2P_DEFAULT_HANDSHAKE_INVOKE_TIMEOUT          = 5000;          // 5 seconds
     const char     P2P_STAT_TRUSTED_PUB_KEY[]                    = "";
 
-    const uint64_t DATABASE_WRITE_BUFFER_MB_DEFAULT_SIZE         = 256;
-    const uint64_t DATABASE_READ_BUFFER_MB_DEFAULT_SIZE          = 10;
-    const uint32_t DATABASE_DEFAULT_MAX_OPEN_FILES               = 100;
-    const uint16_t DATABASE_DEFAULT_BACKGROUND_THREADS_COUNT     = 2;
+    const uint64_t DATABASE_WRITE_BUFFER_MB_DEFAULT_SIZE = 1024; // 1 GB
+    const uint64_t DATABASE_READ_BUFFER_MB_DEFAULT_SIZE = 1024; // 1 GB
+    const uint32_t DATABASE_DEFAULT_MAX_OPEN_FILES = 500; // 500 files
+    const uint16_t DATABASE_DEFAULT_BACKGROUND_THREADS_COUNT = 10; // 10 DB threads
 
     const char     LATEST_VERSION_URL[]                          = "http://catalystcrypto.net";
     const std::string LICENSE_URL                                = "https://github.com/catalystdevelopment/catalyst/blob/development/LICENSE";
