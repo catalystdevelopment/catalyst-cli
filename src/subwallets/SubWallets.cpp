@@ -309,8 +309,7 @@ void SubWallets::addUnconfirmedTransaction(const WalletTypes::Transaction tx)
     {
         std::stringstream stream;
 
-        stream << "Unconfirmed transaction " << tx.hash << " was erronously "
-               << "attempted to be added to the wallet twice. Ignoring.";
+        stream << "Unconfirmed transaction " << tx.hash << " already exists in wallet. Ignoring.";
 
         Logger::logger.log(
             stream.str(),
@@ -351,8 +350,7 @@ void SubWallets::addTransaction(const WalletTypes::Transaction tx)
     {
         std::stringstream stream;
 
-        stream << "Transaction " << tx.hash << " was erronously "
-               << "attempted to be added to the wallet twice. Ignoring.";
+        stream << "Transaction " << tx.hash << " already exists in wallet. Ignoring.";
 
         Logger::logger.log(
             stream.str(),
