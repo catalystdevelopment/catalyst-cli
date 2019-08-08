@@ -18,6 +18,8 @@ https://discord.gg/rd3ss4G
 #### Development Build Status
 [![Build Status](https://travis-ci.org/catalystdevelopment/catalyst.svg?branch=development)](https://travis-ci.org/dirtybits/catalyst) [![Build status](https://ci.appveyor.com/api/projects/status/github/catalystdevelopment/catalyst?branch=development&svg=true)](https://ci.appveyor.com/project/dirtybits/catalyst)
 
+Development build currently failing, please use branch 0.3.2.2 or download source directly from Releases tab
+
 ### Installing
 <!--
 Pre-compiled Windows executables are available here: https://github.com/dirtybits/catalyst-executables/blob/master/Release_fixed.zip
