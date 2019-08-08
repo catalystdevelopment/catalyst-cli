@@ -1,6 +1,7 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 // Copyright (c) 2014-2018, The Monero Project
 // Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Catalyst Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -316,7 +317,8 @@ namespace CryptoNote
             uint64_t alreadyGeneratedCoins,
             uint64_t fee,
             uint64_t &reward,
-            int64_t &emissionChange) const;
+            int64_t &emissionChange,
+            uint32_t height) const;
 
         size_t maxBlockCumulativeSize(uint64_t height) const;
 

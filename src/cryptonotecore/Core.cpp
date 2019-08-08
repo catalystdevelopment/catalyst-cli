@@ -2,6 +2,7 @@
 // Copyright (c) 2014-2018, The Monero Project
 // Copyright (c) 2018-2019, The Galaxia Project Developers
 // Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Catalyst Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -190,7 +191,8 @@ namespace CryptoNote
                     alreadyGeneratedCoins,
                     cumulativeFee,
                     reward,
-                    emissionChange))
+                    emissionChange,
+                    previousBlockIndex+1))
             {
                 throw std::system_error(make_error_code(error::BlockValidationError::CUMULATIVE_BLOCK_SIZE_TOO_BIG));
             }
@@ -1190,7 +1192,8 @@ namespace CryptoNote
                 alreadyGeneratedCoins,
                 cumulativeFee,
                 reward,
-                emissionChange))
+                emissionChange,
+                blockIndex))
         {
             logger(Logging::DEBUGGING) << "Block " << blockStr << " has too big cumulative size";
             return error::BlockValidationError::CUMULATIVE_BLOCK_SIZE_TOO_BIG;
@@ -3196,7 +3199,8 @@ namespace CryptoNote
             prevBlockGeneratedCoins,
             0,
             blockDetails.baseReward,
-            emissionChange);
+            emissionChange,
+            blockIndex);
         if (result)
         {
         }
@@ -3210,7 +3214,8 @@ namespace CryptoNote
             prevBlockGeneratedCoins,
             0,
             currentReward,
-            emissionChange);
+            emissionChange,
+            blockIndex);
         assert(result);
 
         if (blockDetails.baseReward == 0 && currentReward == 0)

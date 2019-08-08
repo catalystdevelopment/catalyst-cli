@@ -1,6 +1,7 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 // Copyright (c) 2014-2018, The Monero Project
 // Copyright (c) 2018-2019, The TurtleCoin Developers
+// Copyright (c) 2018-2019, The Catalyst Developers
 //
 // Please see the included LICENSE file for more information.
 
@@ -188,12 +189,19 @@ namespace CryptoNote
         uint64_t alreadyGeneratedCoins,
         uint64_t fee,
         uint64_t &reward,
-        int64_t &emissionChange) const
+        int64_t &emissionChange,
+        uint32_t height) const
     {
         assert(alreadyGeneratedCoins <= m_moneySupply);
-        assert(m_emissionSpeedFactor > 0 && m_emissionSpeedFactor <= 8 * sizeof(uint64_t));
+        auto emission = m_emissionSpeedFactor;
 
-        uint64_t baseReward = (m_moneySupply - alreadyGeneratedCoins) >> m_emissionSpeedFactor;
+        if (height >= CryptoNote::parameters::EMISSION_SPEED_V2_HEIGHT)
+        {
+            emission = CryptoNote::parameters::EMISSION_SPEED_FACTOR_V2;
+        }
+        assert(emission > 0 && emission <= 8 * sizeof(uint64_t));
+
+        uint64_t baseReward = (m_moneySupply - alreadyGeneratedCoins) >> emission;
 
         size_t blockGrantedFullRewardZone = blockGrantedFullRewardZoneByBlockVersion(blockMajorVersion);
         medianSize = std::max(medianSize, blockGrantedFullRewardZone);
@@ -262,7 +270,8 @@ namespace CryptoNote
                 alreadyGeneratedCoins,
                 fee,
                 blockReward,
-                emissionChange))
+                emissionChange,
+                height))
         {
             logger(INFO) << "Block is too big";
             return false;

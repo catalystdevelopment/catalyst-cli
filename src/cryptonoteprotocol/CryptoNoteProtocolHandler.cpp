@@ -352,7 +352,7 @@ namespace CryptoNote
                 ss << "You are " << std::abs(diff) << " blocks (" << days << " days) ahead ";
             }
 
-            ss << "the current peer you're connected to. Slow and steady wins the race! ";
+            ss << "the current peer you're connected to. To infinity and beyond! ";
 
             auto logLevel = Logging::TRACE;
             /* Log at different levels depending upon if we're ahead, behind, and if it's
@@ -368,7 +368,7 @@ namespace CryptoNote
                     logLevel = Logging::DEBUGGING;
                 }
             }
-            logger(logLevel, Logging::BRIGHT_GREEN) << context << ss.str();
+            logger(logLevel, Logging::BRIGHT_BLUE) << context << ss.str();
 
             logger(Logging::DEBUGGING) << "Remote top block height: " << hshd.current_height << ", id: " << hshd.top_id;
             // let the socket to send response to handshake, but request callback, to let send request data after
@@ -1000,7 +1000,7 @@ namespace CryptoNote
                                 << ENDL;
             logger(INFO, BRIGHT_MAGENTA) << "===================================================" << ENDL << ENDL;
 
-            logger(INFO, BRIGHT_GREEN) << asciiArt << ENDL;
+            logger(INFO, BRIGHT_BLUE) << asciiArt << ENDL;
 
             m_observerManager.notify(&ICryptoNoteProtocolObserver::blockchainSynchronized, m_core.getTopBlockIndex());
         }
