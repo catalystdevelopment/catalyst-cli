@@ -1,0 +1,101 @@
+version: '3'
+
+# nc -zw3 node1 17290 && echo "opened" || echo "closed"
+
+# BUILD
+# docker volume create cn-builds-volume
+
+# cmake .. -DCMAKE_BUILD_TYPE=Release -DARCH=default
+# make -j6
+
+# MSBuild Catalyst.sln /p:Configuration=Release /m
+
+# docker-compose build --force-rm --parallel build
+# docker-compose run --rm --name build build
+
+# docker-compose run --rm --service-ports --name node1 node1
+# docker-compose run --rm --service-ports --name node2 node2
+# docker-compose run --rm --service-ports --name node3 node3
+
+# docker-compose run --rm --service-ports --name miner miner
+
+# external miner
+# ./miner --threads 4 --daemon-host fs.local --daemon-rpc-port 17251 --address cat18x93ufCQWaX4f8f2c2fZ8Ku2A4VTcgEoSpweiDbgEBF9i7YA2XGX1dSR7UbguQU5UKYEXyjfaTfnJBmRhHju26n8Y9AAFx
+
+services:
+
+  build:
+    container_name: build
+    image: build:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    working_dir: /releases
+    command: zsh
+    volumes:
+      - cn-builds-volume:/releases
+
+  miner:
+    container_name: miner
+    image: ubuntu:18.04
+    working_dir: /cat-bin
+    command: ./miner --threads 1 --daemon-host node3 --address cat18x93ufCQWaX4f8f2c2fZ8Ku2A4VTcgEoSpweiDbgEBF9i7YA2XGX1dSR7UbguQU5UKYEXyjfaTfnJBmRhHju26n8Y9AAFx
+    volumes:
+      - ./bin:/cat-bin
+    networks:
+      testnet:
+        ipv4_address: 172.16.78.5
+
+  node1:
+    container_name: node1
+    image: ubuntu:18.04
+    working_dir: /cat-bin
+    command: ./catalystd --log-level=2 --data-dir blockchain --rpc-bind-ip 0.0.0.0 --allow-local-ip
+    volumes:
+      - ./bin:/cat-bin
+      - ./node1-bc:/cat-bin/blockchain
+    networks:
+      testnet:
+        ipv4_address: 172.16.78.10
+
+  node2:
+    container_name: node2
+    image: ubuntu:18.04
+    working_dir: /cat-bin
+    command: ./catalystd --log-level=2 --data-dir blockchain --rpc-bind-ip 0.0.0.0 --allow-local-ip --add-priority-node=172.16.78.10:17290
+    volumes:
+      - ./bin:/cat-bin
+      - ./node2-bc:/cat-bin/blockchain
+    networks:
+      testnet:
+        ipv4_address: 172.16.78.11
+
+  node3:
+    container_name: node3
+    image: ubuntu:18.04
+    working_dir: /cat-bin
+    command: ./catalystd --log-level=2 --data-dir blockchain --rpc-bind-ip 0.0.0.0 --allow-local-ip --add-priority-node=172.16.78.11:17290
+    volumes:
+      - ./bin:/cat-bin
+      - ./node3-bc:/cat-bin/blockchain
+    networks:
+      testnet:
+        ipv4_address: 172.16.78.12
+    ports:
+      - 17250:17290
+      - 17251:17291
+    expose:
+      - 17250
+      - 17251
+
+networks:
+  testnet:
+    ipam:
+      config:
+        - subnet: 172.16.78.0/24
+
+
+
+volumes:
+  cn-builds-volume:
+    external: true
