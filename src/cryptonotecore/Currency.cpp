@@ -539,7 +539,7 @@ namespace CryptoNote
 
         /* Executes the helper functions to determine if there is a difficulty reset
            currently activated. Method comes from Difficulty.cpp */
-        return adjustForDifficultyReset(nextDiff, blockIndex);
+        return nextDiff;
     }
 
     uint64_t Currency::nextDifficulty(
