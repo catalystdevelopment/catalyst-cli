@@ -42,12 +42,10 @@ if(CCACHE_PROGRAM)
   set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/")
-include(ReadVersion)
-get_rocksdb_version(rocksdb_VERSION)
-project(rocksdb
-  VERSION ${rocksdb_VERSION}
-  LANGUAGES CXX C ASM)
+project(rocksdb)
+enable_language(CXX)
+enable_language(C)
+enable_language(ASM)
 
 if(POLICY CMP0042)
   cmake_policy(SET CMP0042 NEW)
