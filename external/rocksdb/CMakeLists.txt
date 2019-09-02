@@ -831,8 +831,8 @@ else()
     ${THIRDPARTY_LIBS} ${SYSTEM_LIBS})
   set_target_properties(${ROCKSDB_SHARED_LIB} PROPERTIES
                         LINKER_LANGUAGE CXX
-                        VERSION ${rocksdb_VERSION}
-                        SOVERSION ${rocksdb_VERSION_MAJOR}
+                        VERSION ${ROCKSDB_VERSION}
+                        SOVERSION ${ROCKSDB_VERSION_MAJOR}
                         CXX_STANDARD 11
                         OUTPUT_NAME "rocksdb")
 endif()
@@ -887,7 +887,7 @@ if(NOT WIN32 OR ROCKSDB_INSTALL_ON_WINDOWS)
 
   write_basic_package_version_file(
     RocksDBConfigVersion.cmake
-    VERSION ${rocksdb_VERSION}
+    VERSION ${ROCKSDB_VERSION}
     COMPATIBILITY SameMajorVersion
   )
 
