@@ -48,10 +48,10 @@ namespace CryptoNote
         cfOpts.compaction_style = rocksdb::kCompactionStyleLevel;
 
         const auto compressionLevel =
-            config.getCompressionEnabled() ? rocksdb::kLZ4Compression : rocksdb::kNoCompression;
+            config.getCompressionEnabled() ? rocksdb::kZSTD : rocksdb::kNoCompression;
         std::fill_n(std::back_inserter(cfOpts.compression_per_level), cfOpts.num_levels, compressionLevel);
         cfOpts.bottommost_compression =
-            config.getCompressionEnabled() ? rocksdb::kLZ4HCCompression : rocksdb::kNoCompression;
+            config.getCompressionEnabled() ? rocksdb::kZSTD : rocksdb::kNoCompression;
 
         rocksdb::BlockBasedTableOptions tblOpts;
         tblOpts.block_cache = rocksdb::NewLRUCache(32 * 1024 * 1024);

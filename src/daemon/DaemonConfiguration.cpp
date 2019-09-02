@@ -157,7 +157,7 @@ namespace DaemonConfig
             "<ip:port>");
 
         options.add_options("Database")
-#ifdef ENABLE_LZ4_COMPRESSION
+#ifdef ENABLE_ZSTD_COMPRESSION
             ("db-enable-compression",
              "Enable database compression",
              cxxopts::value<bool>(config.enableDbCompression)->default_value("false")->implicit_value("true"))
@@ -265,7 +265,7 @@ namespace DaemonConfig
                 config.useRocksdbForLocalCaches = cli["rocksdb"].as<bool>();
             }
 
-#ifdef ENABLE_LZ4_COMPRESSION
+#ifdef ENABLE_ZSTD_COMPRESSION
             if (cli.count("db-enable-compression") > 0)
             {
                 config.enableDbCompression = cli["db-enable-compression"].as<bool>();
@@ -478,7 +478,7 @@ namespace DaemonConfig
                     config.useRocksdbForLocalCaches = cfgValue.at(0) == '1';
                     updated = true;
                 }
-#ifdef ENABLE_LZ4_COMPRESSION
+#ifdef ENABLE_ZSTD_COMPRESSION
                 else if (cfgKey.compare("db-enable-compression") == 0)
                 {
                     config.enableDbCompression = cfgValue.at(0) == '1';
@@ -728,7 +728,7 @@ namespace DaemonConfig
             config.useRocksdbForLocalCaches = j["rocksdb"].GetBool();
         }
 
-#ifdef ENABLE_LZ4_COMPRESSION
+#ifdef ENABLE_ZSTD_COMPRESSION
         if (j.HasMember("db-enable-compression"))
         {
             config.enableDbCompression = j["db-enable-compression"].GetBool();
@@ -874,7 +874,7 @@ namespace DaemonConfig
         j.AddMember("no-console", config.noConsole, alloc);
         j.AddMember("rocksdb", config.useRocksdbForLocalCaches, alloc);
         j.AddMember("sqlite", config.useSqliteForLocalCaches, alloc);
-#ifdef ENABLE_LZ4_COMPRESSION
+#ifdef ENABLE_ZSTD_COMPRESSION
         j.AddMember("db-enable-compression", config.enableDbCompression, alloc);
 #endif
         j.AddMember("db-max-open-files", config.dbMaxOpenFiles, alloc);
