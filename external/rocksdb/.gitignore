@@ -27,7 +27,6 @@ make_config.mk
 .watchmanconfig
 CMakeCache.txt
 CMakeFiles/
-/build/
 
 ldb
 manifest_dump
