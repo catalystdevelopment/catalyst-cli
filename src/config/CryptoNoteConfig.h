@@ -264,10 +264,10 @@ namespace CryptoNote
     const size_t   P2P_DEFAULT_HANDSHAKE_INVOKE_TIMEOUT          = 5000;          // 5 seconds
     const char     P2P_STAT_TRUSTED_PUB_KEY[]                    = "";
 
-    const uint64_t DATABASE_WRITE_BUFFER_MB_DEFAULT_SIZE = 1024; // 1 GB
-    const uint64_t DATABASE_READ_BUFFER_MB_DEFAULT_SIZE = 1024; // 1 GB
-    const uint32_t DATABASE_DEFAULT_MAX_OPEN_FILES = 500; // 500 files
-    const uint16_t DATABASE_DEFAULT_BACKGROUND_THREADS_COUNT = 10; // 10 DB threads
+    const uint64_t DATABASE_WRITE_BUFFER_MB_DEFAULT_SIZE = 256; // 256 MB
+    const uint64_t DATABASE_READ_BUFFER_MB_DEFAULT_SIZE = 64; // 64 MB
+    const uint32_t DATABASE_DEFAULT_MAX_OPEN_FILES = 200; // 200 files
+    const uint16_t DATABASE_DEFAULT_BACKGROUND_THREADS_COUNT = 4; // 4 DB threads
 
     const char     LATEST_VERSION_URL[]                          = "https://www.cryptocatalyst.net";
     const std::string LICENSE_URL                                = "https://github.com/catalystdevelopment/catalyst/blob/development/LICENSE";
