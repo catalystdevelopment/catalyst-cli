@@ -58,7 +58,7 @@ namespace CryptoNote
         static_assert(sizeof(GENESIS_COINBASE_TX_HEX)/sizeof(*GENESIS_COINBASE_TX_HEX) != 1, "GENESIS_COINBASE_TX_HEX must not be empty.");
 
         /* This is the unix timestamp of the first "mined" block (technically block 2, not the genesis block)
-           You can get this value by doing "print_block 2" in TurtleCoind. It is used to know what timestamp
+           You can get this value by doing "print_block 2" in Catalystd. It is used to know what timestamp
            to import from when the block height cannot be found in the node or the node is offline. */
 
         // Change to match Catalyst
@@ -82,20 +82,20 @@ namespace CryptoNote
         const uint64_t MINIMUM_MIXIN_V2                              = 3;
         const uint64_t MAXIMUM_MIXIN_V2                              = 5;
 
-        const uint64_t MINIMUM_MIXIN_V3                              = 5; // Possibly keeping at V2 values
-        const uint64_t MAXIMUM_MIXIN_V3                              = 7; // ^
+        const uint64_t MINIMUM_MIXIN_V3                              = 3; 
+        const uint64_t MAXIMUM_MIXIN_V3                              = 5; 
 
         /* The heights to activate the mixin limits at */
         const uint32_t MIXIN_LIMITS_V1_HEIGHT                        = 0;
         const uint32_t MIXIN_LIMITS_V2_HEIGHT                        = 1;
-        const uint32_t MIXIN_LIMITS_V3_HEIGHT                        = 770000;
+        const uint32_t MIXIN_LIMITS_V3_HEIGHT                        = 770000; 
 
         /* The mixin to use by default with zedwallet and turtle-service */
         /* DEFAULT_MIXIN_V0 is the mixin used before MIXIN_LIMITS_V1_HEIGHT is started */
         const uint64_t DEFAULT_MIXIN_V0                              = 3;
         const uint64_t DEFAULT_MIXIN_V1                              = MAXIMUM_MIXIN_V1;
         const uint64_t DEFAULT_MIXIN_V2                              = MAXIMUM_MIXIN_V2;
-        const uint64_t DEFAULT_MIXIN_V3                              = MAXIMUM_MIXIN_V3;
+        const uint64_t DEFAULT_MIXIN_V3                              = MINIMUM_MIXIN_V3;
 
         const uint64_t DEFAULT_DUST_THRESHOLD                        = UINT64_C(10);
         const uint64_t DEFAULT_DUST_THRESHOLD_V2                     = UINT64_C(0);
