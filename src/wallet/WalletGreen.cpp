@@ -477,8 +477,8 @@ namespace CryptoNote
                 // Don't delete file if it has existed
                 if (storageCreated)
                 {
-                    boost::system::error_code ignore;
-                    boost::filesystem::remove(path, ignore);
+                    std::error_code ignore;
+                    fs::remove(path, ignore);
                 }
             });
 
