@@ -10,8 +10,11 @@
 
 #include <cassert>
 #include <common/FileSystemShim.h>
+#include <crypto/random.h>
 #include <cstdint>
 #include <string>
+#include <sstream>
+#include <iostream>
 
 namespace Common
 {
@@ -943,17 +946,14 @@ namespace Common
             throw std::runtime_error("Vector is mapped to a .bak file due to earlier errors");
         }
 
-        /* Define the path to the backup file */
         fs::path bakPath = m_path + ".bak";
 
-        /* Create a new temporary filename and path. Due to variations in
-           where different platforms create the temporary path to, we are
-           only going to use the filename of the unique path and prepend
-           the backup file's parent_path (aka. directory path) to come up
-           with the full temporary file path */
-        std::string uniqueName = std::tmpnam(nullptr);
-        fs::path uniquePath = uniqueName;
-        fs::path tmpPath = bakPath.parent_path().string() + uniquePath.filename().string();
+        std::stringstream stream;
+
+        stream << std::hex << Random::randomValue<uint64_t>()
+                           << Random::randomValue<uint64_t>();
+
+        fs::path tmpPath = fs::path(m_path).parent_path() / stream.str();
 
         if (fs::exists(bakPath))
         {
