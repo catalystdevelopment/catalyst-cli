@@ -47,7 +47,6 @@ namespace DaemonConfig
             osVersion = false;
             printGenesisTx = false;
             dumpConfig = false;
-            useRocksdbForLocalCaches = false;
             enableDbCompression = false;
             resync = false;
         }
@@ -121,8 +120,6 @@ namespace DaemonConfig
         bool printGenesisTx;
 
         bool dumpConfig;
-
-        bool useRocksdbForLocalCaches;
 
         bool enableDbCompression;
     };
