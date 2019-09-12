@@ -10,7 +10,7 @@ include_directories(${CMAKE_SOURCE_DIR}/external/rapidjson)
 include_directories(${CMAKE_SOURCE_DIR}/external/cxxopts)
 include_directories(${CMAKE_SOURCE_DIR}/external/cryptopp)
 include_directories(${CMAKE_SOURCE_DIR}/external/sqlite3)
-include_directories(${CMAKE_SOURCE_DIR}/external/lz4)
+include_directories(${CMAKE_SOURCE_DIR}/external/zstd)
 include_directories(${CMAKE_SOURCE_DIR}/external/argon2/include)
 
 # Show cmake where the source files are
@@ -138,9 +138,9 @@ elseif (UNIX)
 endif ()
 
 if (MSVC)
-    target_link_libraries(TurtleCoind System CryptoNoteCore rocksdb lz4 sqlite3 Errors ${Boost_LIBRARIES})
+    target_link_libraries(TurtleCoind System CryptoNoteCore rocksdb zstd sqlite3 Errors ${Boost_LIBRARIES})
 else ()
-    target_link_libraries(TurtleCoind System CryptoNoteCore rocksdblib lz4 sqlite3 Errors ${Boost_LIBRARIES})
+    target_link_libraries(TurtleCoind System CryptoNoteCore rocksdblib zstd sqlite3 Errors ${Boost_LIBRARIES})
 endif ()
 
 # Add the dependencies we need
