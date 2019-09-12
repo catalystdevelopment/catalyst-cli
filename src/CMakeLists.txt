@@ -9,8 +9,7 @@ include_directories(${CMAKE_SOURCE_DIR}/external/nlohmann-json)
 include_directories(${CMAKE_SOURCE_DIR}/external/rapidjson)
 include_directories(${CMAKE_SOURCE_DIR}/external/cxxopts)
 include_directories(${CMAKE_SOURCE_DIR}/external/cryptopp)
-include_directories(${CMAKE_SOURCE_DIR}/external/sqlite3)
-include_directories(${CMAKE_SOURCE_DIR}/external/lz4)
+include_directories(${CMAKE_SOURCE_DIR}/external/zstd)
 include_directories(${CMAKE_SOURCE_DIR}/external/argon2/include)
 
 # Show cmake where the source files are
@@ -138,15 +137,15 @@ elseif (UNIX)
 endif ()
 
 if (MSVC)
-    target_link_libraries(TurtleCoind System CryptoNoteCore rocksdb lz4 sqlite3 Errors ${Boost_LIBRARIES})
+    target_link_libraries(TurtleCoind System CryptoNoteCore rocksdb zstd Errors ${Boost_LIBRARIES})
 else ()
-    target_link_libraries(TurtleCoind System CryptoNoteCore rocksdblib lz4 sqlite3 Errors ${Boost_LIBRARIES})
+    target_link_libraries(TurtleCoind System CryptoNoteCore rocksdblib zstd Errors ${Boost_LIBRARIES})
 endif ()
 
 # Add the dependencies we need
 target_link_libraries(Common __filesystem)
 target_link_libraries(Crypto argon2)
-target_link_libraries(CryptoNoteCore Utilities Common Logging Crypto P2P Rpc Http Serialization System sqlite3 ${Boost_LIBRARIES})
+target_link_libraries(CryptoNoteCore Utilities Common Logging Crypto P2P Rpc Http Serialization System ${Boost_LIBRARIES})
 target_link_libraries(cryptotest Crypto Common)
 target_link_libraries(Errors Crypto SubWallets Utilities)
 target_link_libraries(Logging Common)
