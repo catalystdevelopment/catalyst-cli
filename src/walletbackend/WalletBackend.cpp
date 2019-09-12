@@ -398,7 +398,11 @@ bool WalletBackend::tryUpgradeWalletFormat(
 
         /* Save the old wallet to the backup file via simple file copy operation */
         std::error_code backupError;
-        fs::copy(filename, "old-version-backup-" + filename, fs::copy_options::overwrite_existing, backupError);
+
+        fs::path filepath = filename;
+        fs::path backupFilepath = filepath.parent_path() / "old-version-backup-" += filepath.filename();
+
+        fs::copy(filename, backupFilepath, fs::copy_options::overwrite_existing, backupError);
 
         /* If we could not backup the file then instantly fail for safety sake */
         if (backupError)
