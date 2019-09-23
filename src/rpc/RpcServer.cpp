@@ -337,10 +337,20 @@ namespace CryptoNote
             return false;
         }
 
+        uint32_t blockCount = COMMAND_RPC_GET_BLOCKS_FAST_MAX_COUNT;
+
+        /* Allow the requested block count to be specified in the
+           request if it's greater than 0 and less than the configured
+           maximum */
+        if (req.blockCount > 0 && req.blockCount < blockCount)
+        {
+            blockCount = req.blockCount;
+        }
+
         uint32_t totalBlockCount;
         uint32_t startBlockIndex;
         std::vector<Crypto::Hash> supplement = m_core.findBlockchainSupplement(
-            req.block_ids, COMMAND_RPC_GET_BLOCKS_FAST_MAX_COUNT, totalBlockCount, startBlockIndex);
+            req.block_ids, blockCount, totalBlockCount, startBlockIndex);
 
         res.current_height = totalBlockCount;
         res.start_height = startBlockIndex;
