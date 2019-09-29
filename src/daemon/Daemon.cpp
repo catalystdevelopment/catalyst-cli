@@ -195,6 +195,24 @@ int main(int argc, char *argv[])
         }
     }
 
+    if (config.p2pPort < 0 || config.p2pPort > 65535)
+    {
+        std::cout << "P2P Port must be between 0 and 65,535" << std::endl;
+        exit(1);
+    }
+
+    if (config.p2pExternalPort < 0 || config.p2pExternalPort > 65535)
+    {
+        std::cout << "P2P External Port must be between 0 and 65,535" << std::endl;
+        exit(1);
+    }
+
+    if (config.rpcPort < 0 || config.rpcPort > 65535)
+    {
+        std::cout << "RPC Port must be between 0 and 65,535" << std::endl;
+        exit(1);
+    }
+
     try
     {
         fs::path cwdPath = fs::current_path();
