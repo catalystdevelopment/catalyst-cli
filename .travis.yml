@@ -110,7 +110,11 @@ deploy:
   provider: releases
   api_key:
     secure: Bvv6NglewXXOg/S2iJ5+yvd5dT2ygDJrxpA2kjhLk79kUGju9RZXaTq5NPenIru/FBDfVj97VIud2cfRQu17Z2lMfP7EvAJkGCcgLgH5BvNTgOLGY753wLVQwkR4zfM9WujAYUs1V6fvkDpdqObqo8mbinxadLmMr1cDBgC107FEBnvRBVKkG/6MNIH84jq4WMisV8luBw0xTH36y17NFj6ofjlJ7EKPWXXzx3DGs+E/vVVGNjdcZz4S4cMzcsPE/ruklGfV3MiP5Z7c8dYmOe3eLX26zQrXcJ7agMfT4sCmtiF8HzP5cwbjJqsc7I/2xJXQXuyxA7B/C0HTF84FvpPAm+K/x1rL88/EwcqY9g9v5ip5fMouqJ2DAx029tEcOZdTVwV1WBkcckLxWUcTdlmaM1OavXX3CBBC0V4SdcFyPz0DgoKb/lfkCuqVGZhJ/sGoIeyWrfgU4ZyszCl73bHFO+OBBxda66E9maUpIZFhoI8oW3kYlPFq+NWqqZysxR7wCqeQ5a4O90PDrAixPe8jPDV74EzkbxE3PhQPT9EFGGDlt7QEuPYNS3TeH4i7jMBx6qVwlA4WZtdPwUtVWdqoqHiX/YQmy+BwXFP1oL3C6njhD6iGT8AK0tqS42HZPon4B82M+nlhy+3Gq6Ywzp14BazzuLsaocPoJad/l/c=
-  file: ''
+  file: 
+    - catalyst-${TRAVIS_TAG}-${LABEL}.tar.gz
+  skip_cleanup: true
   on:
     repo: catalystdevelopment/catalyst
-    branch: development
+    # branch: development
+    tags: true
+    condition: "$_DEPLOYABLE = true"
