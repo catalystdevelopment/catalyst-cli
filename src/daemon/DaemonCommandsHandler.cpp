@@ -59,36 +59,36 @@ DaemonCommandsHandler::DaemonCommandsHandler(
     m_logManager(log),
     m_prpc_server(prpc_server)
 {
-    m_consoleHandler.setHandler("exit", boost::bind(&DaemonCommandsHandler::exit, this, _1), "Shutdown the daemon");
-    m_consoleHandler.setHandler("help", boost::bind(&DaemonCommandsHandler::help, this, _1), "Show this help");
-    m_consoleHandler.setHandler("print_pl", boost::bind(&DaemonCommandsHandler::print_pl, this, _1), "Print peer list");
+    m_consoleHandler.setHandler("exit", std::bind(&DaemonCommandsHandler::exit, this, std::placeholders::_1), "Shutdown the daemon");
+    m_consoleHandler.setHandler("help", std::bind(&DaemonCommandsHandler::help, this, std::placeholders::_1), "Show this help");
+    m_consoleHandler.setHandler("print_pl", std::bind(&DaemonCommandsHandler::print_pl, this, std::placeholders::_1), "Print peer list");
     m_consoleHandler.setHandler(
-        "print_cn", boost::bind(&DaemonCommandsHandler::print_cn, this, _1), "Print connections");
+        "print_cn", std::bind(&DaemonCommandsHandler::print_cn, this, std::placeholders::_1), "Print connections");
     m_consoleHandler.setHandler(
         "print_bc",
-        boost::bind(&DaemonCommandsHandler::print_bc, this, _1),
+        std::bind(&DaemonCommandsHandler::print_bc, this, std::placeholders::_1),
         "Print blockchain info in a given blocks range, print_bc <begin_height> [<end_height>]");
     m_consoleHandler.setHandler(
         "print_block",
-        boost::bind(&DaemonCommandsHandler::print_block, this, _1),
+        std::bind(&DaemonCommandsHandler::print_block, this, std::placeholders::_1),
         "Print block, print_block <block_hash> | <block_height>");
     m_consoleHandler.setHandler(
         "print_tx",
-        boost::bind(&DaemonCommandsHandler::print_tx, this, _1),
+        std::bind(&DaemonCommandsHandler::print_tx, this, std::placeholders::_1),
         "Print transaction, print_tx <transaction_hash>");
     m_consoleHandler.setHandler(
         "print_pool",
-        boost::bind(&DaemonCommandsHandler::print_pool, this, _1),
+        std::bind(&DaemonCommandsHandler::print_pool, this, std::placeholders::_1),
         "Print transaction pool (long format)");
     m_consoleHandler.setHandler(
         "print_pool_sh",
-        boost::bind(&DaemonCommandsHandler::print_pool_sh, this, _1),
+        std::bind(&DaemonCommandsHandler::print_pool_sh, this, std::placeholders::_1),
         "Print transaction pool (short format)");
     m_consoleHandler.setHandler(
         "set_log",
-        boost::bind(&DaemonCommandsHandler::set_log, this, _1),
+        std::bind(&DaemonCommandsHandler::set_log, this, std::placeholders::_1),
         "set_log <level> - Change current log level, <level> is a number 0-4");
-    m_consoleHandler.setHandler("status", boost::bind(&DaemonCommandsHandler::status, this, _1), "Show daemon status");
+    m_consoleHandler.setHandler("status", std::bind(&DaemonCommandsHandler::status, this, std::placeholders::_1), "Show daemon status");
 }
 
 //--------------------------------------------------------------------------------
