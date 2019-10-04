@@ -359,11 +359,11 @@ std::string getExistingWalletFileName(const ZedConfig &config)
                 std::cout << WarningMsg("\nWallet name can't be blank! Try again.\n\n");
             }
             /* Allow people to enter wallet name with or without file extension */
-            else if (fs::exists(walletName))
+            else if (fs::exists(walletName) && !fs::is_directory(walletName))
             {
                 return walletName;
             }
-            else if (fs::exists(walletFileName))
+            else if (fs::exists(walletFileName) && !fs::is_directory(walletFileName))
             {
                 return walletFileName;
             }
