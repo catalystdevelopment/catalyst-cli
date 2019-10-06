@@ -2178,6 +2178,14 @@ namespace CryptoNote
                 return error::TransactionValidationError::OUTPUT_ZERO_AMOUNT;
             }
 
+            if (blockIndex >= CryptoNote::parameters::MAX_OUTPUT_SIZE_HEIGHT)
+            {
+                if (output.amount > CryptoNote::parameters::MAX_OUTPUT_SIZE_NODE)
+                {
+                    return error::TransactionValidationError::OUTPUT_AMOUNT_TOO_LARGE;
+                }
+            }
+
             if (output.target.type() == typeid(KeyOutput))
             {
                 if (!check_key(boost::get<KeyOutput>(output.target).key))
