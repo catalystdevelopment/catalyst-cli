@@ -385,15 +385,15 @@ bool DaemonCommandsHandler::print_pool_sh(const std::vector<std::string> &args)
         CryptoNote::CachedTransaction ctx(tx);
 
         std::cout << InformationMsg("Hash: ") << SuccessMsg(ctx.getTransactionHash())
-                  << InformationMsg("\nFusion: ");
+                  << InformationMsg(", Fusion: ");
 
         if (ctx.getTransactionFee() == 0)
         {
-            std::cout << SuccessMsg("Yes\n") << std::endl;
+            std::cout << SuccessMsg("Yes") << std::endl;
         }
         else
         {
-            std::cout << WarningMsg("No\n") << std::endl;
+            std::cout << WarningMsg("No") << std::endl;
         }
 
         totalSize += ctx.getTransactionBinaryArray().size();
