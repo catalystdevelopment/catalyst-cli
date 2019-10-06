@@ -378,7 +378,7 @@ bool DaemonCommandsHandler::print_pool_sh(const std::vector<std::string> &args)
 
     uint64_t totalSize = 0;
 
-    const uint64_t maxTxSize = Utilities::getMaxTxSize(m_core.getTopBlockIndex());
+    const float maxTxSize = Utilities::getMaxTxSize(m_core.getTopBlockIndex());
     
     for (const auto &tx : pool)
     {
@@ -399,7 +399,7 @@ bool DaemonCommandsHandler::print_pool_sh(const std::vector<std::string> &args)
         totalSize += ctx.getTransactionBinaryArray().size();
     }
 
-    const uint64_t blocksRequiredToClear = totalSize / maxTxSize;
+    const float blocksRequiredToClear = std::ceil(totalSize / maxTxSize);
 
     std::cout << InformationMsg("\nTotal transactions: ") << SuccessMsg(pool.size())
               << InformationMsg("\nTotal size of transactions: ") << SuccessMsg(Utilities::prettyPrintBytes(totalSize))
