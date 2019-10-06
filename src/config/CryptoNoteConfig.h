@@ -350,5 +350,6 @@ namespace CryptoNote
         "165.227.252.132:11897", // iburnmycd
         "148.251.178.238:11897", // hv
         "46.214.70.196:11897", // CuveeRO
+        "91.239.237.54:11897" // CuveeCZ
     };
 } // namespace CryptoNote
