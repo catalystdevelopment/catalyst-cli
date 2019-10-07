@@ -162,8 +162,8 @@ namespace CryptoNote
 
         const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT = 1300000;
 
-        /* 30 trillion atomic, or 300 billion TRTL */
-        /* This is enforced on the daemon side. An output > 300 billion causes
+        /* 25 trillion atomic, or 250 billion TRTL -> Max supply / mixin+1 outputs */
+        /* This is enforced on the daemon side. An output > 250 billion causes
          * an invalid block. */
         const uint64_t MAX_OUTPUT_SIZE_NODE   = 250'000'000'000'00;
 
