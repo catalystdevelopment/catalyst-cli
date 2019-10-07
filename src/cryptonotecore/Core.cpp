@@ -260,6 +260,7 @@ namespace CryptoNote
 
     Core::~Core()
     {
+        transactionPool->flush();
         contextGroup.interrupt();
         contextGroup.wait();
     }
@@ -1242,6 +1243,13 @@ namespace CryptoNote
                         std::move(rawBlock));
 
                     updateBlockMedianSize();
+
+                    /* We've used these transactions, remove them from the pool if they are there */
+                    for (const auto tx : transactions)
+                    {
+                        transactionPool->removeTransaction(tx.getTransactionHash());
+                    }
+
                     actualizePoolTransactionsLite(validatorState);
 
                     ret = error::AddBlockErrorCode::ADDED_TO_MAIN;
@@ -1277,6 +1285,13 @@ namespace CryptoNote
                         updateMainChainSet();
 
                         updateBlockMedianSize();
+
+                        /* We've used these transactions, remove them from the pool if they are there */
+                        for (const auto tx : transactions)
+                        {
+                            transactionPool->removeTransaction(tx.getTransactionHash());
+                        }
+
                         actualizePoolTransactions();
                         copyTransactionsToPool(chainsLeaves[endpointIndex]);
 
@@ -1643,13 +1658,23 @@ namespace CryptoNote
     {
         TransactionValidatorState validatorState;
 
+        auto transactionHash = cachedTransaction.getTransactionHash();
+
+        /* If the transaction is already in the pool, then checking it again
+           and/or trying to add it to the pool again wastes time and resources.
+           We don't need to waste time doing this as everything we hear about
+           from the network would result in us checking relayed transactions
+           an insane number of times */
+        if (transactionPool->checkIfTransactionPresent(transactionHash))
+        {
+            return {false, "Transaction already exists in pool"};
+        }
+
         const auto [success, error] = isTransactionValidForPool(cachedTransaction, validatorState);
         if (!success)
         {
             return {false, error};
         }
-
-        auto transactionHash = cachedTransaction.getTransactionHash();
 
         if (!transactionPool->pushTransaction(std::move(cachedTransaction), std::move(validatorState)))
         {
@@ -1666,6 +1691,8 @@ namespace CryptoNote
         const CachedTransaction &cachedTransaction,
         TransactionValidatorState &validatorState)
     {
+        const auto transactionHash = cachedTransaction.getTransactionHash();
+
         auto [success, err] = Mixins::validate({cachedTransaction}, getTopBlockIndex());
 
         if (!success)
@@ -1675,10 +1702,20 @@ namespace CryptoNote
 
         if (cachedTransaction.getTransaction().extra.size() >= CryptoNote::parameters::MAX_EXTRA_SIZE_V2)
         {
-            logger(Logging::TRACE) << "Not adding transaction " << cachedTransaction.getTransactionHash()
+            logger(Logging::TRACE) << "Not adding transaction " << transactionHash
                                    << " to pool, extra too large.";
 
             return {false, "Transaction extra data is too large"};
+        }
+
+        auto maxTransactionSize = getMaximumTransactionAllowedSize(blockMedianSize, currency);
+        if (cachedTransaction.getTransactionBinaryArray().size() > maxTransactionSize)
+        {
+            logger(Logging::WARNING) << "Transaction " << transactionHash
+                                     << " is not valid. Reason: transaction is too big ("
+                                     << cachedTransaction.getTransactionBinaryArray().size()
+                                     << "). Maximum allowed size is " << maxTransactionSize;
+            return {false, "Transaction size (bytes) is too large"};
         }
 
         uint64_t fee;
@@ -1686,19 +1723,9 @@ namespace CryptoNote
         if (auto validationResult =
                 validateTransaction(cachedTransaction, validatorState, chainsLeaves[0], fee, getTopBlockIndex()))
         {
-            logger(Logging::DEBUGGING) << "Transaction " << cachedTransaction.getTransactionHash()
+            logger(Logging::DEBUGGING) << "Transaction " << transactionHash
                                        << " is not valid. Reason: " << validationResult.message();
             return {false, validationResult.message()};
-        }
-
-        auto maxTransactionSize = getMaximumTransactionAllowedSize(blockMedianSize, currency);
-        if (cachedTransaction.getTransactionBinaryArray().size() > maxTransactionSize)
-        {
-            logger(Logging::WARNING) << "Transaction " << cachedTransaction.getTransactionHash()
-                                     << " is not valid. Reason: transaction is too big ("
-                                     << cachedTransaction.getTransactionBinaryArray().size()
-                                     << "). Maximum allowed size is " << maxTransactionSize;
-            return {false, "Transaction size (bytes) is too large"};
         }
 
         bool isFusion = fee == 0
@@ -1709,7 +1736,7 @@ namespace CryptoNote
 
         if (!isFusion && fee < currency.minimumFee())
         {
-            logger(Logging::WARNING) << "Transaction " << cachedTransaction.getTransactionHash()
+            logger(Logging::WARNING) << "Transaction " << transactionHash
                                      << " is not valid. Reason: fee is too small and it's not a fusion transaction";
             return {false, "Transaction fee is too small"};
         }
