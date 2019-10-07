@@ -417,6 +417,7 @@ bool DaemonCommandsHandler::status(const std::vector<std::string> &args)
     statusTable.push_back({"Uptime", uptimeStr});
     statusTable.push_back({"Fork Status", Utilities::get_update_status(forkStatus)});
     statusTable.push_back({"Next Fork", Utilities::get_fork_time(iresp.network_height, iresp.upgrade_heights)});
+    statusTable.push_back({"Transaction Pool Size", std::to_string(m_core.getPoolTransactionHashes().size())});
 
     size_t longestValue = 0;
     size_t longestDescription = 0;
