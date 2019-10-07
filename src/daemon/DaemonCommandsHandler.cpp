@@ -17,6 +17,7 @@
 #include <serialization/SerializationTools.h>
 #include <utilities/ColouredMsg.h>
 #include <utilities/FormatTools.h>
+#include <utilities/Utilities.h>
 
 namespace
 {
@@ -365,16 +366,44 @@ bool DaemonCommandsHandler::print_pool(const std::vector<std::string> &args)
 //--------------------------------------------------------------------------------
 bool DaemonCommandsHandler::print_pool_sh(const std::vector<std::string> &args)
 {
-    std::cout << "Pool short state: \n";
-    auto pool = m_core.getPoolTransactions();
+    const auto pool = m_core.getPoolTransactions();
 
+    if (pool.size() == 0)
+    {
+        std::cout << InformationMsg("\nPool state: ") << SuccessMsg("Empty.") << std::endl;
+        return true;
+    }
+
+    std::cout << InformationMsg("\nPool state:\n");
+
+    uint64_t totalSize = 0;
+
+    const float maxTxSize = Utilities::getMaxTxSize(m_core.getTopBlockIndex());
+    
     for (const auto &tx : pool)
     {
         CryptoNote::CachedTransaction ctx(tx);
-        std::cout << printTransactionShortInfo(ctx) << "\n";
+
+        std::cout << InformationMsg("Hash: ") << SuccessMsg(ctx.getTransactionHash())
+                  << InformationMsg(", Fusion: ");
+
+        if (ctx.getTransactionFee() == 0)
+        {
+            std::cout << SuccessMsg("Yes") << std::endl;
+        }
+        else
+        {
+            std::cout << WarningMsg("No") << std::endl;
+        }
+
+        totalSize += ctx.getTransactionBinaryArray().size();
     }
 
-    std::cout << std::endl;
+    const float blocksRequiredToClear = std::ceil(totalSize / maxTxSize);
+
+    std::cout << InformationMsg("\nTotal transactions: ") << SuccessMsg(pool.size())
+              << InformationMsg("\nTotal size of transactions: ") << SuccessMsg(Utilities::prettyPrintBytes(totalSize))
+              << InformationMsg("\nEstimated full blocks to clear: ") << SuccessMsg(blocksRequiredToClear) << std::endl << std::endl;
 
     return true;
 }
