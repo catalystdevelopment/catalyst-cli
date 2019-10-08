@@ -1398,8 +1398,13 @@ namespace CryptoNote
 
             bool isValid = true;
 
+            /* If the transaction is in the chain but somehow was not previously removed, fail */
+            if (isTransactionInChain(poolTxHash))
+            {
+                isValid = false;
+            }
             /* If the transaction does not have the right number of mixins, fail */
-            if (!mixinSuccess)
+            else if (!mixinSuccess)
             {
                 isValid = false;
             }
@@ -1422,6 +1427,21 @@ namespace CryptoNote
                 notifyObservers(makeDelTransactionMessage({poolTxHash}, Messages::DeleteTransaction::Reason::NotActual));
             }
         }
+    }
+
+    /* This quickly finds out if a transaction is in the blockchain somewhere */
+    bool Core::isTransactionInChain(const Crypto::Hash &txnHash)
+    {
+        throwIfNotInitialized();
+
+        auto segment = findSegmentContainingTransaction(txnHash);
+
+        if (segment != nullptr)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     void Core::switchMainChainStorage(uint32_t splitBlockIndex, IBlockchainCache &newChain)
