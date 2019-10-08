@@ -1244,13 +1244,10 @@ namespace CryptoNote
 
                     updateBlockMedianSize();
 
-                    /* We've used these transactions, remove them from the pool if they are there */
-                    for (const auto tx : transactions)
-                    {
-                        transactionPool->removeTransaction(tx.getTransactionHash());
-                    }
-
-                    actualizePoolTransactionsLite(validatorState);
+                    /* Take the current block spent key images and run them
+                       against the pool to remove any transactions that may
+                       be in the pool that would now be considered invalid */
+                    checkAndRemoveInvalidPoolTransactions(validatorState);
 
                     ret = error::AddBlockErrorCode::ADDED_TO_MAIN;
                     logger(Logging::DEBUGGING) << "Block " << blockStr << " added to main chain.";
@@ -1286,13 +1283,11 @@ namespace CryptoNote
 
                         updateBlockMedianSize();
 
-                        /* We've used these transactions, remove them from the pool if they are there */
-                        for (const auto tx : transactions)
-                        {
-                            transactionPool->removeTransaction(tx.getTransactionHash());
-                        }
+                        /* Take the current block spent key images and run them
+                           against the pool to remove any transactions that may
+                           be in the pool that would now be considered invalid */
+                        checkAndRemoveInvalidPoolTransactions(validatorState);
 
-                        actualizePoolTransactions();
                         copyTransactionsToPool(chainsLeaves[endpointIndex]);
 
                         switchMainChainStorage(chainsLeaves[0]->getStartBlockIndex(), *chainsLeaves[0]);
@@ -1378,44 +1373,53 @@ namespace CryptoNote
         return ret;
     }
 
-    void Core::actualizePoolTransactions()
+    /* This method is a light version of transaction validation that is used
+       to clear the transaction pool of transactions that have been invalidated
+       by the addition of a block to the blockchain. As the transactions are already
+       in the pool, there are only a subset of normal transaction validation
+       tests that need to be completed to determine if the transaction can
+       stay in the pool at this time. */
+    void Core::checkAndRemoveInvalidPoolTransactions(
+        const TransactionValidatorState blockTransactionsState)
     {
         auto &pool = *transactionPool;
-        auto hashes = pool.getTransactionHashes();
 
-        for (auto &hash : hashes)
+        const auto poolHashes = pool.getTransactionHashes();
+
+        const auto maxTransactionSize = getMaximumTransactionAllowedSize(blockMedianSize, currency);
+
+        for (const auto poolTxHash : poolHashes)
         {
-            auto tx = pool.getTransaction(hash);
-            pool.removeTransaction(hash);
+            const auto poolTx = pool.getTransaction(poolTxHash);
 
-            const auto [success, error] = addTransactionToPool(std::move(tx));
-            if (!success)
+            const auto poolTxState = extractSpentOutputs(poolTx);
+
+            auto [mixinSuccess, err] = Mixins::validate({poolTx}, getTopBlockIndex());
+
+            bool isValid = true;
+
+            /* If the transaction does not have the right number of mixins, fail */
+            if (!mixinSuccess)
             {
-                notifyObservers(makeDelTransactionMessage({hash}, Messages::DeleteTransaction::Reason::NotActual));
+                isValid = false;
             }
-        }
-    }
-
-    void Core::actualizePoolTransactionsLite(const TransactionValidatorState &validatorState)
-    {
-        auto &pool = *transactionPool;
-        auto hashes = pool.getTransactionHashes();
-
-        TransactionValidatorState validator = validatorState;
-
-        for (auto &hash : hashes)
-        {
-            auto tx = pool.getTransaction(hash);
-
-            auto txState = extractSpentOutputs(tx);
-
-            const auto [transactionValidForPool, error] = isTransactionValidForPool(tx, validator);
-            if (hasIntersections(validatorState, txState)
-                || tx.getTransactionBinaryArray().size() > getMaximumTransactionAllowedSize(blockMedianSize, currency)
-                || !transactionValidForPool)
+            /* If the transaction exceeds the maximum size of a transaction, fail */
+            else if (poolTx.getTransactionBinaryArray().size() > maxTransactionSize)
             {
-                pool.removeTransaction(hash);
-                notifyObservers(makeDelTransactionMessage({hash}, Messages::DeleteTransaction::Reason::NotActual));
+                isValid = false;
+            }
+            /* If the the transaction contains outputs that were spent in the new block, fail */
+            else if (hasIntersections(blockTransactionsState, poolTxState))
+            {
+                isValid = false;
+            }
+
+            /* If the transaction is no longer valid, remove it from the pool
+               and tell everyone else that they should also remove it from the pool */
+            if (!isValid)
+            {
+                pool.removeTransaction(poolTxHash);
+                notifyObservers(makeDelTransactionMessage({poolTxHash}, Messages::DeleteTransaction::Reason::NotActual));
             }
         }
     }
@@ -1862,22 +1866,22 @@ namespace CryptoNote
         b.timestamp = time(nullptr);
 
         /* Ok, so if an attacker is fiddling around with timestamps on the network,
-     they can make it so all the valid pools / miners don't produce valid
-     blocks. This is because the timestamp is created as the users current time,
-     however, if the attacker is a large % of the hashrate, they can slowly
-     increase the timestamp into the future, shifting the median timestamp
-     forwards. At some point, this will mean the valid pools will submit a
-     block with their valid timestamps, and it will be rejected for being
-     behind the median timestamp / too far in the past. The simple way to
-     handle this is just to check if our timestamp is going to be invalid, and
-     set it to the median.
+           they can make it so all the valid pools / miners don't produce valid
+           blocks. This is because the timestamp is created as the users current time,
+           however, if the attacker is a large % of the hashrate, they can slowly
+           increase the timestamp into the future, shifting the median timestamp
+           forwards. At some point, this will mean the valid pools will submit a
+           block with their valid timestamps, and it will be rejected for being
+           behind the median timestamp / too far in the past. The simple way to
+           handle this is just to check if our timestamp is going to be invalid, and
+           set it to the median.
 
-     Once the attack ends, the median timestamp will remain how it is, until
-     the time on the clock goes forwards, and we can start submitting valid
-     timestamps again, and then we are back to normal. */
+           Once the attack ends, the median timestamp will remain how it is, until
+           the time on the clock goes forwards, and we can start submitting valid
+           timestamps again, and then we are back to normal. */
 
         /* Thanks to jagerman for this patch:
-     https://github.com/loki-project/loki/pull/26 */
+           https://github.com/loki-project/loki/pull/26 */
 
         /* How many blocks we look in the past to calculate the median timestamp */
         uint64_t blockchain_timestamp_check_window;
@@ -1892,7 +1896,7 @@ namespace CryptoNote
         }
 
         /* Skip the first N blocks, we don't have enough blocks to calculate a
-     proper median yet */
+           proper median yet */
         if (height >= blockchain_timestamp_check_window)
         {
             std::vector<uint64_t> timestamps;
@@ -1922,11 +1926,11 @@ namespace CryptoNote
         fillBlockTemplate(b, medianSize, currency.maxBlockCumulativeSize(height), height, transactionsSize, fee);
 
         /*
-     two-phase miner transaction generation: we don't know exact block size until we prepare block, but we don't know
-     reward until we know
-     block size, so first miner transaction generated with fake amount of money, and with phase we know think we know
-     expected block size
-  */
+           two-phase miner transaction generation: we don't know exact block size until we prepare block, but we don't know
+           reward until we know
+           block size, so first miner transaction generated with fake amount of money, and with phase we know think we know
+           expected block size
+        */
         // make blocks coin-base tx looks close to real coinbase tx to get truthful blob size
         bool r = currency.constructMinerTx(
             b.majorVersion,
@@ -3007,7 +3011,7 @@ namespace CryptoNote
             };
 
         /* First we're going to loop through transactions that have a fee:
-       ie. the transactions that are paying to use the network */
+           ie. the transactions that are paying to use the network */
         for (const auto &transaction : regularTransactions)
         {
             if (addTransactionToBlockTemplate(transaction))
@@ -3023,7 +3027,7 @@ namespace CryptoNote
         }
 
         /* Then we'll loop through the fusion transactions as they don't
-       pay anything to use the network */
+           pay anything to use the network */
         for (const auto &transaction : fusionTransactions)
         {
             if (addTransactionToBlockTemplate(transaction))
