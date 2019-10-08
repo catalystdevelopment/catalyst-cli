@@ -87,6 +87,9 @@ namespace DaemonConfig
             "enable-blockexplorer",
             "Enable the Blockchain Explorer RPC",
             cxxopts::value<bool>()->default_value("false")->implicit_value("true"))(
+            "enable-blockexplorer-detailed",
+            "Enable the Blockchain Explorer Detailed RPC",
+            cxxopts::value<bool>()->default_value("false")->implicit_value("true"))(
             "enable-cors",
             "Adds header 'Access-Control-Allow-Origin' to the RPC responses using the <domain>. Uses the value "
             "specified as the domain. Use * for all.",
@@ -346,6 +349,11 @@ namespace DaemonConfig
                 config.enableBlockExplorer = cli["enable-blockexplorer"].as<bool>();
             }
 
+            if (cli.count("enable-blockexplorer-detailed") > 0)
+            {
+                config.enableBlockExplorerDetailed = cli["enable-blockexplorer-detailed"].as<bool>();
+            }
+
             if (cli.count("enable-cors") > 0)
             {
                 config.enableCors = cli["enable-cors"].as<std::vector<std::string>>();
@@ -602,6 +610,11 @@ namespace DaemonConfig
                     config.enableBlockExplorer = cfgValue.at(0) == '1';
                     updated = true;
                 }
+                else if (cfgKey.compare("enable-blockexplorer-detailed") == 0)
+                {
+                    config.enableBlockExplorerDetailed = cfgValue.at(0) == '1';
+                    updated = true;
+                }
                 else if (cfgKey.compare("enable-cors") == 0)
                 {
                     cors.push_back(cfgValue);
@@ -805,6 +818,11 @@ namespace DaemonConfig
             config.enableBlockExplorer = j["enable-blockexplorer"].GetBool();
         }
 
+        if (j.HasMember("enable-blockexplorer-detailed"))
+        {
+            config.enableBlockExplorerDetailed = j["enable-blockexplorer-detailed"].GetBool();
+        }
+
         if (j.HasMember("enable-cors"))
         {
             const Value &va = j["enable-cors"];
@@ -898,6 +916,7 @@ namespace DaemonConfig
         }
 
         j.AddMember("enable-blockexplorer", config.enableBlockExplorer, alloc);
+        j.AddMember("enable-blockexplorer-detailed", config.enableBlockExplorerDetailed, alloc);
         j.AddMember("fee-address", config.feeAddress, alloc);
         j.AddMember("fee-amount", config.feeAmount, alloc);
 
