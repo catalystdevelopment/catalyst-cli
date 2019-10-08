@@ -65,6 +65,7 @@ set(NO_OPTIMIZED_MULTIPLY_ON_ARM OFF CACHE BOOL "Turn off Optimized Multiplicati
 
 ## This section defines a few parameters that we open up for use with RocksDB
 set(WITH_ZSTD ON CACHE STRING "Enable zstd compression")
+set(WITH_LZ4 ON CACHE STRING "Enable lz4 compression")
 
 message(STATUS "Building for target architecture: ${ARCH}")
 
