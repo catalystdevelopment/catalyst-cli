@@ -22,6 +22,7 @@ namespace CryptoNote
 //-----------------------------------------------
 #define CORE_RPC_STATUS_OK "OK"
 #define CORE_RPC_STATUS_BUSY "BUSY"
+#define CORE_RPC_ERROR_EMPTY ""
 
     struct EMPTY_STRUCT
     {
@@ -67,9 +68,12 @@ namespace CryptoNote
                 block_ids; //*first 10 blocks id goes sequential, next goes in pow(2,n) offset, like 2, 4, 8, 16, 32, 64
                            // and so on, and the last one is always genesis block */
 
+            uint32_t blockCount;
+
             void serialize(ISerializer &s)
             {
-                KV_MEMBER(block_ids);
+                KV_MEMBER(block_ids)
+                KV_MEMBER(blockCount)
             }
         };
 
@@ -335,10 +339,12 @@ namespace CryptoNote
         struct response
         {
             std::string status;
+            std::string error;
 
             void serialize(ISerializer &s)
             {
                 KV_MEMBER(status)
+                KV_MEMBER(error)
             }
         };
     };

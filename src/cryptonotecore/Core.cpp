@@ -260,6 +260,7 @@ namespace CryptoNote
 
     Core::~Core()
     {
+        transactionPool->flush();
         contextGroup.interrupt();
         contextGroup.wait();
     }
@@ -456,7 +457,8 @@ namespace CryptoNote
             auto transactions = alt->getRawTransactions(alt->getTransactionHashes());
             for (auto &transaction : transactions)
             {
-                if (addTransactionToPool(std::move(transaction)))
+                const auto [success, error] = addTransactionToPool(std::move(transaction));
+                if (success)
                 {
                     // TODO: send notification
                 }
@@ -1213,7 +1215,7 @@ namespace CryptoNote
         }
         else if (!currency.checkProofOfWork(cachedBlock, currentDifficulty))
         {
-            logger(Logging::WARNING) << "Proof of work too weak for block " << blockStr;
+            logger(Logging::DEBUGGING) << "Proof of work too weak for block " << blockStr;
             return error::BlockValidationError::PROOF_OF_WORK_TOO_WEAK;
         }
 
@@ -1241,7 +1243,11 @@ namespace CryptoNote
                         std::move(rawBlock));
 
                     updateBlockMedianSize();
-                    actualizePoolTransactionsLite(validatorState);
+
+                    /* Take the current block spent key images and run them
+                       against the pool to remove any transactions that may
+                       be in the pool that would now be considered invalid */
+                    checkAndRemoveInvalidPoolTransactions(validatorState);
 
                     ret = error::AddBlockErrorCode::ADDED_TO_MAIN;
                     logger(Logging::DEBUGGING) << "Block " << blockStr << " added to main chain.";
@@ -1276,7 +1282,12 @@ namespace CryptoNote
                         updateMainChainSet();
 
                         updateBlockMedianSize();
-                        actualizePoolTransactions();
+
+                        /* Take the current block spent key images and run them
+                           against the pool to remove any transactions that may
+                           be in the pool that would now be considered invalid */
+                        checkAndRemoveInvalidPoolTransactions(validatorState);
+
                         copyTransactionsToPool(chainsLeaves[endpointIndex]);
 
                         switchMainChainStorage(chainsLeaves[0]->getStartBlockIndex(), *chainsLeaves[0]);
@@ -1362,44 +1373,75 @@ namespace CryptoNote
         return ret;
     }
 
-    void Core::actualizePoolTransactions()
+    /* This method is a light version of transaction validation that is used
+       to clear the transaction pool of transactions that have been invalidated
+       by the addition of a block to the blockchain. As the transactions are already
+       in the pool, there are only a subset of normal transaction validation
+       tests that need to be completed to determine if the transaction can
+       stay in the pool at this time. */
+    void Core::checkAndRemoveInvalidPoolTransactions(
+        const TransactionValidatorState blockTransactionsState)
     {
         auto &pool = *transactionPool;
-        auto hashes = pool.getTransactionHashes();
 
-        for (auto &hash : hashes)
+        const auto poolHashes = pool.getTransactionHashes();
+
+        const auto maxTransactionSize = getMaximumTransactionAllowedSize(blockMedianSize, currency);
+
+        for (const auto poolTxHash : poolHashes)
         {
-            auto tx = pool.getTransaction(hash);
-            pool.removeTransaction(hash);
+            const auto poolTx = pool.getTransaction(poolTxHash);
 
-            if (!addTransactionToPool(std::move(tx)))
+            const auto poolTxState = extractSpentOutputs(poolTx);
+
+            auto [mixinSuccess, err] = Mixins::validate({poolTx}, getTopBlockIndex());
+
+            bool isValid = true;
+
+            /* If the transaction is in the chain but somehow was not previously removed, fail */
+            if (isTransactionInChain(poolTxHash))
             {
-                notifyObservers(makeDelTransactionMessage({hash}, Messages::DeleteTransaction::Reason::NotActual));
+                isValid = false;
+            }
+            /* If the transaction does not have the right number of mixins, fail */
+            else if (!mixinSuccess)
+            {
+                isValid = false;
+            }
+            /* If the transaction exceeds the maximum size of a transaction, fail */
+            else if (poolTx.getTransactionBinaryArray().size() > maxTransactionSize)
+            {
+                isValid = false;
+            }
+            /* If the the transaction contains outputs that were spent in the new block, fail */
+            else if (hasIntersections(blockTransactionsState, poolTxState))
+            {
+                isValid = false;
+            }
+
+            /* If the transaction is no longer valid, remove it from the pool
+               and tell everyone else that they should also remove it from the pool */
+            if (!isValid)
+            {
+                pool.removeTransaction(poolTxHash);
+                notifyObservers(makeDelTransactionMessage({poolTxHash}, Messages::DeleteTransaction::Reason::NotActual));
             }
         }
     }
 
-    void Core::actualizePoolTransactionsLite(const TransactionValidatorState &validatorState)
+    /* This quickly finds out if a transaction is in the blockchain somewhere */
+    bool Core::isTransactionInChain(const Crypto::Hash &txnHash)
     {
-        auto &pool = *transactionPool;
-        auto hashes = pool.getTransactionHashes();
+        throwIfNotInitialized();
 
-        TransactionValidatorState validator = validatorState;
+        auto segment = findSegmentContainingTransaction(txnHash);
 
-        for (auto &hash : hashes)
+        if (segment != nullptr)
         {
-            auto tx = pool.getTransaction(hash);
-
-            auto txState = extractSpentOutputs(tx);
-
-            if (hasIntersections(validatorState, txState)
-                || tx.getTransactionBinaryArray().size() > getMaximumTransactionAllowedSize(blockMedianSize, currency)
-                || !isTransactionValidForPool(tx, validator))
-            {
-                pool.removeTransaction(hash);
-                notifyObservers(makeDelTransactionMessage({hash}, Messages::DeleteTransaction::Reason::NotActual));
-            }
+            return true;
         }
+
+        return false;
     }
 
     void Core::switchMainChainStorage(uint32_t splitBlockIndex, IBlockchainCache &newChain)
@@ -1612,7 +1654,7 @@ namespace CryptoNote
         }
     }
 
-    bool Core::addTransactionToPool(const BinaryArray &transactionBinaryArray)
+    std::tuple<bool, std::string> Core::addTransactionToPool(const BinaryArray &transactionBinaryArray)
     {
         throwIfNotInitialized();
 
@@ -1620,60 +1662,84 @@ namespace CryptoNote
         if (!fromBinaryArray<Transaction>(transaction, transactionBinaryArray))
         {
             logger(Logging::WARNING) << "Couldn't add transaction to pool due to deserialization error";
-            return false;
+            return {false, "Could not deserialize transaction"};
         }
 
         CachedTransaction cachedTransaction(std::move(transaction));
         auto transactionHash = cachedTransaction.getTransactionHash();
 
-        if (!addTransactionToPool(std::move(cachedTransaction)))
+        const auto [success, error] = addTransactionToPool(std::move(cachedTransaction));
+        if (!success)
         {
-            return false;
+            return {false, error};
         }
 
         notifyObservers(makeAddTransactionMessage({transactionHash}));
-        return true;
+        return {true, ""};
     }
 
-    bool Core::addTransactionToPool(CachedTransaction &&cachedTransaction)
+    std::tuple<bool, std::string> Core::addTransactionToPool(CachedTransaction &&cachedTransaction)
     {
         TransactionValidatorState validatorState;
 
-        if (!isTransactionValidForPool(cachedTransaction, validatorState))
+        auto transactionHash = cachedTransaction.getTransactionHash();
+
+        /* If the transaction is already in the pool, then checking it again
+           and/or trying to add it to the pool again wastes time and resources.
+           We don't need to waste time doing this as everything we hear about
+           from the network would result in us checking relayed transactions
+           an insane number of times */
+        if (transactionPool->checkIfTransactionPresent(transactionHash))
         {
-            return false;
+            return {false, "Transaction already exists in pool"};
         }
 
-        auto transactionHash = cachedTransaction.getTransactionHash();
+        const auto [success, error] = isTransactionValidForPool(cachedTransaction, validatorState);
+        if (!success)
+        {
+            return {false, error};
+        }
 
         if (!transactionPool->pushTransaction(std::move(cachedTransaction), std::move(validatorState)))
         {
             logger(Logging::DEBUGGING) << "Failed to push transaction " << transactionHash
                                        << " to pool, already exists";
-            return false;
+            return {false, "Transaction already exists in pool"};
         }
 
         logger(Logging::DEBUGGING) << "Transaction " << transactionHash << " has been added to pool";
-        return true;
+        return {true, ""};
     }
 
-    bool Core::isTransactionValidForPool(
+    std::tuple<bool, std::string> Core::isTransactionValidForPool(
         const CachedTransaction &cachedTransaction,
         TransactionValidatorState &validatorState)
     {
+        const auto transactionHash = cachedTransaction.getTransactionHash();
+
         auto [success, err] = Mixins::validate({cachedTransaction}, getTopBlockIndex());
 
         if (!success)
         {
-            return false;
+            return {false, "Transaction does not contain the proper number of ring signatures"};
         }
 
         if (cachedTransaction.getTransaction().extra.size() >= CryptoNote::parameters::MAX_EXTRA_SIZE_V2)
         {
-            logger(Logging::TRACE) << "Not adding transaction " << cachedTransaction.getTransactionHash()
+            logger(Logging::TRACE) << "Not adding transaction " << transactionHash
                                    << " to pool, extra too large.";
 
-            return false;
+            return {false, "Transaction extra data is too large"};
+        }
+
+        auto maxTransactionSize = getMaximumTransactionAllowedSize(blockMedianSize, currency);
+        if (cachedTransaction.getTransactionBinaryArray().size() > maxTransactionSize)
+        {
+            logger(Logging::WARNING) << "Transaction " << transactionHash
+                                     << " is not valid. Reason: transaction is too big ("
+                                     << cachedTransaction.getTransactionBinaryArray().size()
+                                     << "). Maximum allowed size is " << maxTransactionSize;
+            return {false, "Transaction size (bytes) is too large"};
         }
 
         uint64_t fee;
@@ -1681,19 +1747,9 @@ namespace CryptoNote
         if (auto validationResult =
                 validateTransaction(cachedTransaction, validatorState, chainsLeaves[0], fee, getTopBlockIndex()))
         {
-            logger(Logging::DEBUGGING) << "Transaction " << cachedTransaction.getTransactionHash()
+            logger(Logging::DEBUGGING) << "Transaction " << transactionHash
                                        << " is not valid. Reason: " << validationResult.message();
-            return false;
-        }
-
-        auto maxTransactionSize = getMaximumTransactionAllowedSize(blockMedianSize, currency);
-        if (cachedTransaction.getTransactionBinaryArray().size() > maxTransactionSize)
-        {
-            logger(Logging::WARNING) << "Transaction " << cachedTransaction.getTransactionHash()
-                                     << " is not valid. Reason: transaction is too big ("
-                                     << cachedTransaction.getTransactionBinaryArray().size()
-                                     << "). Maximum allowed size is " << maxTransactionSize;
-            return false;
+            return {false, validationResult.message()};
         }
 
         bool isFusion = fee == 0
@@ -1704,12 +1760,12 @@ namespace CryptoNote
 
         if (!isFusion && fee < currency.minimumFee())
         {
-            logger(Logging::WARNING) << "Transaction " << cachedTransaction.getTransactionHash()
+            logger(Logging::WARNING) << "Transaction " << transactionHash
                                      << " is not valid. Reason: fee is too small and it's not a fusion transaction";
-            return false;
+            return {false, "Transaction fee is too small"};
         }
 
-        return true;
+        return {true, ""};
     }
 
     std::vector<Crypto::Hash> Core::getPoolTransactionHashes() const
@@ -1830,22 +1886,22 @@ namespace CryptoNote
         b.timestamp = time(nullptr);
 
         /* Ok, so if an attacker is fiddling around with timestamps on the network,
-     they can make it so all the valid pools / miners don't produce valid
-     blocks. This is because the timestamp is created as the users current time,
-     however, if the attacker is a large % of the hashrate, they can slowly
-     increase the timestamp into the future, shifting the median timestamp
-     forwards. At some point, this will mean the valid pools will submit a
-     block with their valid timestamps, and it will be rejected for being
-     behind the median timestamp / too far in the past. The simple way to
-     handle this is just to check if our timestamp is going to be invalid, and
-     set it to the median.
+           they can make it so all the valid pools / miners don't produce valid
+           blocks. This is because the timestamp is created as the users current time,
+           however, if the attacker is a large % of the hashrate, they can slowly
+           increase the timestamp into the future, shifting the median timestamp
+           forwards. At some point, this will mean the valid pools will submit a
+           block with their valid timestamps, and it will be rejected for being
+           behind the median timestamp / too far in the past. The simple way to
+           handle this is just to check if our timestamp is going to be invalid, and
+           set it to the median.
 
-     Once the attack ends, the median timestamp will remain how it is, until
-     the time on the clock goes forwards, and we can start submitting valid
-     timestamps again, and then we are back to normal. */
+           Once the attack ends, the median timestamp will remain how it is, until
+           the time on the clock goes forwards, and we can start submitting valid
+           timestamps again, and then we are back to normal. */
 
         /* Thanks to jagerman for this patch:
-     https://github.com/loki-project/loki/pull/26 */
+           https://github.com/loki-project/loki/pull/26 */
 
         /* How many blocks we look in the past to calculate the median timestamp */
         uint64_t blockchain_timestamp_check_window;
@@ -1860,7 +1916,7 @@ namespace CryptoNote
         }
 
         /* Skip the first N blocks, we don't have enough blocks to calculate a
-     proper median yet */
+           proper median yet */
         if (height >= blockchain_timestamp_check_window)
         {
             std::vector<uint64_t> timestamps;
@@ -1890,11 +1946,11 @@ namespace CryptoNote
         fillBlockTemplate(b, medianSize, currency.maxBlockCumulativeSize(height), height, transactionsSize, fee);
 
         /*
-     two-phase miner transaction generation: we don't know exact block size until we prepare block, but we don't know
-     reward until we know
-     block size, so first miner transaction generated with fake amount of money, and with phase we know think we know
-     expected block size
-  */
+           two-phase miner transaction generation: we don't know exact block size until we prepare block, but we don't know
+           reward until we know
+           block size, so first miner transaction generated with fake amount of money, and with phase we know think we know
+           expected block size
+        */
         // make blocks coin-base tx looks close to real coinbase tx to get truthful blob size
         bool r = currency.constructMinerTx(
             b.majorVersion,
@@ -2171,6 +2227,14 @@ namespace CryptoNote
             if (output.amount == 0)
             {
                 return error::TransactionValidationError::OUTPUT_ZERO_AMOUNT;
+            }
+
+            if (blockIndex >= CryptoNote::parameters::MAX_OUTPUT_SIZE_HEIGHT)
+            {
+                if (output.amount > CryptoNote::parameters::MAX_OUTPUT_SIZE_NODE)
+                {
+                    return error::TransactionValidationError::OUTPUT_AMOUNT_TOO_LARGE;
+                }
             }
 
             if (output.target.type() == typeid(KeyOutput))
@@ -2967,7 +3031,7 @@ namespace CryptoNote
             };
 
         /* First we're going to loop through transactions that have a fee:
-       ie. the transactions that are paying to use the network */
+           ie. the transactions that are paying to use the network */
         for (const auto &transaction : regularTransactions)
         {
             if (addTransactionToBlockTemplate(transaction))
@@ -2983,7 +3047,7 @@ namespace CryptoNote
         }
 
         /* Then we'll loop through the fusion transactions as they don't
-       pay anything to use the network */
+           pay anything to use the network */
         for (const auto &transaction : fusionTransactions)
         {
             if (addTransactionToBlockTemplate(transaction))

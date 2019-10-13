@@ -162,6 +162,18 @@ namespace CryptoNote
 
         const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT = 1300000;
 
+        /* 25 trillion atomic, or 250 billion TRTL -> Max supply / mixin+1 outputs */
+        /* This is enforced on the daemon side. An output > 250 billion causes
+         * an invalid block. */
+        const uint64_t MAX_OUTPUT_SIZE_NODE   = 250'000'000'000'00;
+
+        /* 100 billion atomic, or 1 billion TRTL */
+        /* This is enforced on the client side. An output > 1 billion will not
+         * be created in a transaction */
+        const uint64_t MAX_OUTPUT_SIZE_CLIENT = 1'000'000'000'00;
+
+        const uint64_t MAX_OUTPUT_SIZE_HEIGHT = 2000000;
+
         /* For new projects forked from this code base, the values immediately below
            should be changed to 0 to prevent issues with transaction processing
            and other possible unexpected behavior */
@@ -202,12 +214,6 @@ namespace CryptoNote
         const uint32_t UPGRADE_HEIGHT_V6 = 1800000; // Upgrade height for Chukwa switch.
 
         const uint32_t UPGRADE_HEIGHT_CURRENT = UPGRADE_HEIGHT_V6;
-
-        /* This value is here to handle the difficult reset needed for the PoW upgrade
-           at block major version V6 */
-        const uint64_t DIFFICULTY_RESET_HEIGHT_V1 = UPGRADE_HEIGHT_V6;
-        const float DIFFICULTY_RESET_MULTIPLIER_V1 = 0.1;
-        const uint64_t DIFFICULTY_RESET_WINDOW_V1 = DIFFICULTY_BLOCKS_COUNT_V3;
 
         const unsigned UPGRADE_VOTING_THRESHOLD = 90; // percent
         const uint32_t UPGRADE_VOTING_WINDOW = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY; // blocks
@@ -337,10 +343,10 @@ namespace CryptoNote
     const size_t P2P_DEFAULT_HANDSHAKE_INVOKE_TIMEOUT = 5000; // 5 seconds
     const char P2P_STAT_TRUSTED_PUB_KEY[] = "";
 
-    const uint64_t DATABASE_WRITE_BUFFER_MB_DEFAULT_SIZE = 1024; // 1 GB
-    const uint64_t DATABASE_READ_BUFFER_MB_DEFAULT_SIZE = 1024; // 1 GB
-    const uint32_t DATABASE_DEFAULT_MAX_OPEN_FILES = 500; // 500 files
-    const uint16_t DATABASE_DEFAULT_BACKGROUND_THREADS_COUNT = 10; // 10 DB threads
+    const uint64_t DATABASE_WRITE_BUFFER_MB_DEFAULT_SIZE = 256; // 256 MB
+    const uint64_t DATABASE_READ_BUFFER_MB_DEFAULT_SIZE = 128; // 128 MB
+    const uint32_t DATABASE_DEFAULT_MAX_OPEN_FILES = 125; // 125 files
+    const uint16_t DATABASE_DEFAULT_BACKGROUND_THREADS_COUNT = 4; // 4 DB threads
 
     const char LATEST_VERSION_URL[] = "http://latest.turtlecoin.lol";
 
@@ -353,6 +359,10 @@ namespace CryptoNote
         "206.189.142.142:11897", // rock
         "145.239.88.119:11999", // cision
         "142.44.242.106:11897", // tom
-        "165.227.252.132:11897" // iburnmycd
+        "165.227.252.132:11897", // iburnmycd
+        "148.251.178.238:11897", // hv
+        "45.32.138.7:11897", // extra
+        "46.214.70.196:11897", // CuveeRO
+        "91.239.237.54:11897" // CuveeCZ
     };
 } // namespace CryptoNote

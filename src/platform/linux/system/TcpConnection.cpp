@@ -93,7 +93,7 @@ namespace System
                 knownError = true;
             }
 
-            if (knownError)
+            if (!knownError)
             {
                 message = "recv failed, " + lastErrorMessage();
             }
@@ -224,7 +224,7 @@ namespace System
                 knownError = true;
             }
 
-            if (knownError)
+            if (!knownError)
             {
                 message = "send failed, " + lastErrorMessage();
             }
