@@ -123,6 +123,7 @@ namespace CryptoNote
                 for (const auto &cors_domain : obj->getCorsDomains())
                 {
                     response.addHeader("Access-Control-Allow-Origin", cors_domain);
+                    response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-API-KEY");
                 }
                 response.addHeader("Content-Type", "application/json");
                 response.setBody(storeToJson(res.data()));
