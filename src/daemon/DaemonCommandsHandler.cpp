@@ -60,11 +60,22 @@ DaemonCommandsHandler::DaemonCommandsHandler(
     m_logManager(log),
     m_prpc_server(prpc_server)
 {
-    m_consoleHandler.setHandler("exit", std::bind(&DaemonCommandsHandler::exit, this, std::placeholders::_1), "Shutdown the daemon");
-    m_consoleHandler.setHandler("help", std::bind(&DaemonCommandsHandler::help, this, std::placeholders::_1), "Show this help");
-    m_consoleHandler.setHandler("print_pl", std::bind(&DaemonCommandsHandler::print_pl, this, std::placeholders::_1), "Print peer list");
     m_consoleHandler.setHandler(
-        "print_cn", std::bind(&DaemonCommandsHandler::print_cn, this, std::placeholders::_1), "Print connections");
+        "exit", 
+        std::bind(&DaemonCommandsHandler::exit, this, std::placeholders::_1), 
+        "Shutdown the daemon");
+    m_consoleHandler.setHandler(
+        "help", 
+        std::bind(&DaemonCommandsHandler::help, this, std::placeholders::_1), 
+        "Show this help");
+    m_consoleHandler.setHandler(
+        "print_pl", 
+        std::bind(&DaemonCommandsHandler::print_pl, this, std::placeholders::_1), 
+        "Print peer list");
+    m_consoleHandler.setHandler(
+        "print_cn", 
+        std::bind(&DaemonCommandsHandler::print_cn, this, std::placeholders::_1), 
+        "Print connections");
     m_consoleHandler.setHandler(
         "print_bc",
         std::bind(&DaemonCommandsHandler::print_bc, this, std::placeholders::_1),
@@ -89,7 +100,10 @@ DaemonCommandsHandler::DaemonCommandsHandler(
         "set_log",
         std::bind(&DaemonCommandsHandler::set_log, this, std::placeholders::_1),
         "set_log <level> - Change current log level, <level> is a number 0-4");
-    m_consoleHandler.setHandler("status", std::bind(&DaemonCommandsHandler::status, this, std::placeholders::_1), "Show daemon status");
+    m_consoleHandler.setHandler(
+        "status", 
+        std::bind(&DaemonCommandsHandler::status, this, std::placeholders::_1), 
+        "Show daemon status");
 }
 
 //--------------------------------------------------------------------------------
