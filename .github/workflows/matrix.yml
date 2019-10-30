@@ -1,7 +1,6 @@
 name: Build
 on: [push, pull_request]
 
-
 jobs:
   # Common Build matrix for builds on Ubuntu VM
   ubuntu_build:
