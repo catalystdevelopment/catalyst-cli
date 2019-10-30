@@ -200,7 +200,7 @@ set_property(TARGET WalletApi PROPERTY OUTPUT_NAME "wallet-api")
 set_property(TARGET WalletUpgrader PROPERTY OUTPUT_NAME "wallet-upgrader")
 
 # Additional make targets, can be used to build a subset of the targets
-# e.g. make pool will build only TurtleCoind and service
-add_custom_target(pool DEPENDS Catalystd service)
+# e.g. make pool will build only Catalystd and service
+add_custom_target(pool DEPENDS Catalystd WalletService)
 add_custom_target(solominer DEPENDS Catalystd zedwallet miner)
 add_custom_target(cli DEPENDS Catalystd zedwallet)
