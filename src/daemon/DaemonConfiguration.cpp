@@ -81,17 +81,14 @@ namespace DaemonConfig
             "no-console",
             "Disable daemon console commands",
             cxxopts::value<bool>()->default_value("false")->implicit_value("true"))(
-            "rocksdb",
-            "Use Rocksdb for local cache files",
-            cxxopts::value<bool>(config.useRocksdbForLocalCaches)->default_value("false")->implicit_value("true"))(
-            "save-config", "Save the configuration to the specified <file>", cxxopts::value<std::string>(), "<file>")(
-            "sqlite",
-            "Use SQLite3 for local cache files",
-            cxxopts::value<bool>(config.useSqliteForLocalCaches)->default_value("false")->implicit_value("true"));
+            "save-config", "Save the configuration to the specified <file>", cxxopts::value<std::string>(), "<file>");
 
         options.add_options("RPC")(
             "enable-blockexplorer",
             "Enable the Blockchain Explorer RPC",
+            cxxopts::value<bool>()->default_value("false")->implicit_value("true"))(
+            "enable-blockexplorer-detailed",
+            "Enable the Blockchain Explorer Detailed RPC",
             cxxopts::value<bool>()->default_value("false")->implicit_value("true"))(
             "enable-cors",
             "Adds header 'Access-Control-Allow-Origin' to the RPC responses using the <domain>. Uses the value "
@@ -156,26 +153,28 @@ namespace DaemonConfig
             cxxopts::value<std::vector<std::string>>(),
             "<ip:port>");
 
-        options.add_options("Database")(
-            "db-enable-compression",
-            "Enable database compression",
-            cxxopts::value<bool>(config.enableDbCompression)->default_value("false")->implicit_value("true"))(
-            "db-max-open-files",
-            "Number of files that can be used by the database at one time",
-            cxxopts::value<int>()->default_value(std::to_string(config.dbMaxOpenFiles)),
-            "#")(
-            "db-read-buffer-size",
-            "Size of the database read cache in megabytes (MB)",
-            cxxopts::value<int>()->default_value(std::to_string(config.dbReadCacheSizeMB)),
-            "#")(
-            "db-threads",
-            "Number of background threads used for compaction and flush operations",
-            cxxopts::value<int>()->default_value(std::to_string(config.dbThreads)),
-            "#")(
-            "db-write-buffer-size",
-            "Size of the database write buffer in megabytes (MB)",
-            cxxopts::value<int>()->default_value(std::to_string(config.dbWriteBufferSizeMB)),
-            "#");
+        options.add_options("Database")
+#ifdef ENABLE_ZSTD_COMPRESSION
+            ("db-enable-compression",
+             "Enable database compression",
+             cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+#endif
+                ("db-max-open-files",
+                 "Number of files that can be used by the database at one time",
+                 cxxopts::value<int>()->default_value(std::to_string(config.dbMaxOpenFiles)),
+                 "#")(
+                    "db-read-buffer-size",
+                    "Size of the database read cache in megabytes (MB)",
+                    cxxopts::value<int>()->default_value(std::to_string(config.dbReadCacheSizeMB)),
+                    "#")(
+                    "db-threads",
+                    "Number of background threads used for compaction and flush operations",
+                    cxxopts::value<int>()->default_value(std::to_string(config.dbThreads)),
+                    "#")(
+                    "db-write-buffer-size",
+                    "Size of the database write buffer in megabytes (MB)",
+                    cxxopts::value<int>()->default_value(std::to_string(config.dbWriteBufferSizeMB)),
+                    "#");
 
         try
         {
@@ -253,20 +252,12 @@ namespace DaemonConfig
                 config.logLevel = cli["log-level"].as<int>();
             }
 
-            if (cli.count("sqlite") > 0)
-            {
-                config.useSqliteForLocalCaches = cli["sqlite"].as<bool>();
-            }
-
-            if (cli.count("rocksdb") > 0)
-            {
-                config.useRocksdbForLocalCaches = cli["rocksdb"].as<bool>();
-            }
-
+#ifdef ENABLE_ZSTD_COMPRESSION
             if (cli.count("db-enable-compression") > 0)
             {
                 config.enableDbCompression = cli["db-enable-compression"].as<bool>();
             }
+#endif
 
             if (cli.count("no-console") > 0)
             {
@@ -356,6 +347,11 @@ namespace DaemonConfig
             if (cli.count("enable-blockexplorer") > 0)
             {
                 config.enableBlockExplorer = cli["enable-blockexplorer"].as<bool>();
+            }
+
+            if (cli.count("enable-blockexplorer-detailed") > 0)
+            {
+                config.enableBlockExplorerDetailed = cli["enable-blockexplorer-detailed"].as<bool>();
             }
 
             if (cli.count("enable-cors") > 0)
@@ -464,21 +460,13 @@ namespace DaemonConfig
                         throw std::runtime_error(std::string(e.what()) + " - Invalid value for " + cfgKey);
                     }
                 }
-                else if (cfgKey.compare("sqlite") == 0)
-                {
-                    config.useSqliteForLocalCaches = cfgValue.at(0) == '1';
-                    updated = true;
-                }
-                else if (cfgKey.compare("rocksdb") == 0)
-                {
-                    config.useRocksdbForLocalCaches = cfgValue.at(0) == '1';
-                    updated = true;
-                }
+#ifdef ENABLE_ZSTD_COMPRESSION
                 else if (cfgKey.compare("db-enable-compression") == 0)
                 {
                     config.enableDbCompression = cfgValue.at(0) == '1';
                     updated = true;
                 }
+#endif
                 else if (cfgKey.compare("no-console") == 0)
                 {
                     config.noConsole = cfgValue.at(0) == '1';
@@ -622,6 +610,11 @@ namespace DaemonConfig
                     config.enableBlockExplorer = cfgValue.at(0) == '1';
                     updated = true;
                 }
+                else if (cfgKey.compare("enable-blockexplorer-detailed") == 0)
+                {
+                    config.enableBlockExplorerDetailed = cfgValue.at(0) == '1';
+                    updated = true;
+                }
                 else if (cfgKey.compare("enable-cors") == 0)
                 {
                     cors.push_back(cfgValue);
@@ -712,20 +705,12 @@ namespace DaemonConfig
             config.logLevel = j["log-level"].GetInt();
         }
 
-        if (j.HasMember("sqlite"))
-        {
-            config.useSqliteForLocalCaches = j["sqlite"].GetBool();
-        }
-
-        if (j.HasMember("rocksdb"))
-        {
-            config.useRocksdbForLocalCaches = j["rocksdb"].GetBool();
-        }
-
+#ifdef ENABLE_ZSTD_COMPRESSION
         if (j.HasMember("db-enable-compression"))
         {
             config.enableDbCompression = j["db-enable-compression"].GetBool();
         }
+#endif
 
         if (j.HasMember("no-console"))
         {
@@ -833,6 +818,11 @@ namespace DaemonConfig
             config.enableBlockExplorer = j["enable-blockexplorer"].GetBool();
         }
 
+        if (j.HasMember("enable-blockexplorer-detailed"))
+        {
+            config.enableBlockExplorerDetailed = j["enable-blockexplorer-detailed"].GetBool();
+        }
+
         if (j.HasMember("enable-cors"))
         {
             const Value &va = j["enable-cors"];
@@ -864,9 +854,9 @@ namespace DaemonConfig
         j.AddMember("log-file", config.logFile, alloc);
         j.AddMember("log-level", config.logLevel, alloc);
         j.AddMember("no-console", config.noConsole, alloc);
-        j.AddMember("rocksdb", config.useRocksdbForLocalCaches, alloc);
-        j.AddMember("sqlite", config.useSqliteForLocalCaches, alloc);
+#ifdef ENABLE_ZSTD_COMPRESSION
         j.AddMember("db-enable-compression", config.enableDbCompression, alloc);
+#endif
         j.AddMember("db-max-open-files", config.dbMaxOpenFiles, alloc);
         j.AddMember("db-read-buffer-size", (config.dbReadCacheSizeMB), alloc);
         j.AddMember("db-threads", config.dbThreads, alloc);
@@ -926,6 +916,7 @@ namespace DaemonConfig
         }
 
         j.AddMember("enable-blockexplorer", config.enableBlockExplorer, alloc);
+        j.AddMember("enable-blockexplorer-detailed", config.enableBlockExplorerDetailed, alloc);
         j.AddMember("fee-address", config.feeAddress, alloc);
         j.AddMember("fee-amount", config.feeAmount, alloc);
 
