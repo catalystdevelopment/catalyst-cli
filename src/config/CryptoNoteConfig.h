@@ -82,13 +82,13 @@ namespace CryptoNote
         const uint64_t MINIMUM_MIXIN_V2                              = 3;
         const uint64_t MAXIMUM_MIXIN_V2                              = 5;
 
-        const uint64_t MINIMUM_MIXIN_V3                              = 3; 
-        const uint64_t MAXIMUM_MIXIN_V3                              = 5; 
+        const uint64_t MINIMUM_MIXIN_V3                              = 3;
+        const uint64_t MAXIMUM_MIXIN_V3                              = 5;
 
         /* The heights to activate the mixin limits at */
         const uint32_t MIXIN_LIMITS_V1_HEIGHT                        = 0;
         const uint32_t MIXIN_LIMITS_V2_HEIGHT                        = 1;
-        const uint32_t MIXIN_LIMITS_V3_HEIGHT                        = 770000; 
+        const uint32_t MIXIN_LIMITS_V3_HEIGHT                        = 770000;
 
         /* The mixin to use by default with zedwallet and turtle-service */
         /* DEFAULT_MIXIN_V0 is the mixin used before MIXIN_LIMITS_V1_HEIGHT is started */
@@ -124,6 +124,26 @@ namespace CryptoNote
         const uint64_t MAX_EXTRA_SIZE                                = 140000;
         const uint64_t MAX_EXTRA_SIZE_V2                             = 1024;
         const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT                      = 170000;
+
+
+       /* 25 trillion atomic, or 2 million TRTL -> Max supply / mixin+1 outputs */
+
+        /* This is enforced on the daemon side. An output > 250 billion causes
+         * an invalid block. */
+
+        /* IDK 2 million for example*/
+        const uint64_t MAX_OUTPUT_SIZE_NODE   = 2'000'000'00;
+
+        /* 100 billion atomic, or 1 billion TRTL */
+        /* This is enforced on the client side. An output > 1 billion will not
+         * be created in a transaction */
+
+        /* IDK 1 million for example*/
+        const uint64_t MAX_OUTPUT_SIZE_CLIENT = 1'000'000'00;
+
+        /* We need to plan a fork, currently some value in the future */
+        const uint64_t MAX_OUTPUT_SIZE_HEIGHT = 500000;
+
 
         /* For new projects forked from this code base, the values immediately below
            should be changed to 0 to prevent issues with transaction processing

@@ -31,7 +31,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y libboost-all-dev libssl-dev ${{ matrix.package_name }}
-      
+
       # Configure the project with cmake
       - name: Configure
         if: matrix.build_name != 'aarch64'
@@ -41,7 +41,7 @@ jobs:
         run: |
           mkdir build && cd build
           cmake -DARCH=default -DCMAKE_BUILD_TYPE=Release -DSTATIC=true ..
-      
+
       # Build for linux
       - name: Build
         if: matrix.build_name != 'aarch64'
@@ -59,7 +59,7 @@ jobs:
           mkdir build && cd build
           cmake -DARCH=default -DCMAKE_BUILD_TYPE=Release -DSTATIC=true ..
           make -j2
-      
+
       # Test the crypto
       - name: Test Crypto
         if: matrix.build_name != 'aarch64'
@@ -76,26 +76,26 @@ jobs:
       CXX: /usr/local/opt/llvm@8/bin/clang++
     steps:
       - uses: actions/checkout@v1
-      
+
       # Fetch Dependencies
       - name: Dependencies
         run: |
           brew install --force boost llvm@8
           brew link --force llvm@8
           ln -s /usr/local/opt/llvm@8 /usr/local/opt/llvm
-      
+
       # Configure project with cmake
       - name: Configure
         run: |
           mkdir build && cd build
           cmake -DARCH=default -DCMAKE_BUILD_TYPE=Release -DSTATIC=true ..
-      
+
       # Build for macOS
       - name: Build
         run: |
           cd build
           make -j2
-      
+
       # Test the crypto
       - name: Test Crypto
         run: |
@@ -110,7 +110,7 @@ jobs:
       MSBUILD_PATH: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin"
     steps:
       - uses: actions/checkout@v1
-      
+
       - name: Setup MSBuild.exe
         uses: warrenbuckley/Setup-MSBuild@v1
 
@@ -120,13 +120,13 @@ jobs:
           mkdir build
           cd build
           cmake -G "Visual Studio 16 2019" -A x64 .. -DARCH=default
-      
+
       # Build for Windows
       - name: Build
         run: |
           cd build
-          MSBuild TurtleCoin.sln /p:Configuration=Release /m
-      
+          MSBuild Catalyst.sln /p:Configuration=Release /m
+
       # Test the crypto
       - name: Test Crypto
         shell: bash
