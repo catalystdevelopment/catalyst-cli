@@ -1,0 +1,1640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="cryptopp"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\external\;CMake Files\external\argon2\;CMake Files\external\argon2\cmake\;CMake Files\external\miniupnpc\;CMake Files\external\cryptopp\;CMake Files\external\zstd\;CMake Files\external\lz4\;CMake Files\src\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cryptopp-static">
+				<Option output="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/libcryptopp.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DFORCE_USE_HEAP"/>
+					<Add option="-DENABLE_ZSTD_COMPRESSION"/>
+					<Add option="-DRAPIDJSON_HAS_STDSTRING"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/include"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/cmake-build-debug/version"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/linux"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/posix"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external/cryptopp"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 cryptopp-static"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cryptopp-static/fast">
+				<Option output="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/libcryptopp.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DFORCE_USE_HEAP"/>
+					<Add option="-DENABLE_ZSTD_COMPRESSION"/>
+					<Add option="-DRAPIDJSON_HAS_STDSTRING"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/include"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/cmake-build-debug/version"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/linux"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/posix"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external/cryptopp"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 cryptopp-static/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cryptopp-object">
+				<Option output="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/cryptopp-object.objlib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DFORCE_USE_HEAP"/>
+					<Add option="-DENABLE_ZSTD_COMPRESSION"/>
+					<Add option="-DRAPIDJSON_HAS_STDSTRING"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/include"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/cmake-build-debug/version"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/linux"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/posix"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 cryptopp-object"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cryptopp-object/fast">
+				<Option output="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/cryptopp-object.objlib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DFORCE_USE_HEAP"/>
+					<Add option="-DENABLE_ZSTD_COMPRESSION"/>
+					<Add option="-DRAPIDJSON_HAS_STDSTRING"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/include"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/cmake-build-debug/version"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/linux"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/posix"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 cryptopp-object/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="static">
+				<Option working_dir="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 static"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/3way.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/adler32.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/algebra.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/algparam.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/arc4.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/aria.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/aria_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/ariatab.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/asn.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/authenc.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/base32.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/base64.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/basecode.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/bfinit.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/blake2.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/blake2b_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/blake2s_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/blowfish.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/blumshub.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/camellia.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/cast.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/casts.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/cbcmac.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/ccm.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/chacha.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/chacha_avx.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/chacha_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/chachapoly.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/cham.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/cham_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/channels.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/cmac.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/cpu.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/crc.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/crc_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/cryptlib.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/darn.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/default.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/des.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/dessp.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/dh.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/dh2.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/dll.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/donna_32.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/donna_64.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/donna_sse.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/dsa.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/eax.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/ec2n.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/eccrypto.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/ecp.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/elgamal.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/emsa2.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/eprecomp.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/esign.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/files.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/filters.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/fips140.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/gcm.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/gcm_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/gf256.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/gf2_32.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/gf2n.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/gf2n_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/gfpcrypt.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/gost.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/gzip.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/hc128.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/hc256.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/hex.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/hight.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/hmac.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/hrtimer.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/ida.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/idea.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/integer.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/iterhash.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/kalyna.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/kalynatab.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/keccak.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/keccak_core.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/keccak_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/lea.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/lea_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/luc.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/mars.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/marss.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/md2.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/md4.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/md5.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/misc.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/modes.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/mqueue.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/mqv.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/nbtheory.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/neon_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/oaep.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/osrng.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/padlkrng.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/panama.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/pkcspad.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/poly1305.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/polynomi.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/ppc_power7.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/ppc_power8.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/ppc_power9.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/ppc_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/pssr.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/pubkey.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/queue.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/rabbit.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/rabin.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/randpool.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/rc2.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/rc5.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/rc6.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/rdrand.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/rdtables.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/rijndael.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/rijndael_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/ripemd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/rng.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/rsa.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/rw.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/safer.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/salsa.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/scrypt.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/seal.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/seed.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/serpent.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/sha.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/sha3.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/sha_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/shacal2.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/shacal2_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/shake.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/shark.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/sharkbox.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/simeck.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/simeck_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/simon.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/simon128_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/simon64_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/skipjack.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/sm3.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/sm4.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/sm4_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/sosemanuk.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/speck.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/speck128_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/speck64_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/square.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/squaretb.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/sse_simd.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/strciphr.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/tea.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/tftables.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/threefish.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/tiger.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/tigertab.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/ttmac.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/tweetnacl.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/twofish.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/vmac.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/wake.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/whrlpool.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/xed25519.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/xtr.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/xtrcrypt.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/zdeflate.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/zinflate.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/cryptopp/CMakeFiles/cryptopp-object.dir/zlib.cpp.o">
+			<Option target="cryptopp-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/3way.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/3way.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/adler32.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/adler32.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/algebra.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/algebra.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/algparam.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/algparam.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/arc4.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/arc4.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/aria.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/aria.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/aria_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ariatab.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/asn.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/asn.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/authenc.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/authenc.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/base32.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/base32.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/base64.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/base64.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/basecode.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/basecode.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/bfinit.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/blake2.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/blake2.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/blake2b_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/blake2s_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/blowfish.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/blowfish.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/blumshub.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/blumshub.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/camellia.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/camellia.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cast.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cast.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/casts.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cbcmac.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cbcmac.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ccm.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ccm.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/chacha.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/chacha.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/chacha_avx.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/chacha_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/chachapoly.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/chachapoly.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cham.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cham.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cham_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/channels.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/channels.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cmac.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cmac.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cpu.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cpu.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/crc.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/crc.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/crc_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cryptlib.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/cryptlib.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/darn.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/darn.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/default.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/default.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/des.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/des.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/dessp.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/dh.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/dh.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/dh2.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/dh2.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/dll.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/dll.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/donna_32.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/donna_32.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/donna_64.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/donna_64.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/donna_sse.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/donna_sse.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/dsa.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/dsa.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/eax.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/eax.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ec2n.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ec2n.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/eccrypto.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/eccrypto.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ecp.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ecp.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/elgamal.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/elgamal.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/emsa2.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/emsa2.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/eprecomp.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/eprecomp.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/esign.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/esign.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/files.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/files.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/filters.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/filters.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/fips140.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/fips140.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gcm.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gcm.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gcm_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gf256.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gf256.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gf2_32.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gf2_32.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gf2n.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gf2n.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gf2n_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gfpcrypt.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gfpcrypt.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gost.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gost.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gzip.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/gzip.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/hc128.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/hc128.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/hc256.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/hc256.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/hex.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/hex.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/hight.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/hight.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/hmac.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/hmac.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/hrtimer.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/hrtimer.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ida.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ida.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/idea.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/idea.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/integer.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/integer.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/iterhash.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/iterhash.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/kalyna.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/kalyna.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/kalynatab.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/keccak.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/keccak.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/keccak_core.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/keccak_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/lea.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/lea.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/lea_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/luc.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/luc.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/mars.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/mars.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/marss.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/md2.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/md2.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/md4.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/md4.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/md5.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/md5.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/misc.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/misc.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/modes.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/modes.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/mqueue.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/mqueue.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/mqv.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/mqv.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/nbtheory.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/nbtheory.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/neon_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/oaep.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/oaep.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/osrng.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/osrng.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/padlkrng.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/padlkrng.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/panama.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/panama.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/pkcspad.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/pkcspad.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/poly1305.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/poly1305.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/polynomi.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/polynomi.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ppc_power7.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ppc_power8.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ppc_power9.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ppc_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ppc_simd.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/pssr.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/pssr.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/pubkey.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/pubkey.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/queue.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/queue.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rabbit.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rabbit.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rabin.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rabin.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/randpool.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/randpool.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rc2.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rc2.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rc5.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rc5.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rc6.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rc6.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rdrand.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rdrand.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rdtables.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rijndael.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rijndael.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rijndael_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ripemd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ripemd.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rng.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rng.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rsa.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rsa.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rw.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/rw.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/safer.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/safer.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/salsa.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/salsa.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/scrypt.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/scrypt.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/seal.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/seal.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/seed.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/seed.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/serpent.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/serpent.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sha.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sha.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sha3.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sha3.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sha_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/shacal2.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/shacal2.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/shacal2_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/shake.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/shake.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/shark.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/shark.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sharkbox.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/simeck.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/simeck.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/simeck_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/simon.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/simon.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/simon128_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/simon64_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/skipjack.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/skipjack.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sm3.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sm3.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sm4.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sm4.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sm4_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sosemanuk.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sosemanuk.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/speck.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/speck.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/speck128_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/speck64_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/square.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/square.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/squaretb.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/sse_simd.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/strciphr.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/strciphr.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/tea.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/tea.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/tftables.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/threefish.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/threefish.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/tiger.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/tiger.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/tigertab.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ttmac.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/ttmac.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/tweetnacl.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/tweetnacl.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/twofish.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/twofish.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/vmac.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/vmac.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/wake.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/wake.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/whrlpool.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/whrlpool.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/xed25519.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/xed25519.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/xtr.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/xtr.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/xtrcrypt.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/xtrcrypt.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/zdeflate.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/zdeflate.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/zinflate.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/zinflate.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/zlib.cpp">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/zlib.h">
+			<Option target="cryptopp-object"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\argon2\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/AddCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/CheckCCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/CheckCXXCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/CheckMicCCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/CheckMicCXXCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/OptimizeForArchitecture.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\miniupnpc\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/miniupnpcstrings.h.cmake">
+			<Option virtualFolder="CMake Files\external\miniupnpc\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\cryptopp\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\zstd\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/lz4/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\lz4\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

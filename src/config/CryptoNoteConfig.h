@@ -125,6 +125,8 @@ namespace CryptoNote
         const uint64_t MAX_EXTRA_SIZE_V2                             = 1024;
         const uint64_t MAX_EXTRA_SIZE_V2_HEIGHT                      = 170000;
 
+        const uint64_t MAX_OUTPUT_SIZE_HEIGHT = 770000;
+
         /* For new projects forked from this code base, the values immediately below
            should be changed to 0 to prevent issues with transaction processing
            and other possible unexpected behavior */

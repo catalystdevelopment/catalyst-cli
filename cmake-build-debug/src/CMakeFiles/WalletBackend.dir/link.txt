@@ -1,0 +1,2 @@
+/usr/bin/ar qc libWalletBackend.a  CMakeFiles/WalletBackend.dir/walletbackend/BlockDownloader.cpp.o CMakeFiles/WalletBackend.dir/walletbackend/JsonSerialization.cpp.o CMakeFiles/WalletBackend.dir/walletbackend/SynchronizationStatus.cpp.o CMakeFiles/WalletBackend.dir/walletbackend/Transfer.cpp.o CMakeFiles/WalletBackend.dir/walletbackend/WalletBackend.cpp.o CMakeFiles/WalletBackend.dir/walletbackend/WalletSynchronizer.cpp.o
+/usr/bin/ranlib libWalletBackend.a

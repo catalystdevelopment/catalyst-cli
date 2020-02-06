@@ -1,0 +1,9 @@
+/home/water/blockchains/catalyst-cli/cmake-build-debug/rocksdb/CMakeFiles/install.dir
+/home/water/blockchains/catalyst-cli/cmake-build-debug/rocksdb/CMakeFiles/list_install_components.dir
+/home/water/blockchains/catalyst-cli/cmake-build-debug/rocksdb/CMakeFiles/install/strip.dir
+/home/water/blockchains/catalyst-cli/cmake-build-debug/rocksdb/CMakeFiles/install/local.dir
+/home/water/blockchains/catalyst-cli/cmake-build-debug/rocksdb/CMakeFiles/rocksdb-shared.dir
+/home/water/blockchains/catalyst-cli/cmake-build-debug/rocksdb/CMakeFiles/build_version.dir
+/home/water/blockchains/catalyst-cli/cmake-build-debug/rocksdb/CMakeFiles/rocksdb.dir
+/home/water/blockchains/catalyst-cli/cmake-build-debug/rocksdb/CMakeFiles/edit_cache.dir
+/home/water/blockchains/catalyst-cli/cmake-build-debug/rocksdb/CMakeFiles/rebuild_cache.dir

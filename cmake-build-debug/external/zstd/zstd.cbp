@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="zstd"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\external\;CMake Files\external\argon2\;CMake Files\external\argon2\cmake\;CMake Files\external\miniupnpc\;CMake Files\external\cryptopp\;CMake Files\external\zstd\;CMake Files\external\lz4\;CMake Files\src\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="zstd">
+				<Option output="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/libzstd.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DFORCE_USE_HEAP"/>
+					<Add option="-DENABLE_ZSTD_COMPRESSION"/>
+					<Add option="-DRAPIDJSON_HAS_STDSTRING"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external/zstd"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/include"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/cmake-build-debug/version"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/linux"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/posix"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external/zstd/lib"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external/zstd/lib/common"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/Makefile&quot;  VERBOSE=1 zstd"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="zstd/fast">
+				<Option output="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/libzstd.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DFORCE_USE_HEAP"/>
+					<Add option="-DENABLE_ZSTD_COMPRESSION"/>
+					<Add option="-DRAPIDJSON_HAS_STDSTRING"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external/zstd"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/include"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/cmake-build-debug/version"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/linux"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/posix"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external/zstd/lib"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external/zstd/lib/common"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/Makefile&quot;  VERBOSE=1 zstd/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/zstd/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/bitstream.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/compiler.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/cpu.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/debug.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/debug.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/entropy_common.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/error_private.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/error_private.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/fse.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/fse_decompress.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/huf.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/mem.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/pool.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/pool.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/threading.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/threading.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/xxhash.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/xxhash.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/zstd_common.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/zstd_errors.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/common/zstd_internal.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/fse_compress.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/hist.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/hist.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/huf_compress.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_compress.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_compress_internal.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_compress_literals.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_compress_literals.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_compress_sequences.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_compress_sequences.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_double_fast.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_double_fast.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_fast.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_fast.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_lazy.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_lazy.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_ldm.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_ldm.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_opt.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstd_opt.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstdmt_compress.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/compress/zstdmt_compress.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/decompress/huf_decompress.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/decompress/zstd_ddict.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/decompress/zstd_ddict.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/decompress/zstd_decompress.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/decompress/zstd_decompress_block.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/decompress/zstd_decompress_block.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/decompress/zstd_decompress_internal.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/deprecated/zbuff.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/deprecated/zbuff_common.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/deprecated/zbuff_compress.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/deprecated/zbuff_decompress.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/dictBuilder/cover.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/dictBuilder/cover.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/dictBuilder/divsufsort.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/dictBuilder/divsufsort.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/dictBuilder/fastcover.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/dictBuilder/zdict.c">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/dictBuilder/zdict.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/lib/zstd.h">
+			<Option target="zstd"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\argon2\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/AddCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/CheckCCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/CheckCXXCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/CheckMicCCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/CheckMicCXXCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/OptimizeForArchitecture.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\miniupnpc\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/miniupnpcstrings.h.cmake">
+			<Option virtualFolder="CMake Files\external\miniupnpc\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\cryptopp\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\zstd\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/lz4/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\lz4\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

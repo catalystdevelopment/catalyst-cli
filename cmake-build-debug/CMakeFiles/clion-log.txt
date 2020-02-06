@@ -1,0 +1,232 @@
+/home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/water/blockchains/catalyst-cli
+CMake Warning (dev) at CMakeLists.txt:16 (set):
+  implicitly converting 'TYPE' to 'STRING' type.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- The C compiler identification is GNU 9.2.0
+-- The CXX compiler identification is GNU 9.2.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Building for target architecture: native
+-- FORCE_USE_HEAP: ENABLED
+-- HW AES: ENABLED
+-- OPTIMIZED_ARM_MULTIPLICATION: ENABLED
+-- Found Git: /usr/bin/git
+CMake Warning at /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1144 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1266 (_Boost_COMPONENT_DEPENDENCIES)
+  /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1904 (_Boost_MISSING_DEPENDENCIES)
+  CMakeLists.txt:252 (find_package)
+
+
+CMake Warning at /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1144 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1266 (_Boost_COMPONENT_DEPENDENCIES)
+  /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1904 (_Boost_MISSING_DEPENDENCIES)
+  CMakeLists.txt:252 (find_package)
+
+
+CMake Warning at /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1144 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1266 (_Boost_COMPONENT_DEPENDENCIES)
+  /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1904 (_Boost_MISSING_DEPENDENCIES)
+  CMakeLists.txt:252 (find_package)
+
+
+CMake Warning at /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1144 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1266 (_Boost_COMPONENT_DEPENDENCIES)
+  /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1904 (_Boost_MISSING_DEPENDENCIES)
+  CMakeLists.txt:252 (find_package)
+
+
+CMake Warning at /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1144 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1266 (_Boost_COMPONENT_DEPENDENCIES)
+  /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1904 (_Boost_MISSING_DEPENDENCIES)
+  CMakeLists.txt:252 (find_package)
+
+
+CMake Warning at /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1144 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1266 (_Boost_COMPONENT_DEPENDENCIES)
+  /home/water/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/193.6015.37/bin/cmake/linux/share/cmake-3.15/Modules/FindBoost.cmake:1904 (_Boost_MISSING_DEPENDENCIES)
+  CMakeLists.txt:252 (find_package)
+
+
+-- Found Boost: /usr/include (found version "1.72.0") found components:  system thread date_time chrono serialization atomic 
+-- Boost Found: /usr/include
+-- Could NOT find OpenSSL, try to set the path to OpenSSL root folder in the system variable OPENSSL_ROOT_DIR (missing: OPENSSL_CRYPTO_LIBRARY) (found version "1.1.1d")
+-- OpenSSL Found: No... Skipping...
+-- *************************************************************************
+The Crypto++ library does not officially support CMake. CMake support is a
+community effort, and the library works with the folks using CMake to help
+improve it. If you find an issue then please fix it or report it at
+https://github.com/noloader/cryptopp-cmake.
+-- *************************************************************************
+-- CMake version 3.15.3
+-- Performing Test CRYPTOPP_IA32_SSE2
+-- Performing Test CRYPTOPP_IA32_SSE2 - Success
+-- Performing Test CRYPTOPP_IA32_SSSE3
+-- Performing Test CRYPTOPP_IA32_SSSE3 - Success
+-- Performing Test CRYPTOPP_IA32_SSE41
+-- Performing Test CRYPTOPP_IA32_SSE41 - Success
+-- Performing Test CRYPTOPP_IA32_SSE42
+-- Performing Test CRYPTOPP_IA32_SSE42 - Success
+-- Performing Test CRYPTOPP_IA32_CLMUL
+-- Performing Test CRYPTOPP_IA32_CLMUL - Success
+-- Performing Test CRYPTOPP_IA32_AES
+-- Performing Test CRYPTOPP_IA32_AES - Success
+-- Performing Test CRYPTOPP_IA32_AVX
+-- Performing Test CRYPTOPP_IA32_AVX - Success
+-- Performing Test CRYPTOPP_IA32_AVX2
+-- Performing Test CRYPTOPP_IA32_AVX2 - Success
+-- Performing Test CRYPTOPP_IA32_SHA
+-- Performing Test CRYPTOPP_IA32_SHA - Success
+-- Performing Test CRYPTOPP_MIXED_ASM
+-- Performing Test CRYPTOPP_MIXED_ASM - Success
+-- Platform: x86_64
+-- Native arch: FALSE
+-- Compiler: /usr/bin/c++
+-- Compiler options:  -std=c++17  -Wall -Wextra -Wpointer-arith -Wvla -Wwrite-strings  -Wno-error=extra -Wno-error=unused-function -Wno-error=sign-compare -Wno-error=strict-aliasing -Wno-error=type-limits -Wno-unused-parameter -Wno-error=unused-variable -Wno-error=undef -Wno-error=uninitialized -Wno-error=unused-result -Wlogical-op -Wno-error=maybe-uninitialized -Wno-error=clobbered -Wno-error=unused-but-set-variable -Wno-error=odr -Wno-reorder -Wno-missing-field-initializers -march=native -maes -pthread -w -Wno-everything 
+-- Compiler definitions: 
+-- Build type: Debug
+ZSTD VERSION 1.4.3
+-- Argon2: Processor: x86_64
+-- Argon2: Build Type: native
+-- Detected Host CPU: kaby-lake
+-- Performing Test check_cxx_compiler_flag__march_skylake
+-- Performing Test check_cxx_compiler_flag__march_skylake - Success
+-- Performing Test check_cxx_compiler_flag__msse2
+-- Performing Test check_cxx_compiler_flag__msse2 - Success
+-- Performing Test check_cxx_compiler_flag__msse3
+-- Performing Test check_cxx_compiler_flag__msse3 - Success
+-- Looking for C++ include pmmintrin.h
+-- Looking for C++ include pmmintrin.h - found
+-- Performing Test check_cxx_compiler_flag__mssse3
+-- Performing Test check_cxx_compiler_flag__mssse3 - Success
+-- Looking for C++ include tmmintrin.h
+-- Looking for C++ include tmmintrin.h - found
+-- Performing Test check_cxx_compiler_flag__msse4_1
+-- Performing Test check_cxx_compiler_flag__msse4_1 - Success
+-- Looking for C++ include smmintrin.h
+-- Looking for C++ include smmintrin.h - found
+-- Performing Test check_cxx_compiler_flag__msse4_2
+-- Performing Test check_cxx_compiler_flag__msse4_2 - Success
+-- Performing Test check_cxx_compiler_flag__mavx
+-- Performing Test check_cxx_compiler_flag__mavx - Success
+-- Looking for C++ include immintrin.h
+-- Looking for C++ include immintrin.h - found
+-- Performing Test check_cxx_compiler_flag__mfma
+-- Performing Test check_cxx_compiler_flag__mfma - Success
+-- Performing Test check_cxx_compiler_flag__mbmi2
+-- Performing Test check_cxx_compiler_flag__mbmi2 - Success
+-- Performing Test check_cxx_compiler_flag__mavx2
+-- Performing Test check_cxx_compiler_flag__mavx2 - Success
+-- Performing Test check_cxx_compiler_flag__mno_sse4a
+-- Performing Test check_cxx_compiler_flag__mno_sse4a - Success
+-- Performing Test check_cxx_compiler_flag__mno_xop
+-- Performing Test check_cxx_compiler_flag__mno_xop - Success
+-- Performing Test check_cxx_compiler_flag__mno_fma4
+-- Performing Test check_cxx_compiler_flag__mno_fma4 - Success
+-- Performing Test check_cxx_compiler_flag__mno_avx512f
+-- Performing Test check_cxx_compiler_flag__mno_avx512f - Success
+-- Performing Test check_cxx_compiler_flag__mno_avx512vl
+-- Performing Test check_cxx_compiler_flag__mno_avx512vl - Success
+-- Performing Test check_cxx_compiler_flag__mno_avx512pf
+-- Performing Test check_cxx_compiler_flag__mno_avx512pf - Success
+-- Performing Test check_cxx_compiler_flag__mno_avx512er
+-- Performing Test check_cxx_compiler_flag__mno_avx512er - Success
+-- Performing Test check_cxx_compiler_flag__mno_avx512cd
+-- Performing Test check_cxx_compiler_flag__mno_avx512cd - Success
+-- Performing Test check_cxx_compiler_flag__mno_avx512dq
+-- Performing Test check_cxx_compiler_flag__mno_avx512dq - Success
+-- Performing Test check_cxx_compiler_flag__mno_avx512bw
+-- Performing Test check_cxx_compiler_flag__mno_avx512bw - Success
+-- Performing Test check_cxx_compiler_flag__mno_avx512ifma
+-- Performing Test check_cxx_compiler_flag__mno_avx512ifma - Success
+-- Performing Test check_cxx_compiler_flag__mno_avx512vbmi
+-- Performing Test check_cxx_compiler_flag__mno_avx512vbmi - Success
+-- -- Argon2: Build Flags:  -std=c++17  -Wall -Wextra -Wpointer-arith -Wvla -Wwrite-strings  -Wno-error=extra -Wno-error=unused-function -Wno-error=sign-compare -Wno-error=strict-aliasing -Wno-error=type-limits -Wno-unused-parameter -Wno-error=unused-variable -Wno-error=undef -Wno-error=uninitialized -Wno-error=unused-result -Wlogical-op -Wno-error=maybe-uninitialized -Wno-error=clobbered -Wno-error=unused-but-set-variable -Wno-error=odr -Wno-reorder -Wno-missing-field-initializers -march=native -maes -pthread -w -Wno-everything -march=skylake -msse2 -msse3 -mssse3 -msse4.1 -msse4.2 -mavx -mfma -mbmi2 -mavx2 -mno-sse4a -mno-xop -mno-fma4 -mno-avx512f -mno-avx512vl -mno-avx512pf -mno-avx512er -mno-avx512cd -mno-avx512dq -mno-avx512bw -mno-avx512ifma -mno-avx512vbmi
+-- Setting up build environment for RocksDB
+-- The C compiler identification is GNU 9.2.0
+-- The CXX compiler identification is GNU 9.2.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- The ASM compiler identification is GNU
+-- Found assembler: /usr/bin/cc
+-- LZ4 library is enabled
+-- Found Git: /usr/bin/git (found version "2.25.0") 
+-- Performing Test HAVE_OMIT_LEAF_FRAME_POINTER
+-- Performing Test HAVE_OMIT_LEAF_FRAME_POINTER - Success
+-- Performing Test HAVE_SSE42
+-- Performing Test HAVE_SSE42 - Success
+-- Performing Test HAVE_THREAD_LOCAL
+-- Performing Test HAVE_THREAD_LOCAL - Success
+-- Enabling RTTI in Debug builds only (default)
+-- Performing Test HAVE_SYNC_FILE_RANGE_WRITE
+-- Performing Test HAVE_SYNC_FILE_RANGE_WRITE - Success
+-- Performing Test HAVE_PTHREAD_MUTEX_ADAPTIVE_NP
+-- Performing Test HAVE_PTHREAD_MUTEX_ADAPTIVE_NP - Success
+-- Looking for malloc_usable_size
+-- Looking for malloc_usable_size - found
+-- Looking for sched_getcpu
+-- Looking for sched_getcpu - found
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- JNI library is disabled
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/water/blockchains/catalyst-cli/cmake-build-debug/rocksdb
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/water/blockchains/catalyst-cli/cmake-build-debug
+Cannot read CMake dependency information from /home/water/blockchains/catalyst-cli/cmake-build-debug/CMakeFiles/Makefile.cmake

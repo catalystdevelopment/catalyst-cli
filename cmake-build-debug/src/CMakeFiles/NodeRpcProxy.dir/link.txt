@@ -1,0 +1,2 @@
+/usr/bin/ar qc libNodeRpcProxy.a  CMakeFiles/NodeRpcProxy.dir/noderpcproxy/NodeErrors.cpp.o CMakeFiles/NodeRpcProxy.dir/noderpcproxy/NodeRpcProxy.cpp.o
+/usr/bin/ranlib libNodeRpcProxy.a

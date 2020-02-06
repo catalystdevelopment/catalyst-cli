@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="miniupnpc"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\external\;CMake Files\external\argon2\;CMake Files\external\argon2\cmake\;CMake Files\external\miniupnpc\;CMake Files\external\cryptopp\;CMake Files\external\zstd\;CMake Files\external\lz4\;CMake Files\src\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="upnpc-static">
+				<Option output="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/libminiupnpc.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DMINIUPNP_STATICLIB"/>
+					<Add option="-DFORCE_USE_HEAP"/>
+					<Add option="-DENABLE_ZSTD_COMPRESSION"/>
+					<Add option="-DRAPIDJSON_HAS_STDSTRING"/>
+					<Add option="-DMINIUPNPC_SET_SOCKET_TIMEOUT"/>
+					<Add option="-D_BSD_SOURCE"/>
+					<Add option="-D_DEFAULT_SOURCE"/>
+					<Add option="-D_XOPEN_SOURCE=600"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/include"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/cmake-build-debug/version"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/linux"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/posix"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/Makefile&quot;  VERBOSE=1 upnpc-static"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="upnpc-static/fast">
+				<Option output="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/libminiupnpc.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DMINIUPNP_STATICLIB"/>
+					<Add option="-DFORCE_USE_HEAP"/>
+					<Add option="-DENABLE_ZSTD_COMPRESSION"/>
+					<Add option="-DRAPIDJSON_HAS_STDSTRING"/>
+					<Add option="-DMINIUPNPC_SET_SOCKET_TIMEOUT"/>
+					<Add option="-D_BSD_SOURCE"/>
+					<Add option="-D_DEFAULT_SOURCE"/>
+					<Add option="-D_XOPEN_SOURCE=600"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/include"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/cmake-build-debug/version"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/external"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/linux"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/src/platform/posix"/>
+					<Add directory="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/Makefile&quot;  VERBOSE=1 upnpc-static/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/water/blockchains/catalyst-cli/cmake-build-debug/external/miniupnpc/miniupnpcstrings.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/connecthostport.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/connecthostport.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/igd_desc_parse.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/igd_desc_parse.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/minisoap.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/minisoap.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/minissdpc.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/minissdpc.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/miniupnpc.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/miniupnpc.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/miniupnpctypes.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/miniwget.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/miniwget.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/minixml.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/minixml.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/portlistingparse.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/portlistingparse.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/receivedata.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/receivedata.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/upnpcommands.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/upnpcommands.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/upnpdev.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/upnpdev.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/upnperrors.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/upnperrors.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/upnpreplyparse.c">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/upnpreplyparse.h">
+			<Option target="upnpc-static"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\argon2\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/AddCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/CheckCCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/CheckCXXCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/CheckMicCCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/CheckMicCXXCompilerFlag.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/argon2/cmake/OptimizeForArchitecture.cmake">
+			<Option virtualFolder="CMake Files\external\argon2\cmake\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\miniupnpc\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/miniupnpc/miniupnpcstrings.h.cmake">
+			<Option virtualFolder="CMake Files\external\miniupnpc\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/cryptopp/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\cryptopp\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/zstd/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\zstd\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/external/lz4/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\lz4\"/>
+		</Unit>
+		<Unit filename="/home/water/blockchains/catalyst-cli/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
