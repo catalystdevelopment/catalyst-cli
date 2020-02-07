@@ -1,0 +1,2 @@
+/usr/bin/ar qc libSubWallets.a  CMakeFiles/SubWallets.dir/subwallets/SubWallet.cpp.o CMakeFiles/SubWallets.dir/subwallets/SubWallets.cpp.o
+/usr/bin/ranlib libSubWallets.a

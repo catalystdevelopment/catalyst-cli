@@ -1,0 +1,2 @@
+/usr/bin/ar qc libLogging.a  CMakeFiles/Logging.dir/logging/CommonLogger.cpp.o CMakeFiles/Logging.dir/logging/ConsoleLogger.cpp.o CMakeFiles/Logging.dir/logging/FileLogger.cpp.o CMakeFiles/Logging.dir/logging/ILogger.cpp.o CMakeFiles/Logging.dir/logging/LoggerGroup.cpp.o CMakeFiles/Logging.dir/logging/LoggerManager.cpp.o CMakeFiles/Logging.dir/logging/LoggerMessage.cpp.o CMakeFiles/Logging.dir/logging/LoggerRef.cpp.o CMakeFiles/Logging.dir/logging/StreamLogger.cpp.o
+/usr/bin/ranlib libLogging.a
