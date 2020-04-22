@@ -73,7 +73,10 @@ namespace CryptoNote
 
         const size_t   CRYPTONOTE_DISPLAY_DECIMAL_POINT              = 7;
 
-        const uint64_t MINIMUM_FEE                                   = UINT64_C(10000);
+        const uint64_t MINIMUM_FEE                                   = UINT64_C(10000); // 0.0010000 CX
+
+        /* Fee adjustment V1 */
+        const uint64_t MINIMUM_FEE                                   = UINT64_C(70000000) // 7.0000000 CX
 
         /* This section defines our minimum and maximum mixin counts required for transactions */
         const uint64_t MINIMUM_MIXIN_V1                              = 0;
@@ -82,26 +85,26 @@ namespace CryptoNote
         const uint64_t MINIMUM_MIXIN_V2                              = 3;
         const uint64_t MAXIMUM_MIXIN_V2                              = 5;
 
-        const uint64_t MINIMUM_MIXIN_V3                              = 3; 
-        const uint64_t MAXIMUM_MIXIN_V3                              = 5; 
+        const uint64_t MINIMUM_MIXIN_V3                              = 1;
+        const uint64_t MAXIMUM_MIXIN_V3                              = 3;
 
         /* The heights to activate the mixin limits at */
         const uint32_t MIXIN_LIMITS_V1_HEIGHT                        = 0;
         const uint32_t MIXIN_LIMITS_V2_HEIGHT                        = 1;
-        const uint32_t MIXIN_LIMITS_V3_HEIGHT                        = 770000; 
+        const uint32_t MIXIN_LIMITS_V3_HEIGHT                        = 725500;
 
         /* The mixin to use by default with zedwallet and turtle-service */
         /* DEFAULT_MIXIN_V0 is the mixin used before MIXIN_LIMITS_V1_HEIGHT is started */
         const uint64_t DEFAULT_MIXIN_V0                              = 3;
         const uint64_t DEFAULT_MIXIN_V1                              = MAXIMUM_MIXIN_V1;
         const uint64_t DEFAULT_MIXIN_V2                              = MAXIMUM_MIXIN_V2;
-        const uint64_t DEFAULT_MIXIN_V3                              = MINIMUM_MIXIN_V3;
+        const uint64_t DEFAULT_MIXIN_V3                              = MAXIMUM_MIXIN_V3;
 
         const uint64_t DEFAULT_DUST_THRESHOLD                        = UINT64_C(10);
         const uint64_t DEFAULT_DUST_THRESHOLD_V2                     = UINT64_C(0);
 
         const uint32_t DUST_THRESHOLD_V2_HEIGHT                      = MIXIN_LIMITS_V2_HEIGHT;
-        const uint32_t FUSION_DUST_THRESHOLD_HEIGHT_V2               = 770000;
+        const uint32_t FUSION_DUST_THRESHOLD_HEIGHT_V2               = 725500;
         const uint64_t EXPECTED_NUMBER_OF_BLOCKS_PER_DAY             = 24 * 60 * 60 / DIFFICULTY_TARGET;
 
         const size_t   DIFFICULTY_WINDOW                             = 17;
@@ -135,7 +138,7 @@ namespace CryptoNote
          * be created in a transaction */
         const uint64_t MAX_OUTPUT_SIZE_CLIENT = 10'000'0000000;
 
-        const uint64_t MAX_OUTPUT_SIZE_HEIGHT = 770000;
+        const uint64_t MAX_OUTPUT_SIZE_HEIGHT = 725500;
 
         /* For new projects forked from this code base, the values immediately below
            should be changed to 0 to prevent issues with transaction processing
@@ -186,7 +189,7 @@ namespace CryptoNote
             21000,   // 0
             170000,  // 1
             394000,  // 2
-            770000   // 3
+            725500   // 3
         };
 
         /* MAKE SURE TO UPDATE THIS VALUE WITH EVERY MAJOR RELEASE BEFORE A FORK */
@@ -290,10 +293,12 @@ namespace CryptoNote
     };
 
     const char* const SEED_NODES[] = {
-        "node-chukwa-01.cryptocatalyst.net:17290",
-        "node-chukwa-02.cryptocatalyst.net:17290",
-        "node-chukwa-03.cryptocatalyst.net:17290",
-        "node-chukwa-04.cryptocatalyst.net:17290",
-        "node-chukwa-05.cryptocatalyst.net:17290"
+//        "node-chukwa-01.cryptocatalyst.net:17290",
+//        "node-chukwa-02.cryptocatalyst.net:17290",
+//        "node-chukwa-03.cryptocatalyst.net:17290",
+//        "node-chukwa-04.cryptocatalyst.net:17290",
+//        "node-chukwa-05.cryptocatalyst.net:17290",
+        "46.30.188.5",  // TheGoldenSparrow
+        "3.130.191.255" // dirtybits
     };
 } // CryptoNote

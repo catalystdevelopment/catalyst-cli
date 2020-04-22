@@ -36,6 +36,7 @@
 #include <utilities/FormatTools.h>
 #include <utilities/LicenseCanary.h>
 #include <utilities/ParseExtra.h>
+#include <utilities/Fees.h>
 
 using namespace Crypto;
 
@@ -1761,7 +1762,9 @@ namespace CryptoNote
                             cachedTransaction.getTransactionBinaryArray().size(),
                             getTopBlockIndex());
 
-        if (!isFusion && fee < currency.minimumFee())
+        const uint64_t minFee = Utilities::getMinimumFee(getTopBlockIndex());
+
+        if (!isFusion && fee < minFee)
         {
             logger(Logging::WARNING) << "Transaction " << transactionHash
                                      << " is not valid. Reason: fee is too small and it's not a fusion transaction";
