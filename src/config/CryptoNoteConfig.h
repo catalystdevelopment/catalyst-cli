@@ -91,7 +91,7 @@ namespace CryptoNote
         /* The heights to activate the mixin limits at */
         const uint32_t MIXIN_LIMITS_V1_HEIGHT                        = 0;
         const uint32_t MIXIN_LIMITS_V2_HEIGHT                        = 1;
-        const uint32_t MIXIN_LIMITS_V3_HEIGHT                        = 725500;
+        const uint32_t MIXIN_LIMITS_V3_HEIGHT                        = 727000;
 
         /* The mixin to use by default with zedwallet and turtle-service */
         /* DEFAULT_MIXIN_V0 is the mixin used before MIXIN_LIMITS_V1_HEIGHT is started */
@@ -104,7 +104,7 @@ namespace CryptoNote
         const uint64_t DEFAULT_DUST_THRESHOLD_V2                     = UINT64_C(0);
 
         const uint32_t DUST_THRESHOLD_V2_HEIGHT                      = MIXIN_LIMITS_V2_HEIGHT;
-        const uint32_t FUSION_DUST_THRESHOLD_HEIGHT_V2               = 725500;
+        const uint32_t FUSION_DUST_THRESHOLD_HEIGHT_V2               = 727000;
         const uint64_t EXPECTED_NUMBER_OF_BLOCKS_PER_DAY             = 24 * 60 * 60 / DIFFICULTY_TARGET;
 
         const size_t   DIFFICULTY_WINDOW                             = 17;
@@ -138,7 +138,7 @@ namespace CryptoNote
          * be created in a transaction */
         const uint64_t MAX_OUTPUT_SIZE_CLIENT = 10'000'0000000;
 
-        const uint64_t MAX_OUTPUT_SIZE_HEIGHT = 725500;
+        const uint64_t MAX_OUTPUT_SIZE_HEIGHT = 727000;
 
         /* For new projects forked from this code base, the values immediately below
            should be changed to 0 to prevent issues with transaction processing
@@ -189,7 +189,7 @@ namespace CryptoNote
             21000,   // 0
             170000,  // 1
             394000,  // 2
-            725500   // 3
+            727000   // 3
         };
 
         /* MAKE SURE TO UPDATE THIS VALUE WITH EVERY MAJOR RELEASE BEFORE A FORK */
