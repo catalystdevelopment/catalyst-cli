@@ -300,7 +300,8 @@ namespace CryptoNote
 //        "node-chukwa-03.cryptocatalyst.net:17290",
 //        "node-chukwa-04.cryptocatalyst.net:17290",
 //        "node-chukwa-05.cryptocatalyst.net:17290",
-        "46.30.188.5:17290",  // TheGoldenSparrow
-        "3.130.191.255:17290" // dirtybits
+        "46.30.188.5:17290",    // TheGoldenSparrow
+        "3.130.191.255:17290",  // dirtybits
+        "3.23.22.126:17290"     // dirtybits
     };
 } // CryptoNote
