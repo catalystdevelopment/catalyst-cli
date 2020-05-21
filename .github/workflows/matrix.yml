@@ -125,7 +125,7 @@ jobs:
       - name: Build
         run: |
           cd build
-          MSBuild TurtleCoin.sln /p:Configuration=Release /m
+          MSBuild Catalyst.sln /p:Configuration=Release /m
       
       # Test the crypto
       - name: Test Crypto
