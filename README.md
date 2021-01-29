@@ -5,6 +5,7 @@ Launched:
 <!--
 #### v0.0.1.1 November 27, 2018
 #### v0.2.0.0 December 8, 2018
+#### v0.4.1.0 April 20, 2020
 -->
 www.cryptocatalyst.net
 
@@ -43,15 +44,15 @@ If you are using Clang, you will need Clang 6.0 or higher. You will also need li
 - `sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y`
 - `sudo apt-get update`
 - `sudo apt-get install aptitude -y`
-- `sudo aptitude install -y build-essential g++-8 gcc-8 git libboost-all-dev python-pip libssl-dev`
-- `sudo pip install cmake`
+- `sudo aptitude install -y build-essential g++-8 gcc-8 git libboost-all-dev python3-pip libssl-dev`
+- `sudo pip3 install cmake`
 - `export CC=gcc-8`
 - `export CXX=g++-8`
-- `git clone https://github.com/catalystdevelopment/catalyst` 
+- `git clone https://github.com/catalystdevelopment/catalyst-cli.git` 
 <!--
 - `git clone -b master --single-branch https://github.com/catalystdevelopment/cryptocatalyst`
 -->
-- `cd catalyst`
+- `cd catalyst-cli`
 - `mkdir build`
 - `cd build`
 - `cmake ..`
@@ -82,12 +83,12 @@ You need to modify the below command for your version of ubuntu - see https://ap
 
 - `sudo apt-get update`
 - `sudo apt-get install aptitude -y`
-- `sudo aptitude install -y -o Aptitude::ProblemResolver::SolutionCost='100*canceled-actions,200*removals' build-essential clang-6.0 libstdc++-7-dev git libboost-all-dev python-pip libssl-dev`
-- `sudo pip install cmake`
+- `sudo aptitude install -y -o Aptitude::ProblemResolver::SolutionCost='100*canceled-actions,200*removals' build-essential clang-6.0 libstdc++-7-dev git libboost-all-dev python3-pip libssl-dev`
+- `sudo pip3 install cmake`
 - `export CC=clang-6.0`
 - `export CXX=clang++-6.0`
-- `git clone https://github.com/catalystdevelopment/catalyst`
-- `cd catalyst`
+- `git clone https://github.com/catalystdevelopment/catalyst-cli.git`
+- `cd catalyst-cli`
 - `mkdir build`
 - `cd build`
 - `cmake ..`
@@ -105,8 +106,8 @@ Ensure you have the dependencies listed above.
 If you want to use clang, ensure you set the environment variables `CC` and `CXX`.
 See the ubuntu instructions for an example.
 
-- `git clone https://github.com/catalystdevelopment/catalyst`
-- `cd catalyst`
+- `git clone https://github.com/catalystdevelopment/catalyst-cli.git`
+- `cd catalyst-cli`
 - `mkdir build`
 - `cd build`
 - `cmake ..`
@@ -129,8 +130,8 @@ The binaries will be in the `src` folder when you are complete.
 - `brew install --force cmake boost llvm openssl`
 - `export CC=/usr/local/opt/llvm/bin/clang`
 - `export CXX=/usr/local/opt/llvm/bin/clang++`
-- `git clone https://github.com/catalystdevelopment/catalyst`
-- `cd catalyst`
+- `git clone https://github.com/catalystdevelopment/catalyst-cli.git`
+- `cd catalyst-cli`
 - `mkdir build`
 - `cd build`
 - `cmake ..`
@@ -192,7 +193,7 @@ Hi Catalyst contributor, thanks for forking and sending back Pull Requests. Exte
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 // Copyright (c) 2014-2018, The Monero Project
 // Copyright (c) 2018-2019, The TurtleCoin Developers
-// Copyright (c) 2018-2019, The Catalyst Developers
+// Copyright (c) 2018-2020, The Catalyst Developers
 // 
 // Please see the included LICENSE file for more information.
 ```
